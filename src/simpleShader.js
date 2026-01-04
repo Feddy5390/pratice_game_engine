@@ -1,11 +1,17 @@
-import Utils from "./utils.js";
+import Utils from './utils.js';
 
 export default class SimpleShader {
   #gl;
   program;
+  #vertexPositionRef;
+  #modelTransformRef;
+  #viewProjTransformRef;
+  #pixelColorRef;
+  #vertexBuffer;
 
-  constructor(gl) {
+  constructor(gl, vertexBuffer) {
     this.#gl = gl;
+    this.#vertexBuffer = vertexBuffer;
   }
 
   #createShader(type, source) {
@@ -23,9 +29,12 @@ export default class SimpleShader {
     return shader;
   }
 
-  async init(vsSourceFilePath, fsSourceFilePath) {
-    const vsSource = await Utils.loadFile(vsSourceFilePath);
-    const fsSource = await Utils.loadFile(fsSourceFilePath);
+  async #createProgram() {
+    const vsPath = new URL('./shader/vertexShader.glsl', import.meta.url).href;
+    const fsPath = new URL('./shader/fragShader.glsl', import.meta.url).href;
+
+    const vsSource = await Utils.loadFile(vsPath);
+    const fsSource = await Utils.loadFile(fsPath);
 
     const gl = this.#gl;
 
@@ -52,30 +61,39 @@ export default class SimpleShader {
     this.program = program;
   }
 
-  // 啟動參數並設定如何使用
-  activeAttrib(variable, size, stride, offset) {
+  async init() {
     const gl = this.#gl;
 
-    gl.useProgram(this.program);
+    // 創建 shader program
+    await this.#createProgram();
 
-    // 取得 shader attribute 變數
-    const v = gl.getAttribLocation(this.program, variable);
-
-    // 啟動屬性
-    gl.enableVertexAttribArray(v);
-
-    // 告訴 webgl 怎麼使用 buffer
-    gl.vertexAttribPointer(v, size, gl.FLOAT, false, stride, offset);
+    // 取得 webgl 變數位置
+    this.#vertexPositionRef = gl.getAttribLocation(this.program, 'a_Position');
+    this.#pixelColorRef = gl.getUniformLocation(this.program, 'u_PixelColor');
+    this.#modelTransformRef = gl.getUniformLocation(
+      this.program,
+      'u_ModelTransform',
+    );
+    this.#viewProjTransformRef = gl.getUniformLocation(
+      this.program,
+      'u_ViewProjTransform',
+    );
   }
 
-  activeUniform(variable, data) {
+  // 啟動參數並設定如何使用
+  active(color, trsMatrix, cameraMatrix) {
     const gl = this.#gl;
 
     gl.useProgram(this.program);
 
-    // 取得 shader attribute 變數
-    const v = gl.getUniformLocation(this.program, variable);
+    // bind vertex buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.#vertexBuffer.buffer);
+    gl.enableVertexAttribArray(this.#vertexPositionRef);
+    gl.vertexAttribPointer(this.#vertexPositionRef, 3, gl.FLOAT, false, 0, 0);
 
-    gl.uniform4fv(v, data);
+    // load uniforms
+    gl.uniform4fv(this.#pixelColorRef, color);
+    gl.uniformMatrix4fv(this.#modelTransformRef, false, trsMatrix);
+    gl.uniformMatrix4fv(this.#viewProjTransformRef, false, cameraMatrix);
   }
 }

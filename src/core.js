@@ -1,15 +1,32 @@
+import Renderable from './renderable.js';
 import SimpleShader from './simpleShader.js';
 import VertexBuffer from './vertexBuffer.js';
+import './lib/gl-matrix.js';
+import Camera from './camera.js';
 
 export default class Core {
   gl;
   shader;
-  vertexBuffer;
+  #fps = 0;
+  #frameCount = 0;
+  #fpsTimer = 0;
+  #logicTickRate = 1 / 60;
+  #isRunning = false;
+  #rafID;
+  #lastTime = 0;
+  #accumulator = 0;
+
+  #gameInit;
+  #gameUpdate;
+  #gameDraw;
 
   constructor(canvasID) {
     this.#initializeWebGL(canvasID);
-    this.shader = new SimpleShader(this.gl);
-    this.vertexBuffer = new VertexBuffer(this.gl);
+    const vertexBuffer = new VertexBuffer(this.gl);
+    vertexBuffer.setData([
+      0.5, 0.5, 0.0, -0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0,
+    ]);
+    this.shader = new SimpleShader(this.gl, vertexBuffer);
   }
 
   #initializeWebGL(canvasID) {
@@ -20,9 +37,69 @@ export default class Core {
     }
   }
 
-  clearCanvas(color) {
-    this.gl.clearColor(...color);
+  createRenderable() {
+    return new Renderable(this.gl, this.shader);
+  }
 
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+  createCamera(wcWidth, wcCenter, viewport) {
+    return new Camera(this.gl, wcWidth, wcCenter, viewport);
+  }
+
+  #gameLoop(timestamp = 0) {
+    if (this.#isRunning) {
+      const dt = (timestamp - this.#lastTime) / 1000;
+      this.#lastTime = timestamp;
+
+      this.updateFPS(dt);
+
+      // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
+      const frameTime = Math.min(dt, 0.25);
+      this.#accumulator += frameTime;
+
+      while (this.#accumulator >= this.#logicTickRate) {
+        this.#gameUpdate(this.#logicTickRate);
+        this.#accumulator -= this.#logicTickRate;
+      }
+
+      // --- 畫面渲染 (Render) ---
+      // 渲染頻率隨瀏覽器跑 (rAF)
+      // 進階：傳入 alpha 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
+      const alpha = this.#accumulator / this.#logicTickRate;
+      this.#gameDraw(alpha);
+
+      this.#rafID = requestAnimationFrame(this.#gameLoop.bind(this));
+    }
+  }
+
+  updateFPS(dt) {
+    this.#fpsTimer += dt;
+    this.#frameCount++;
+
+    if (this.#fpsTimer >= 1) {
+      // 每隔一秒更新一次數值
+      this.#fps = this.#frameCount;
+      this.#frameCount = 0;
+      this.#fpsTimer -= 1;
+
+      console.log(`當前 FPS: ${this.#fps}`);
+    }
+  }
+
+  async init(myGame) {
+    this.#gameInit = myGame.init.bind(myGame);
+    this.#gameUpdate = myGame.update.bind(myGame);
+    this.#gameDraw = myGame.draw.bind(myGame);
+
+    await this.shader.init();
+  }
+
+  async start() {
+    this.#isRunning = true;
+
+    this.#lastTime = performance.now();
+
+    await this.#gameInit();
+
+    this.#gameLoop();
   }
 }
