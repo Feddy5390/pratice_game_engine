@@ -3,6 +3,8 @@ import SimpleShader from './simpleShader.js';
 import VertexBuffer from './vertexBuffer.js';
 import './lib/gl-matrix.js';
 import Camera from './camera.js';
+import Input from './input.js';
+import Resoure from './resource.js';
 
 export default class Core {
   gl;
@@ -20,13 +22,29 @@ export default class Core {
   #gameUpdate;
   #gameDraw;
 
+  input;
+  resource;
+
   constructor(canvasID) {
     this.#initializeWebGL(canvasID);
     const vertexBuffer = new VertexBuffer(this.gl);
     vertexBuffer.setData([
       0.5, 0.5, 0.0, -0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0,
     ]);
-    this.shader = new SimpleShader(this.gl, vertexBuffer);
+    this.shader = new SimpleShader(this, vertexBuffer);
+
+    this.input = new Input();
+    this.input.init();
+
+    this.resource = new Resoure();
+  }
+
+  async init(myGame) {
+    this.#gameInit = myGame.init.bind(myGame);
+    this.#gameUpdate = myGame.update.bind(myGame);
+    this.#gameDraw = myGame.draw.bind(myGame);
+
+    await this.shader.init();
   }
 
   #initializeWebGL(canvasID) {
@@ -57,6 +75,7 @@ export default class Core {
       this.#accumulator += frameTime;
 
       while (this.#accumulator >= this.#logicTickRate) {
+        this.input.update();
         this.#gameUpdate(this.#logicTickRate);
         this.#accumulator -= this.#logicTickRate;
       }
@@ -79,18 +98,17 @@ export default class Core {
       // 每隔一秒更新一次數值
       this.#fps = this.#frameCount;
       this.#frameCount = 0;
-      this.#fpsTimer -= 1;
+      this.#fpsTimer = 0;
 
       console.log(`當前 FPS: ${this.#fps}`);
     }
   }
 
-  async init(myGame) {
-    this.#gameInit = myGame.init.bind(myGame);
-    this.#gameUpdate = myGame.update.bind(myGame);
-    this.#gameDraw = myGame.draw.bind(myGame);
-
-    await this.shader.init();
+  loadLevel(levelMap) {
+    for (const key in levelMap) {
+      const src = levelMap[key];
+      this.resource.add(key, src);
+    }
   }
 
   async start() {
@@ -99,6 +117,8 @@ export default class Core {
     this.#lastTime = performance.now();
 
     await this.#gameInit();
+
+    await this.resource.load();
 
     this.#gameLoop();
   }

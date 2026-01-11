@@ -1,0 +1,11 @@
+{
+  "camera": {
+    "center": [20, 60],
+    "width": 20,
+    "viewPort": [20, 40, 600, 300]
+  },
+  "enemies": [
+    { "type": "white", "x": 20, "y": 60, "size": [1, 1], "color": [1,1,1,1] },
+    { "type": "red", "x": 30, "y": 20, "size": [1, 1], "color": [1,0,0,1] }
+  ]
+}

@@ -1,7 +1,7 @@
 import Utils from './utils.js';
 
 export default class SimpleShader {
-  #gl;
+  #core;
   program;
   #vertexPositionRef;
   #modelTransformRef;
@@ -9,13 +9,13 @@ export default class SimpleShader {
   #pixelColorRef;
   #vertexBuffer;
 
-  constructor(gl, vertexBuffer) {
-    this.#gl = gl;
+  constructor(core, vertexBuffer) {
+    this.#core = core;
     this.#vertexBuffer = vertexBuffer;
   }
 
   #createShader(type, source) {
-    const gl = this.#gl;
+    const gl = this.#core.gl;
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
@@ -36,7 +36,7 @@ export default class SimpleShader {
     const vsSource = await Utils.loadFile(vsPath);
     const fsSource = await Utils.loadFile(fsPath);
 
-    const gl = this.#gl;
+    const gl = this.#core.gl;
 
     const vs = this.#createShader(gl.VERTEX_SHADER, vsSource);
     const fs = this.#createShader(gl.FRAGMENT_SHADER, fsSource);
@@ -62,7 +62,7 @@ export default class SimpleShader {
   }
 
   async init() {
-    const gl = this.#gl;
+    const gl = this.#core.gl;
 
     // 創建 shader program
     await this.#createProgram();
@@ -82,7 +82,7 @@ export default class SimpleShader {
 
   // 啟動參數並設定如何使用
   active(color, trsMatrix, cameraMatrix) {
-    const gl = this.#gl;
+    const gl = this.#core.gl;
 
     gl.useProgram(this.program);
 
