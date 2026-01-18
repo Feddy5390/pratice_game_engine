@@ -5,6 +5,7 @@ import './lib/gl-matrix.js';
 import Camera from './camera.js';
 import Input from './input.js';
 import Resoure from './resource.js';
+import Scene from './scene.js';
 
 export default class Core {
   gl;
@@ -18,12 +19,14 @@ export default class Core {
   #lastTime = 0;
   #accumulator = 0;
 
+  #gameLoad;
   #gameInit;
   #gameUpdate;
   #gameDraw;
 
   input;
   resource;
+  scene;
 
   constructor(canvasID) {
     this.#initializeWebGL(canvasID);
@@ -37,9 +40,11 @@ export default class Core {
     this.input.init();
 
     this.resource = new Resoure();
+    this.scene = new Scene(this.gl, this.shader, this.resource);
   }
 
   async init(myGame) {
+    this.#gameLoad = myGame.load.bind(myGame);
     this.#gameInit = myGame.init.bind(myGame);
     this.#gameUpdate = myGame.update.bind(myGame);
     this.#gameDraw = myGame.draw.bind(myGame);
@@ -104,22 +109,18 @@ export default class Core {
     }
   }
 
-  loadLevel(levelMap) {
-    for (const key in levelMap) {
-      const src = levelMap[key];
-      this.resource.add(key, src);
-    }
-  }
-
   async start() {
     this.#isRunning = true;
 
     this.#lastTime = performance.now();
 
+    await this.#gameLoad();
+    await this.resource.load();
+    await this.scene.loadAllScenes();
+
     await this.#gameInit();
 
-    await this.resource.load();
-
+    console.log('game start');
     this.#gameLoop();
   }
 }

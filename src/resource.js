@@ -8,6 +8,10 @@ export default class Resoure {
     }
   }
 
+  get(name) {
+    return this.#resources.get(name);
+  }
+
   async load() {
     const promises = [];
     for (var [key, src] of this.#resourceMap) {
@@ -16,8 +20,6 @@ export default class Resoure {
     }
 
     await Promise.all(promises);
-
-    
 
     // 清空待載入清單，避免重複載入
     this.#resourceMap.clear();

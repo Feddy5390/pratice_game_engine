@@ -5,6 +5,6 @@
     "viewport": [20, 40, 600, 300]
   },
   "entities": [
-    { "id": "white", "x": 20, "y": 60, "size": [1, 1], "rotate": 0, "color": [1,1,1,1] }
+    { "id": "red", "x": 20, "y": 58, "size": [1, 1], "rotate": 20, "color": [1,0,0,1] }
   ]
 }

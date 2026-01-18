@@ -42,59 +42,62 @@ const keys = {
 export default class Mygame {
   #core;
   camera;
-  whiteRenderable;
-  angle = 1;
+  entities = [];
 
   constructor(canvasID) {
     this.#core = new Core(canvasID);
   }
 
-  init() {
+  load() {
     const core = this.#core;
 
-    core.input.setKey(keys);
-
-    core.resource.add({
-      cuphead: './assets/cuphead.avif',
+    // 載入遊戲
+    core.scene.add({
+      '1-1': './levels/1-1.json',
     });
 
-    this.camera = core.createCamera(20, [20, 60], [20, 40, 600, 300]);
-    this.camera.setViewAndCameraMatrix();
-
-    this.whiteRenderable = core.createRenderable();
-    this.whiteRenderable.setColor([1, 0, 1, 1]);
-    // 計算變換矩陣
-    this.whiteRenderable.mXform.setPosition(20, 60);
-    this.whiteRenderable.mXform.setSize(1, 1);
-    this.whiteRenderable.mXform.setRotationInDegree(20);
-
-    // 先載入遊戲
-    core.loadLevel({
-      '1-1': './levels/1-1.json',
+    core.scene.add({
+      '1-2': './levels/1-2.json',
     });
   }
 
+  init() {
+    const core = this.#core;
+
+    // 設定按鍵
+    core.input.setKey(keys);
+
+    const { camera, entities } = core.scene.start();
+    this.camera = camera;
+    this.entities = entities;
+  }
+
   draw(dt) {
-    this.whiteRenderable.draw(this.camera.viewMatrix);
+    this.camera.setViewAndCameraMatrix();
+
+    for (const entity of this.entities) {
+      entity.draw(this.camera.viewMatrix);
+    }
   }
 
   update() {
     const core = this.#core;
-    const whiteXform = this.whiteRenderable.mXform;
-    if (whiteXform.getXPos() > 30) {
-      whiteXform.setPosition(20, 60);
-    }
-    if (core.input.isKeyPressed('A')) {
-      whiteXform.incXPosBy(-0.05);
-    } else if (core.input.isKeyPressed('D')) {
-      whiteXform.incXPosBy(0.05);
-    }
-    if (core.input.isKeyClicked('W')) {
-      this.angle += 1;
-    } else if (core.input.isKeyClicked('E')) {
-      this.angle -= 1;
-    }
-    whiteXform.incRotationByDegree(this.angle);
+
+    // const whiteXform = this.whiteRenderable.mXform;
+    // if (whiteXform.getXPos() > 30) {
+    //   whiteXform.setPosition(20, 60);
+    // }
+    // if (core.input.isKeyPressed('A')) {
+    //   whiteXform.incXPosBy(-0.05);
+    // } else if (core.input.isKeyPressed('D')) {
+    //   whiteXform.incXPosBy(0.05);
+    // }
+    // if (core.input.isKeyClicked('W')) {
+    //   this.angle += 1;
+    // } else if (core.input.isKeyClicked('E')) {
+    //   this.angle -= 1;
+    // }
+    // whiteXform.incRotationByDegree(this.angle);
   }
 
   async start() {
