@@ -1,20 +1,21 @@
 export default class Resoure {
-  #resources = new Map();
-  #resourceMap = new Map();
+  #rootDir;
 
-  add(maps) {
-    for (const key in maps) {
-      this.#resourceMap.set(key, maps[key]);
-    }
+  #resourceMap = new Map();
+  resources = new Map();
+
+  _init(rootDir) {
+    this.#rootDir = rootDir;
   }
 
-  get(name) {
-    return this.#resources.get(name);
+  add(name, path) {
+    this.#resourceMap.set(name, path);
   }
 
   async load() {
     const promises = [];
     for (var [key, src] of this.#resourceMap) {
+      console.log(`[資源加載] ${key} - ${src}`);
       const promise = this.#loader(key, src);
       promises.push(promise);
     }
@@ -24,7 +25,7 @@ export default class Resoure {
     // 清空待載入清單，避免重複載入
     this.#resourceMap.clear();
 
-    return this.#resources;
+    return this.resources;
   }
 
   #createImageFromBlob(blob) {
@@ -42,6 +43,7 @@ export default class Resoure {
 
   async #loader(key, src) {
     try {
+      src = `${this.#rootDir}/${src}`;
       const response = await fetch(src);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -63,7 +65,7 @@ export default class Resoure {
         data = await response.blob();
       }
 
-      this.#resources.set(key, data);
+      this.resources.set(key, data);
     } catch (error) {
       console.error(`資源載入失敗: ${src}`, error);
     }

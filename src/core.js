@@ -1,126 +1,98 @@
-import Renderable from './renderable.js';
-import SimpleShader from './simpleShader.js';
-import VertexBuffer from './vertexBuffer.js';
 import './lib/gl-matrix.js';
-import Camera from './camera.js';
-import Input from './input.js';
 import Resoure from './resource.js';
-import Scene from './scene.js';
+import GameLoop from './gameLoop.js';
+import ShaderManager from './shader/shaderManager.js';
+import SimpleShader from './shader/default/simpleShader.js';
+import sceneManager from './scene/sceneManager.js';
+import { ExampleScene } from './scene/exampleScene.js';
+import MeshManager from './mesh/meshManager.js';
+import Renderer from './render/renderer.js';
 
 export default class Core {
   gl;
-  shader;
-  #fps = 0;
-  #frameCount = 0;
-  #fpsTimer = 0;
-  #logicTickRate = 1 / 60;
-  #isRunning = false;
-  #rafID;
-  #lastTime = 0;
-  #accumulator = 0;
+  rootDir;
 
-  #gameLoad;
-  #gameInit;
-  #gameUpdate;
-  #gameDraw;
-
-  input;
+  // modules
   resource;
-  scene;
+  shaderManager;
+  meshManager;
+  sceneManager;
+  renderer;
+  gameLoop;
 
-  constructor(canvasID) {
-    this.#initializeWebGL(canvasID);
-    const vertexBuffer = new VertexBuffer(this.gl);
-    vertexBuffer.setData([
-      0.5, 0.5, 0.0, -0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0,
-    ]);
-    this.shader = new SimpleShader(this, vertexBuffer);
+  // system status
+  #isBooting = false;
 
-    this.input = new Input();
-    this.input.init();
+  constructor() {}
 
-    this.resource = new Resoure();
-    this.scene = new Scene(this.gl, this.shader, this.resource);
-  }
-
-  async init(myGame) {
-    this.#gameLoad = myGame.load.bind(myGame);
-    this.#gameInit = myGame.init.bind(myGame);
-    this.#gameUpdate = myGame.update.bind(myGame);
-    this.#gameDraw = myGame.draw.bind(myGame);
-
-    await this.shader.init();
-  }
-
-  #initializeWebGL(canvasID) {
+  #initWebGL(canvasID) {
     const canvas = document.getElementById(canvasID);
-    this.gl = canvas.getContext('webgl');
+    this.gl = canvas.getContext('webgl2');
     if (!this.gl) {
-      throw new Error(`請傳入正確的 canvasID`);
+      throw new Error(`請傳入正確的canvasID`);
     }
   }
 
-  createRenderable() {
-    return new Renderable(this.gl, this.shader);
+  #initModule() {
+    this.resource = new Resoure();
+    this.shaderManager = new ShaderManager();
+    this.meshManager = new MeshManager();
+    this.sceneManager = new sceneManager();
+    this.renderer = new Renderer();
+    this.gameLoop = new GameLoop();
+
+    this.resource._init(this.rootDir);
+    this.shaderManager._init(this.gl, this.resource);
+    this.meshManager._init(this.gl, this.shaderManager);
+    this.sceneManager._init(this);
+    this.renderer._init(this.gl, this.shaderManager, this.meshManager);
+    this.gameLoop._init(this.sceneManager, this.renderer);
   }
 
-  createCamera(wcWidth, wcCenter, viewport) {
-    return new Camera(this.gl, wcWidth, wcCenter, viewport);
+  async #registerDefaultShader() {
+    this.shaderManager.add(
+      'default',
+      SimpleShader,
+      'src/shader/default/glsl/vertexShader.glsl',
+      'src/shader/default/glsl/fragShader.glsl',
+    );
+
+    await this.resource.load();
+
+    this.shaderManager._initAll();
   }
 
-  #gameLoop(timestamp = 0) {
-    if (this.#isRunning) {
-      const dt = (timestamp - this.#lastTime) / 1000;
-      this.#lastTime = timestamp;
-
-      this.updateFPS(dt);
-
-      // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
-      const frameTime = Math.min(dt, 0.25);
-      this.#accumulator += frameTime;
-
-      while (this.#accumulator >= this.#logicTickRate) {
-        this.input.update();
-        this.#gameUpdate(this.#logicTickRate);
-        this.#accumulator -= this.#logicTickRate;
-      }
-
-      // --- 畫面渲染 (Render) ---
-      // 渲染頻率隨瀏覽器跑 (rAF)
-      // 進階：傳入 alpha 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
-      const alpha = this.#accumulator / this.#logicTickRate;
-      this.#gameDraw(alpha);
-
-      this.#rafID = requestAnimationFrame(this.#gameLoop.bind(this));
+  #loadAllScene(scenes = [ExampleScene]) {
+    for (const scene of scenes) {
+      this.sceneManager.addScene(scene);
     }
   }
 
-  updateFPS(dt) {
-    this.#fpsTimer += dt;
-    this.#frameCount++;
+  async init({ canvasID, scenes, rootDir }) {
+    this.rootDir = rootDir;
 
-    if (this.#fpsTimer >= 1) {
-      // 每隔一秒更新一次數值
-      this.#fps = this.#frameCount;
-      this.#frameCount = 0;
-      this.#fpsTimer = 0;
+    this.#initWebGL(canvasID);
 
-      console.log(`當前 FPS: ${this.#fps}`);
-    }
+    // 初始化系統模組
+    this.#initModule();
+
+    // 註冊預設shader
+    await this.#registerDefaultShader();
+
+    // 註冊場景
+    this.#loadAllScene(scenes);
+
+    this.#isBooting = true;
+
+    return this;
   }
 
   async start() {
-    this.#isRunning = true;
+    if (!this.#isBooting) {
+      throw new Error('遊戲尚未初始化');
+    }
 
-    this.#lastTime = performance.now();
-
-    await this.#gameLoad();
-    await this.resource.load();
-    await this.scene.loadAllScenes();
-
-    await this.#gameInit();
-
-    console.log('game start');
-    this.#gameLoop();
+    this.sceneManager.goto();
+    this.gameLoop.start();
   }
 }
