@@ -24,7 +24,7 @@ export default class Mesh {
     let offset = 0;
 
     layout.forEach((attr) => {
-      const loc = gl.getAttribuLocation(shader.program, attr.name);
+      const loc = gl.getAttribLocation(shader.program, attr.name);
       if (loc !== -1) {
         gl.enableVertexAttribArray(loc);
         gl.vertexAttribPointer(loc, attr.size, gl.FLOAT, false, stride, offset);

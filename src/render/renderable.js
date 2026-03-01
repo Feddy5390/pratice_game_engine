@@ -1,16 +1,14 @@
-import Transform from '../transfrom.js';
+import Transform from '../Transform.js';
 
 export default class Renderable {
-  mesh;
+  meshName;
   shaderName;
   color = [1, 1, 1, 1];
-  mXform;
+  transform = new Transform();
 
   constructor(meshName, shaderName) {
     this.meshName = meshName;
     this.shaderName = shaderName;
-    this.color = [1, 1, 1, 1];
-    this.mXform = new Transform();
   }
 
   setColor(color) {

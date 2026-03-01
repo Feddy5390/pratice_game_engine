@@ -1,4 +1,4 @@
-import { BaseScene } from '../baseScene.js';
+import { BaseScene } from './baseScene.js';
 import Camera from '../camera.js';
 import Renderable from '../render/renderable.js';
 
@@ -22,7 +22,7 @@ export class ExampleScene extends BaseScene {
     console.log(`場景(${this.name}) create...`);
 
     // 創建相機
-    const camera = new Camera(200, [0, 0], [0, 0, 800, 600]);
+    const camera = new Camera(10, [0, 0], [0, 0, 320, 240]);
     this.setCamera(camera);
 
     // 建立mesh

@@ -46,8 +46,13 @@ export default class ShaderManager {
     if (this.#active != name) {
       const shader = this.#shaders.get(name);
       this.#gl.useProgram(shader.program);
-      this.#active = program;
+      
+      this.#active = name;
+
+      return shader;
     }
+
+    return null;
   }
 
   get(name) {

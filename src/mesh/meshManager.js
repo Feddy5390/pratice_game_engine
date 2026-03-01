@@ -1,4 +1,4 @@
-import Mesh from './mesh';
+import Mesh from './mesh.js';
 
 export default class MeshManager {
   #gl;

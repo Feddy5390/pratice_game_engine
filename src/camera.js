@@ -14,52 +14,123 @@
  */
 
 export default class Camera {
-  #wcWidth; // 決定縮放倍率(Zoom)
-  #wcCenter; // 世界座標系中，相機的中心點
-  #viewport; // 實際渲染到螢幕的矩形範圍
+  // 世界空間設定
+  wcCenter;
+  wcWidth;
+
+  // 視口設定（螢幕像素）
+  viewport; // [x, y, width, height]
+
+  // 投影深度（2D 通常不需要動）
+  near;
+  far;
+
+  // 相機旋轉（弧度）
+  rotation;
+
+  // 矩陣
   viewMatrix = mat4.create();
   projectionMatrix = mat4.create();
   vpMatrix = mat4.create();
 
-  constructor(wcWidth, wcCenter, viewport) {
-    this.#wcWidth = wcWidth;
-    this.#wcCenter = wcCenter;
-    this.#viewport = viewport;
+  constructor({
+    wcCenter = [0, 0],
+    wcWidth = 100,
+    viewport = [0, 0, 800, 600],
+    near = -1,
+    far = 1,
+    rotation = 0,
+  } = {}) {
+    this.wcCenter = vec2.fromValues(...wcCenter);
+    this.wcWidth = wcWidth;
+    this.viewport = viewport;
+    this.near = near;
+    this.far = far;
+    this.rotation = rotation;
   }
 
-  // 控制鏡頭看往哪個位置
+  // --- Getters / Setters ---
+  get wcHeight() {
+    const [, , w, h] = this.viewport;
+    return (this.wcWidth * h) / w;
+  }
+
+  setCenter(x, y) {
+    vec2.set(this.wcCenter, x, y);
+  }
+  move(dx, dy) {
+    vec2.add(this.wcCenter, this.wcCenter, [dx, dy]);
+  }
+
+  setZoom(wcWidth) {
+    this.wcWidth = wcWidth;
+  }
+  zoomBy(delta) {
+    this.wcWidth = Math.max(0.1, this.wcWidth + delta);
+  }
+  zoomScale(factor) {
+    this.wcWidth = Math.max(0.1, this.wcWidth * factor);
+  }
+
+  setViewport(x, y, w, h) {
+    this.viewport = [x, y, w, h];
+  }
+  setResolution(w, h) {
+    this.viewport[2] = w;
+    this.viewport[3] = h;
+  }
+
+  // --- 座標轉換工具 ---
+
+  // 世界座標 → NDC → 螢幕座標
+  worldToScreen(wx, wy) {
+    const [vx, vy, vw, vh] = this.viewport;
+    const sx =
+      ((wx - this.wcCenter[0]) / (this.wcWidth / 2) + 1) * 0.5 * vw + vx;
+    const sy =
+      (1 - (wy - this.wcCenter[1]) / (this.wcHeight / 2)) * 0.5 * vh + vy;
+    return [sx, sy];
+  }
+
+  // 螢幕座標 → 世界座標（點擊拾取很有用）
+  screenToWorld(sx, sy) {
+    const [vx, vy, vw, vh] = this.viewport;
+    const wx =
+      (((sx - vx) / vw) * 2 - 1) * (this.wcWidth / 2) + this.wcCenter[0];
+    const wy =
+      (1 - ((sy - vy) / vh) * 2) * (this.wcHeight / 2) + this.wcCenter[1];
+    return [wx, wy];
+  }
+
+  // --- 矩陣更新 ---
   #updateViewMatrix() {
-    const cameraCenter = vec2.fromValues(...this.#wcCenter);
-
+    mat4.identity(this.viewMatrix); // 修正累積問題
     mat4.translate(
-      this.viewMatrix, // 結果存到哪 → this.viewMatrix
-      this.viewMatrix, // 基底矩陣，在哪個矩陣上繼續操作 → 上一步的 this.viewMatrix
-      vec3.fromValues(-cameraCenter[0], -cameraCenter[1], 0), // 移動量 vec3 → [-centerX, -centerY, 0]
+      this.viewMatrix,
+      this.viewMatrix,
+      vec3.fromValues(-this.wcCenter[0], -this.wcCenter[1], 0),
     );
+    if (this.rotation !== 0) {
+      mat4.rotateZ(this.viewMatrix, this.viewMatrix, this.rotation);
+    }
   }
 
-  // 鏡頭看到多少，使用正交投影(2D 遊戲用)
   #updateProjectionMatrix() {
-    const wcHeight = (this.#wcWidth * this.#viewport[3]) / this.#viewport[2];
-
-    // Projection Matrix：只負責「世界單位 → NDC」
     mat4.ortho(
       this.projectionMatrix,
-      -this.#wcWidth / 2, // left
-      this.#wcWidth / 2, // right
-      -wcHeight / 2, // bottom
-      wcHeight / 2, // top
-      -1,
-      1, // near, far（2D 隨便給）
+      -this.wcWidth / 2,
+      this.wcWidth / 2,
+      -this.wcHeight / 2,
+      this.wcHeight / 2,
+      this.near,
+      this.far,
     );
   }
 
-  // 更新 VP 矩陣
   #updateVPMatrix() {
     mat4.multiply(this.vpMatrix, this.projectionMatrix, this.viewMatrix);
   }
 
-  // 每幀更新
   update() {
     this.#updateViewMatrix();
     this.#updateProjectionMatrix();

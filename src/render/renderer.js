@@ -22,7 +22,7 @@ export default class Renderer {
     gl.scissor(x, y, w, h);
 
     gl.enable(gl.SCISSOR_TEST);
-    gl.clearColor(0.8, 0.8, 0.8, 1);
+    gl.clearColor(1.0, 0.8, 0.8, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.disable(gl.SCISSOR_TEST);
 
@@ -37,9 +37,8 @@ export default class Renderer {
     const gl = this.#gl;
     const { shaderName, meshName, color, transform } = renderable;
 
-    this.#mShaderManager.use(shaderName);
+    const shader = this.#mShaderManager.use(shaderName);
 
-    const shader = this.#mShaderManager.get(shaderName);
     shader.bindUniform(camera, color, transform.getTRSMatrix());
 
     this.#mMeshManager.bind(meshName);

@@ -10,8 +10,8 @@ export default class sceneManager {
   }
 
   add(_class) {
-    if (!(_class instanceof BaseScene)) {
-      throw new Error('scene 必須繼承 BaseScene');
+    if (!(_class.prototype instanceof BaseScene)) {
+      throw new Error(`scene class ${_class?.prototype?.constructor?.name} 必須繼承 BaseScene`);
     }
 
     const scene = new _class(this.#core);

@@ -64,7 +64,7 @@ export default class Core {
 
   #loadAllScene(scenes = [ExampleScene]) {
     for (const scene of scenes) {
-      this.sceneManager.addScene(scene);
+      this.sceneManager.add(scene);
     }
   }
 
