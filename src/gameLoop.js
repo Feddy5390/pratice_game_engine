@@ -12,11 +12,13 @@ export default class GameLoop {
 
   #mSceneManager;
   #mRenderer;
+  #mCameraManager;
   #mInput;
 
-  _init(sceneManager, renderer) {
+  _init(sceneManager, renderer, cameraManager) {
     this.#mSceneManager = sceneManager;
     this.#mRenderer = renderer;
+    this.#mCameraManager = cameraManager;
   }
 
   start() {
@@ -50,6 +52,7 @@ export default class GameLoop {
       // 渲染頻率隨瀏覽器跑 (rAF)
       // 進階：傳入 alpha 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
       const alpha = this.#accumulator / this.#logicTickRate;
+      this.#mCameraManager.update();
       this.#mRenderer.render(scene, alpha);
     };
 

@@ -6,8 +6,9 @@ export class BaseScene {
   name;
   gameEngine;
 
-  camera;
-  renderables = [];
+  layers = [
+    // { cameraName: 'world', renderables: [] }
+  ];
 
   constructor(gameEngine, name) {
     if (!gameEngine) {
@@ -21,12 +22,16 @@ export class BaseScene {
     this.name = name;
   }
 
-  setCamera(camera) {
-    this.camera = camera;
+  createLayer(layerName) {
+    this.layers.push({ cameraName: layerName, renderables: [] });
   }
 
-  add(renderable) {
-    this.renderables.push(renderable);
+  addToLayer(layerName, renderable) {
+    const layer = this.layers.find((l) => l.cameraName === layerName);
+    if (!layer) {
+      throw new Error(`layer ${layerName} 不存在`);
+    }
+    layer.renderables.push(renderable);
   }
 
   preload() {

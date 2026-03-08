@@ -7,9 +7,11 @@ import sceneManager from './scene/sceneManager.js';
 import { ExampleScene } from './scene/exampleScene.js';
 import MeshManager from './mesh/meshManager.js';
 import Renderer from './render/renderer.js';
+import CameraManager from './camera/cameraManager.js';
 
 export default class Core {
   gl;
+  canvas;
   rootDir;
 
   // modules
@@ -26,8 +28,8 @@ export default class Core {
   constructor() {}
 
   #initWebGL(canvasID) {
-    const canvas = document.getElementById(canvasID);
-    this.gl = canvas.getContext('webgl2');
+    this.canvas = document.getElementById(canvasID);
+    this.gl = this.canvas.getContext('webgl2');
     if (!this.gl) {
       throw new Error(`請傳入正確的canvasID`);
     }
@@ -38,6 +40,7 @@ export default class Core {
     this.shaderManager = new ShaderManager();
     this.meshManager = new MeshManager();
     this.sceneManager = new sceneManager();
+    this.cameraManager = new CameraManager();
     this.renderer = new Renderer();
     this.gameLoop = new GameLoop();
 
@@ -45,8 +48,8 @@ export default class Core {
     this.shaderManager._init(this.gl, this.resource);
     this.meshManager._init(this.gl, this.shaderManager);
     this.sceneManager._init(this);
-    this.renderer._init(this.gl, this.shaderManager, this.meshManager);
-    this.gameLoop._init(this.sceneManager, this.renderer);
+    this.renderer._init(this.gl, this.shaderManager, this.meshManager, this.cameraManager);
+    this.gameLoop._init(this.sceneManager, this.renderer, this.cameraManager);
   }
 
   async #registerDefaultShader() {
@@ -66,6 +69,20 @@ export default class Core {
     for (const scene of scenes) {
       this.sceneManager.add(scene);
     }
+  }
+
+  // 螢幕調整大小
+  resize() {
+    const canvas = this.canvas;
+
+    const dpr = window.devicePixelRatio || 1;
+    const displayWidth = Math.floor(canvas.clientWidth * dpr);
+    const displayHeight = Math.floor(canvas.clientHeight * dpr);
+
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+
+    this.cameraManager.resizeAll(displayWidth, displayHeight);
   }
 
   async init({ canvasID, scenes, rootDir }) {

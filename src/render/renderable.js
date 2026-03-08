@@ -3,7 +3,7 @@ import Transform from '../Transform.js';
 export default class Renderable {
   meshName;
   shaderName;
-  color = [1, 1, 1, 1];
+  color = [0.2, 0.5, 0.7, 1];
   transform = new Transform();
 
   constructor(meshName, shaderName) {

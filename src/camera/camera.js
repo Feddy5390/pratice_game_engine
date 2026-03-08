@@ -16,7 +16,7 @@
 export default class Camera {
   // 世界空間設定
   wcCenter;
-  wcWidth;
+  wcWidth; // 相機視野寬 100 個世界單位
 
   // 視口設定（螢幕像素）
   viewport; // [x, y, width, height]
@@ -28,25 +28,30 @@ export default class Camera {
   // 相機旋轉（弧度）
   rotation;
 
+  // 背景顏色
+  background;
+
   // 矩陣
   viewMatrix = mat4.create();
   projectionMatrix = mat4.create();
   vpMatrix = mat4.create();
 
   constructor({
-    wcCenter = [0, 0],
-    wcWidth = 100,
-    viewport = [0, 0, 800, 600],
+    wcCenter = [0, 0], // 世界中心
+    wcWidth = 100, // 世界寬度;鏡頭焦距，數值越大，看得到的範圍越廣
+    viewport = [0, 0, 800, 600], // 螢幕上的實際像素大小
     near = -1,
     far = 1,
     rotation = 0,
+    background = [0, 0, 0, 1], // 預設黑色
   } = {}) {
-    this.wcCenter = vec2.fromValues(...wcCenter);
+    this.wcCenter = vec2.fromValues(...wcCenter); // 建立一個新的 vec2 陣列，底層用 Float32Array
     this.wcWidth = wcWidth;
     this.viewport = viewport;
     this.near = near;
     this.far = far;
     this.rotation = rotation;
+    this.background = background;
   }
 
   // --- Getters / Setters ---
@@ -79,32 +84,13 @@ export default class Camera {
     this.viewport[2] = w;
     this.viewport[3] = h;
   }
-
-  // --- 座標轉換工具 ---
-
-  // 世界座標 → NDC → 螢幕座標
-  worldToScreen(wx, wy) {
-    const [vx, vy, vw, vh] = this.viewport;
-    const sx =
-      ((wx - this.wcCenter[0]) / (this.wcWidth / 2) + 1) * 0.5 * vw + vx;
-    const sy =
-      (1 - (wy - this.wcCenter[1]) / (this.wcHeight / 2)) * 0.5 * vh + vy;
-    return [sx, sy];
+  setBackground(color) {
+    this.background = color;
   }
 
-  // 螢幕座標 → 世界座標（點擊拾取很有用）
-  screenToWorld(sx, sy) {
-    const [vx, vy, vw, vh] = this.viewport;
-    const wx =
-      (((sx - vx) / vw) * 2 - 1) * (this.wcWidth / 2) + this.wcCenter[0];
-    const wy =
-      (1 - ((sy - vy) / vh) * 2) * (this.wcHeight / 2) + this.wcCenter[1];
-    return [wx, wy];
-  }
-
-  // --- 矩陣更新 ---
+  // 更新視圖矩陣
   #updateViewMatrix() {
-    mat4.identity(this.viewMatrix); // 修正累積問題
+    mat4.identity(this.viewMatrix); // 每次先重置成單位矩陣
     mat4.translate(
       this.viewMatrix,
       this.viewMatrix,
@@ -115,6 +101,7 @@ export default class Camera {
     }
   }
 
+  // 更新投影矩陣
   #updateProjectionMatrix() {
     mat4.ortho(
       this.projectionMatrix,

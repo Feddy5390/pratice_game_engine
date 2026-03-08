@@ -2,34 +2,37 @@ export default class Renderer {
   #gl;
   #mShaderManager;
   #mMeshManager;
+  #mCameraManager;
 
-  _init(gl, shaderManager, meshManager) {
+  _init(gl, mShaderManager, mMeshManager, mCameraManager) {
     this.#gl = gl;
-    this.#mShaderManager = shaderManager;
-    this.#mMeshManager = meshManager;
+    this.#mShaderManager = mShaderManager;
+    this.#mMeshManager = mMeshManager;
+    this.#mCameraManager = mCameraManager;
   }
 
   render(scene, alpha) {
     const gl = this.#gl;
-    const { camera, renderables } = scene;
+    const { layers } = scene;
 
-    if (!camera) {
-      return;
-    }
+    if (layers.length === 0) return;
 
-    const [x, y, w, h] = camera.viewport;
-    gl.viewport(x, y, w, h);
-    gl.scissor(x, y, w, h);
+    for (const layer of layers) {
+      const camera = this.#mCameraManager.get(layer.cameraName);
+      if (!camera) continue;
 
-    gl.enable(gl.SCISSOR_TEST);
-    gl.clearColor(1.0, 0.8, 0.8, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.disable(gl.SCISSOR_TEST);
+      const [x, y, w, h] = camera.viewport;
+      gl.viewport(x, y, w, h);
+      gl.scissor(x, y, w, h);
 
-    camera.update();
+      gl.enable(gl.SCISSOR_TEST);
+      gl.clearColor(...camera.background);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.disable(gl.SCISSOR_TEST);
 
-    for (const renderable of renderables) {
-      this.#drawRenderable(renderable, camera);
+      for (const renderable of layer.renderables) {
+        this.#drawRenderable(renderable, camera);
+      }
     }
   }
 
@@ -37,8 +40,9 @@ export default class Renderer {
     const gl = this.#gl;
     const { shaderName, meshName, color, transform } = renderable;
 
+    
     const shader = this.#mShaderManager.use(shaderName);
-
+    
     shader.bindUniform(camera, color, transform.getTRSMatrix());
 
     this.#mMeshManager.bind(meshName);
