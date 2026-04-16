@@ -6,13 +6,27 @@
     <title>Mygame</title>
     <script type="module" src="index.js"></script>
     <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
       #canvas {
         background-color: red;
+        display: flex;
+      }
+
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #111;
       }
     </style>
   </head>
 
   <body>
-    <canvas id="canvas" width="500" height="500"> 不支援 canvas 畫布 </canvas>
+    <canvas id="canvas"> 不支援 canvas 畫布 </canvas>
   </body>
 </html>

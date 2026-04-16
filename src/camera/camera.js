@@ -11,17 +11,21 @@
  * NDC 標準化裝置座標 (-1~1)
  *    ↓ viewport transform
  * 螢幕像素座標 (Screen Space)
+ *
+ *
+ * 相機用的大小都是物理大小
  */
 
 export default class Camera {
   // 世界空間設定
-  wcCenter;
-  wcWidth; // 相機視野寬 100 個世界單位
+  wcCenter; // 相機中心 (世界單位)
+  wcWidth; // 相機視野寬 (世界單位)
 
   // 視口設定（螢幕像素）
-  viewport; // [x, y, width, height]
+  actrueViewport; // 會根據螢幕縮放計算
+  viewport; // [x, y, width, height] 原始大小
 
-  // 投影深度（2D 通常不需要動）
+  // 投影深度
   near;
   far;
 
@@ -39,30 +43,32 @@ export default class Camera {
   constructor({
     wcCenter = [0, 0], // 世界中心
     wcWidth = 100, // 世界寬度;鏡頭焦距，數值越大，看得到的範圍越廣
-    viewport = [0, 0, 800, 600], // 螢幕上的實際像素大小
+    viewport = [0, 0, 100, 100],
+    rotation = 0,
     near = -1,
     far = 1,
-    rotation = 0,
     background = [0, 0, 0, 1], // 預設黑色
   } = {}) {
     this.wcCenter = vec2.fromValues(...wcCenter); // 建立一個新的 vec2 陣列，底層用 Float32Array
     this.wcWidth = wcWidth;
-    this.viewport = viewport;
+    this.setViewport(...viewport);
     this.near = near;
     this.far = far;
     this.rotation = rotation;
     this.background = background;
   }
 
-  // --- Getters / Setters ---
+  // 等比例計算高度
   get wcHeight() {
-    const [, , w, h] = this.viewport;
+    const [x, y, w, h] = this.viewport;
+
     return (this.wcWidth * h) / w;
   }
 
   setCenter(x, y) {
     vec2.set(this.wcCenter, x, y);
   }
+
   move(dx, dy) {
     vec2.add(this.wcCenter, this.wcCenter, [dx, dy]);
   }
@@ -70,9 +76,11 @@ export default class Camera {
   setZoom(wcWidth) {
     this.wcWidth = wcWidth;
   }
+
   zoomBy(delta) {
     this.wcWidth = Math.max(0.1, this.wcWidth + delta);
   }
+
   zoomScale(factor) {
     this.wcWidth = Math.max(0.1, this.wcWidth * factor);
   }
@@ -80,12 +88,26 @@ export default class Camera {
   setViewport(x, y, w, h) {
     this.viewport = [x, y, w, h];
   }
-  setResolution(w, h) {
-    this.viewport[2] = w;
-    this.viewport[3] = h;
-  }
+
+  // setResolution(w, h) {
+  //   this.viewport[2] = w;
+  //   this.viewport[3] = h;
+  // }
+
   setBackground(color) {
     this.background = color;
+  }
+
+  // 根據傳入的總物理像素，計算自己該佔多少像素
+  calculateInternalViewport(scale) {
+    const [nx, ny, nw, nh] = this.viewport;
+
+    this.viewport = [
+      Math.round(nx * scale),
+      Math.round(ny * scale),
+      Math.round(nw * scale),
+      Math.round(nh * scale),
+    ];
   }
 
   // 更新視圖矩陣
@@ -105,10 +127,10 @@ export default class Camera {
   #updateProjectionMatrix() {
     mat4.ortho(
       this.projectionMatrix,
-      -this.wcWidth / 2,
-      this.wcWidth / 2,
-      -this.wcHeight / 2,
-      this.wcHeight / 2,
+      -this.wcWidth / 2, // left
+      this.wcWidth / 2, // right
+      -this.wcHeight / 2, // bottom
+      this.wcHeight / 2, // top
       this.near,
       this.far,
     );

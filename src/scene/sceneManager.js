@@ -1,6 +1,6 @@
 import { BaseScene } from './baseScene.js';
 
-export default class sceneManager {
+export default class SceneManager {
   #core;
   #scenes = new Map(); // 所有場景的實例
   active; // 目前執行的場景實例
@@ -36,5 +36,7 @@ export default class sceneManager {
     await this.#core.resource.load();
 
     await nextScene.create();
+
+    this.#core.resize();
   }
 }

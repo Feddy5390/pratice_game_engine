@@ -9,9 +9,9 @@ export default class ShaderManager {
 
   #active;
 
-  _init(gl, mResource) {
+  _init(gl, resource) {
     this.#gl = gl;
-    this.#mResource = mResource;
+    this.#mResource = resource;
   }
 
   _initAll() {

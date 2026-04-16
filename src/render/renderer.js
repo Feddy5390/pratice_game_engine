@@ -17,13 +17,15 @@ export default class Renderer {
 
     if (layers.length === 0) return;
 
+    const dpr = window.devicePixelRatio || 1;
+
     for (const layer of layers) {
       const camera = this.#mCameraManager.get(layer.cameraName);
       if (!camera) continue;
 
       const [x, y, w, h] = camera.viewport;
-      gl.viewport(x, y, w, h);
-      gl.scissor(x, y, w, h);
+      gl.viewport(x * dpr, y * dpr, w * dpr, h * dpr);
+      gl.scissor(x * dpr, y * dpr, w * dpr, h * dpr);
 
       gl.enable(gl.SCISSOR_TEST);
       gl.clearColor(...camera.background);
@@ -40,9 +42,8 @@ export default class Renderer {
     const gl = this.#gl;
     const { shaderName, meshName, color, transform } = renderable;
 
-    
     const shader = this.#mShaderManager.use(shaderName);
-    
+
     shader.bindUniform(camera, color, transform.getTRSMatrix());
 
     this.#mMeshManager.bind(meshName);

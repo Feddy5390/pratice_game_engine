@@ -3,16 +3,20 @@ import Resoure from './resource.js';
 import GameLoop from './gameLoop.js';
 import ShaderManager from './shader/shaderManager.js';
 import SimpleShader from './shader/default/simpleShader.js';
-import sceneManager from './scene/sceneManager.js';
+import SceneManager from './scene/sceneManager.js';
 import { ExampleScene } from './scene/exampleScene.js';
 import MeshManager from './mesh/meshManager.js';
 import Renderer from './render/renderer.js';
 import CameraManager from './camera/cameraManager.js';
 
 export default class Core {
+  rootDir;
+  #resizeTimer = null;
+
+  // webgl
   gl;
   canvas;
-  rootDir;
+  viewport;
 
   // modules
   resource;
@@ -39,16 +43,21 @@ export default class Core {
     this.resource = new Resoure();
     this.shaderManager = new ShaderManager();
     this.meshManager = new MeshManager();
-    this.sceneManager = new sceneManager();
+    this.sceneManager = new SceneManager();
     this.cameraManager = new CameraManager();
     this.renderer = new Renderer();
     this.gameLoop = new GameLoop();
 
     this.resource._init(this.rootDir);
     this.shaderManager._init(this.gl, this.resource);
-    this.meshManager._init(this.gl, this.shaderManager);
+    this.meshManager._init(this.gl);
     this.sceneManager._init(this);
-    this.renderer._init(this.gl, this.shaderManager, this.meshManager, this.cameraManager);
+    this.renderer._init(
+      this.gl,
+      this.shaderManager,
+      this.meshManager,
+      this.cameraManager,
+    );
     this.gameLoop._init(this.sceneManager, this.renderer, this.cameraManager);
   }
 
@@ -71,22 +80,60 @@ export default class Core {
     }
   }
 
-  // 螢幕調整大小
-  resize() {
-    const canvas = this.canvas;
+  #listenResize() {
+    window.addEventListener('resize', () => {
+      if (this.#resizeTimer) {
+        clearTimeout(this.#resizeTimer);
+      }
 
-    const dpr = window.devicePixelRatio || 1;
-    const displayWidth = Math.floor(canvas.clientWidth * dpr);
-    const displayHeight = Math.floor(canvas.clientHeight * dpr);
-
-    canvas.width = displayWidth;
-    canvas.height = displayHeight;
-
-    this.cameraManager.resizeAll(displayWidth, displayHeight);
+      this.#resizeTimer = setTimeout(() => {
+        this.resize();
+      }, 300);
+    });
   }
 
-  async init({ canvasID, scenes, rootDir }) {
+  // 螢幕調整大小
+  resize() {
+    const { canvas, viewport } = this;
+    const [baseW, baseH] = viewport;
+    const dpr = window.devicePixelRatio || 1;
+
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    // scale 最大只能是 1 (代表不放大)
+    // 如果螢幕比基準大，scale 還是 1；如果比基準小，則按比例縮小
+    const scale = Math.min(screenW / baseW, screenH / baseH, 1);
+
+    // 計算 CSS 顯示的大小 (邏輯像素)
+    const displayW = Math.round(baseW * scale);
+    const displayH = Math.round(baseH * scale);
+
+    // 計算真正的渲染像素 (考慮 DPR)
+    const renderW = Math.round(displayW * dpr);
+    const renderH = Math.round(displayH * dpr);
+
+        console.log(`scale: ${scale} displayW: ${displayW} renderW: ${renderW}`)
+
+    // 只有當尺寸真的改變時才執行更新
+    if (canvas.width !== renderW || canvas.height !== renderH) {
+      // 設定 CSS 大小
+      canvas.style.width = `${displayW}px`;
+      canvas.style.height = `${displayH}px`;
+
+      // 設定解析度
+      canvas.width = renderW;
+      canvas.height = renderH;
+
+      // 通知相機
+      this.cameraManager.resizeAll(scale);
+    }
+  }
+
+  async init({ canvasID, scenes, rootDir, viewport = [500, 500] }) {
     this.rootDir = rootDir;
+
+    this.viewport = viewport;
 
     this.#initWebGL(canvasID);
 
@@ -98,6 +145,8 @@ export default class Core {
 
     // 註冊場景
     this.#loadAllScene(scenes);
+
+    this.#listenResize();
 
     this.#isBooting = true;
 

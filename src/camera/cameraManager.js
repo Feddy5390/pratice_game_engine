@@ -8,16 +8,21 @@ export default class CameraManager {
   }
 
   add(cameraName, { wcCenter, wcWidth, viewport, background }) {
-    const camera = new Camera({ wcCenter, wcWidth, viewport, background });
+    const camera = new Camera({
+      wcCenter,
+      wcWidth,
+      viewport,
+      background,
+    });
     this.#cameras.set(cameraName, camera);
 
     return camera;
   }
 
-  resizeAll(width, height) {
+  resizeAll(scale) {
     for (const camera of this.#cameras.values()) {
       // 更新相機 viewport
-      camera.setResolution(width, height);
+      camera.calculateInternalViewport(scale);
 
       // 重新計算 ProjectionMatrix
       camera.update();
