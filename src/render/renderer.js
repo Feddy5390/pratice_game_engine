@@ -23,9 +23,17 @@ export default class Renderer {
       const camera = this.#mCameraManager.get(layer.cameraName);
       if (!camera) continue;
 
+      const screenScale = this.#mCameraManager.screenScale;
+
       const [x, y, w, h] = camera.viewport;
-      gl.viewport(x * dpr, y * dpr, w * dpr, h * dpr);
-      gl.scissor(x * dpr, y * dpr, w * dpr, h * dpr);
+      const _viewport = [
+        Math.round(x * dpr * screenScale),
+        Math.round(y * dpr * screenScale),
+        Math.round(w * dpr * screenScale),
+        Math.round(h * dpr * screenScale),
+      ];
+      gl.viewport(..._viewport);
+      gl.scissor(..._viewport);
 
       gl.enable(gl.SCISSOR_TEST);
       gl.clearColor(...camera.background);
@@ -39,7 +47,6 @@ export default class Renderer {
   }
 
   #drawRenderable(renderable, camera) {
-    const gl = this.#gl;
     const { shaderName, meshName, color, transform } = renderable;
 
     const shader = this.#mShaderManager.use(shaderName);

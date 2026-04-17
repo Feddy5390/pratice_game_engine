@@ -25,7 +25,7 @@ export class ExampleScene extends BaseScene {
     ge.cameraManager.add(worldCamera, {
       wcCenter: [0, 0],
       wcWidth: 300,
-      viewport: [0, 0, 300, 300],
+      viewport: [0, 0, 200, 200],
       background: [0.0, 0.1, 1.0, 1.0],
     });
 
@@ -34,7 +34,7 @@ export class ExampleScene extends BaseScene {
       wcCenter: [0, 0],
       wcWidth: 150,
       viewport: [0, 0, 150, 150],
-      background: [0.5, 0.1, 0.3, 1],
+      background: [0.6, 0.8, 0.1, 1],
     });
 
     // 建立mesh
