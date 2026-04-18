@@ -25,17 +25,17 @@ export class ExampleScene extends BaseScene {
     ge.cameraManager.add(worldCamera, {
       wcCenter: [0, 0],
       wcWidth: 300,
-      viewport: [0, 0, 200, 200],
-      background: [0.0, 0.1, 1.0, 1.0],
+      viewport: [0, 0, 300, 300],
+      background: [0.6, 0.1, 1.0, 1.0],
     });
 
-    const mapCamera = 'map';
-    ge.cameraManager.add(mapCamera, {
-      wcCenter: [0, 0],
-      wcWidth: 150,
-      viewport: [0, 0, 150, 150],
-      background: [0.6, 0.8, 0.1, 1],
-    });
+    // const mapCamera = 'map';
+    // ge.cameraManager.add(mapCamera, {
+    //   wcCenter: [0, 0],
+    //   wcWidth: 150,
+    //   viewport: [0, 0, 150, 150],
+    //   background: [0.6, 0.8, 0.1, 1],
+    // });
 
     // 建立mesh
     const shaderName = 'default';
@@ -43,7 +43,11 @@ export class ExampleScene extends BaseScene {
 
     const shader = ge.shaderManager.get(shaderName);
     const layout = [{ name: 'a_Position', size: 3 }];
-    const vertices = [0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0];
+    const vertices = [
+      0.0, -0.5, 0.0,  // 頂點在「上」 (Y 較小)
+      -0.5,  0.5, 0.0,  // 左下 (Y 較大)
+      0.5,  0.5, 0.0   // 右下 (Y 較大)
+    ];
     ge.meshManager.add(meshName, {
       shader,
       layout,
@@ -57,8 +61,8 @@ export class ExampleScene extends BaseScene {
     // 創建三角形
     const blueTriangle = new Renderable(meshName, shaderName);
     this.addToLayer(worldCamera, blueTriangle);
-    blueTriangle.transform.setSize(300, 300);
-    blueTriangle.transform.setPosition(0, 0);
+    blueTriangle.transform.setSize(250, 250);
+    blueTriangle.transform.setPosition(125, 125);
     blueTriangle.setColor([0.0, 0.8, 1.0, 1.0]);
 
     // const redTriangle = new Renderable(meshName, shaderName);

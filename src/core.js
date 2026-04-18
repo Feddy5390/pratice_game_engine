@@ -12,7 +12,6 @@ import CameraManager from './camera/cameraManager.js';
 export default class Core {
   rootDir;
   #resizeTimer = null;
-  scale = 1;
 
   // webgl
   gl;
@@ -105,15 +104,14 @@ export default class Core {
     // scale 最大只能是 1 (代表不放大)
     // 如果螢幕比基準大，scale 還是 1；如果比基準小，則按比例縮小
     const scale = Math.min(screenW / baseW, screenH / baseH, 1);
-    this.scale = scale;
 
     // 計算 CSS 顯示的大小 (邏輯像素)
     const displayW = Math.round(baseW * scale);
     const displayH = Math.round(baseH * scale);
 
     // 計算真正的渲染像素 (考慮 DPR)
-    const renderW = Math.round(displayW * dpr);
-    const renderH = Math.round(displayH * dpr);
+    const renderW = Math.round(baseW * scale * dpr);
+    const renderH = Math.round(baseH * scale * dpr);
 
     // 只有當尺寸真的改變時才執行更新
     if (canvas.width !== renderW || canvas.height !== renderH) {

@@ -38,7 +38,7 @@ export default class Camera {
   #viewMatrix = mat4.create();
   #projectionMatrix = mat4.create();
   #vpMatrix = mat4.create();
-  #translateVec =  vec3.create(); // 相機平移矩陣
+  #translateVec = vec3.create(); // 相機平移矩陣
 
   constructor({
     wcCenter = [0, 0],
@@ -132,12 +132,13 @@ export default class Camera {
   #updateProjectionMatrix() {
     const wcHeight = this.wcHeight;
 
+    // 左上為原點
     mat4.ortho(
       this.#projectionMatrix,
-      -this.#wcWidth / 2, // left
-      this.#wcWidth / 2, // right
-      -wcHeight / 2, // bottom
-      wcHeight / 2, // top
+      0, // left
+      this.#wcWidth, // right
+      wcHeight, // bottom (現在是畫面底部，y 值較大)
+      0, // top (現在是畫面頂部，y 值為 0)
       this.#near,
       this.#far,
     );
