@@ -8,6 +8,7 @@ import { ExampleScene } from './scene/exampleScene.js';
 import MeshManager from './mesh/meshManager.js';
 import Renderer from './render/renderer.js';
 import CameraManager from './camera/cameraManager.js';
+import Input from './input.js';
 
 export default class Core {
   rootDir;
@@ -47,6 +48,7 @@ export default class Core {
     this.cameraManager = new CameraManager();
     this.renderer = new Renderer();
     this.gameLoop = new GameLoop();
+    this.input = new Input();
 
     this.resource._init(this.rootDir);
     this.shaderManager._init(this.gl, this.resource);
@@ -58,7 +60,8 @@ export default class Core {
       this.meshManager,
       this.cameraManager,
     );
-    this.gameLoop._init(this.sceneManager, this.renderer, this.cameraManager);
+    this.gameLoop._init(this.sceneManager, this.renderer, this.cameraManager, this.input);
+    this.input._init();
   }
 
   async #registerDefaultShader() {

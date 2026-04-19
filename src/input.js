@@ -4,7 +4,7 @@ export default class Input {
   #prevPressed = new Set();
   #clicked = new Set();
 
-  init() {
+  _init() {
     window.addEventListener('keydown', (e) => {
       this.#pressed.add(e.keyCode);
     });
@@ -13,11 +13,14 @@ export default class Input {
     });
   }
 
+  // 註冊要監聽的按鍵
   setKey(keys) {
     for (const key in keys) {
       const code = keys[key];
       this.#keys.set(key, code);
     }
+
+    console.log(this.#keys)
   }
 
   update() {
@@ -36,14 +39,17 @@ export default class Input {
     }
   }
 
+  // 判斷是否持續按下
   isKeyPressed(key) {
     const keyCode = this.#keys.get(key);
 
     return this.#pressed.has(keyCode);
   }
 
+  // 判斷是否按下
   isKeyClicked(key) {
     const keyCode = this.#keys.get(key);
+
     return this.#clicked.has(keyCode);
   }
 }

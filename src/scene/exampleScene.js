@@ -2,6 +2,8 @@ import { BaseScene } from './baseScene.js';
 import Renderable from '../render/renderable.js';
 
 export class ExampleScene extends BaseScene {
+  #worldCamera;
+
   constructor(gameEngine) {
     super(gameEngine, 'example-scene');
   }
@@ -20,14 +22,22 @@ export class ExampleScene extends BaseScene {
     const ge = this.gameEngine;
     console.log(`場景(${this.name}) create...`);
 
+    ge.input.setKey({
+      a: 65,
+      d: 68,
+      w: 87,
+      x: 88
+    });
+
     // 創建相機
     const worldCamera = 'world';
     ge.cameraManager.add(worldCamera, {
       wcCenter: [0, 0],
       wcWidth: 300,
-      viewport: [0, 0, 300, 300],
+      viewport: [0, 200, 100, 100],
       background: [0.6, 0.1, 1.0, 1.0],
     });
+    this.#worldCamera = ge.cameraManager.get(worldCamera);
 
     // const mapCamera = 'map';
     // ge.cameraManager.add(mapCamera, {
@@ -44,9 +54,15 @@ export class ExampleScene extends BaseScene {
     const shader = ge.shaderManager.get(shaderName);
     const layout = [{ name: 'a_Position', size: 3 }];
     const vertices = [
-      0.0, -0.5, 0.0,  // 頂點在「上」 (Y 較小)
-      -0.5,  0.5, 0.0,  // 左下 (Y 較大)
-      0.5,  0.5, 0.0   // 右下 (Y 較大)
+      0.0,
+      -0.5,
+      0.0, // 頂點在「上」 (Y 較小)
+      -0.5,
+      0.5,
+      0.0, // 左下 (Y 較大)
+      0.5,
+      0.5,
+      0.0, // 右下 (Y 較大)
     ];
     ge.meshManager.add(meshName, {
       shader,
@@ -74,5 +90,21 @@ export class ExampleScene extends BaseScene {
     console.log(`場景(${this.name}) start`);
   }
 
-  update() {}
+  update() {
+    const ge = this.gameEngine;
+    const { input } = ge;
+
+    if (input.isKeyPressed("a")) {
+      this.#worldCamera.move(1, 0)
+    }
+    if (input.isKeyPressed("d")) {
+      this.#worldCamera.move(-1, 0)
+    }
+    if (input.isKeyPressed("w")) {
+      this.#worldCamera.move(0, 1)
+    }
+    if (input.isKeyPressed("x")) {
+      this.#worldCamera.move(0, -1)
+    }
+  }
 }

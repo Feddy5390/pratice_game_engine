@@ -15,10 +15,11 @@ export default class GameLoop {
   #mCameraManager;
   #mInput;
 
-  _init(sceneManager, renderer, cameraManager) {
+  _init(sceneManager, renderer, cameraManager, input) {
     this.#mSceneManager = sceneManager;
     this.#mRenderer = renderer;
     this.#mCameraManager = cameraManager;
+    this.#mInput = input;
   }
 
   start() {
@@ -31,12 +32,14 @@ export default class GameLoop {
         return;
       }
 
-      const scene = this.#mSceneManager.active;
+      const scene = this.#mSceneManager.active; // 取得目前正在進行中的場景
 
       const dt = (timestamp - this.#lastTime) / 1000;
       this.#lastTime = timestamp;
 
-      this.#updateFPS(dt);
+      this.#updateFPS(dt); // 計算 fps
+
+      this.#mInput.update(); // 更新輸入
 
       // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
       const frameTime = Math.min(dt, 0.25);
