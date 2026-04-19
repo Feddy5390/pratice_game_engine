@@ -60,7 +60,12 @@ export default class Core {
       this.meshManager,
       this.cameraManager,
     );
-    this.gameLoop._init(this.sceneManager, this.renderer, this.cameraManager, this.input);
+    this.gameLoop._init(
+      this.sceneManager,
+      this.renderer,
+      this.cameraManager,
+      this.input,
+    );
     this.input._init();
   }
 
@@ -75,6 +80,28 @@ export default class Core {
     await this.resource.load();
 
     this.shaderManager._initAll();
+  }
+
+  #registerDefaultMesh() {
+    const shader = this.shaderManager.get('default');
+    const layout = [{ name: 'a_Position', size: 3 }];
+    const vertices = [
+      0.0,
+      -0.5,
+      0.0, // 頂點在「上」 (Y 較小)
+      -0.5,
+      0.5,
+      0.0, // 左下 (Y 較大)
+      0.5,
+      0.5,
+      0.0, // 右下 (Y 較大)
+    ];
+
+    this.meshManager.add('triangle', {
+      shader,
+      layout,
+      vertices,
+    });
   }
 
   #loadAllScene(scenes = [ExampleScene]) {
@@ -143,6 +170,9 @@ export default class Core {
 
     // 註冊預設shader
     await this.#registerDefaultShader();
+
+    // 註冊預設mesh
+    this.#registerDefaultMesh();
 
     // 註冊場景
     this.#loadAllScene(scenes);

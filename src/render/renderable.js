@@ -6,9 +6,9 @@ export default class Renderable {
   color = [0.2, 0.5, 0.7, 1];
   transform = new Transform();
 
-  constructor(meshName, shaderName) {
-    this.meshName = meshName;
+  constructor(shaderName = 'default', meshName = 'triangle') {
     this.shaderName = shaderName;
+    this.meshName = meshName;
   }
 
   setColor(color) {

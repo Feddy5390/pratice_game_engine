@@ -8,7 +8,7 @@ window.onload = async () => {
   await myGame.init({
     canvasID: 'canvas',
     rootDir: '..',
-    viewport: [300, 300]
+    viewport: [500, 500]
   });
 
   await myGame.start();

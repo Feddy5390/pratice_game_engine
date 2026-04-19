@@ -19,8 +19,6 @@ export default class Input {
       const code = keys[key];
       this.#keys.set(key, code);
     }
-
-    console.log(this.#keys)
   }
 
   update() {
