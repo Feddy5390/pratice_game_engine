@@ -1,106 +1,89 @@
 import './lib/gl-matrix.js';
-import Resoure from './resource.js';
-import GameLoop from './gameLoop.js';
+import ResourceManager from './resourceManager.js';
 import ShaderManager from './shader/shaderManager.js';
-import SimpleShader from './shader/default/simpleShader.js';
+import TextureManager from './textureManager.js';
 import SceneManager from './scene/sceneManager.js';
-import { ExampleScene } from './scene/exampleScene.js';
-import MeshManager from './mesh/meshManager.js';
-import Renderer from './render/renderer.js';
 import CameraManager from './camera/cameraManager.js';
+import GameLoop from './gameLoop.js';
+import Renderer from './renderer.js';
 import Input from './input.js';
+import DefaultShader from './shader/default/defaultShader.js';
+import { ExampleScene } from './scene/exampleScene.js';
 
 export default class Core {
   rootDir;
   #resizeTimer = null;
+  #isBooting = false;
 
   // webgl
   gl;
   canvas;
-  viewport;
+  screenSize;
 
   // modules
-  resource;
+  resourceManager;
   shaderManager;
-  meshManager;
+  textureManager;
   sceneManager;
   renderer;
   gameLoop;
 
-  // system status
-  #isBooting = false;
-
-  constructor() {}
-
   #initWebGL(canvasID) {
     this.canvas = document.getElementById(canvasID);
-    this.gl = this.canvas.getContext('webgl2');
-    if (!this.gl) {
+    const gl = this.canvas.getContext('webgl2');
+    if (!gl) {
       throw new Error(`請傳入正確的canvasID`);
     }
+    this.gl = gl;
+
+    // 啟動透明度
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   #initModule() {
-    this.resource = new Resoure();
+    this.resourceManager = new ResourceManager();
     this.shaderManager = new ShaderManager();
-    this.meshManager = new MeshManager();
+    this.textureManager = new TextureManager();
     this.sceneManager = new SceneManager();
     this.cameraManager = new CameraManager();
-    this.renderer = new Renderer();
     this.gameLoop = new GameLoop();
+    this.renderer = new Renderer();
     this.input = new Input();
 
-    this.resource._init(this.rootDir);
-    this.shaderManager._init(this.gl, this.resource);
-    this.meshManager._init(this.gl);
-    this.sceneManager._init(this);
-    this.renderer._init(
-      this.gl,
+    this.resourceManager._init(this.rootDir);
+    this.shaderManager._init(this.gl, this.resourceManager);
+    this.textureManager._init(this.gl, this.resourceManager);
+    this.sceneManager._init(
+      this,
+      this.resourceManager,
+      this.textureManager,
       this.shaderManager,
-      this.meshManager,
-      this.cameraManager,
     );
     this.gameLoop._init(
       this.sceneManager,
-      this.renderer,
       this.cameraManager,
+      this.renderer,
       this.input,
+    );
+    this.renderer._init(
+      this.gl,
+      this.shaderManager,
+      this.textureManager,
+      this.cameraManager,
     );
     this.input._init();
   }
 
-  async #registerDefaultShader() {
-    this.shaderManager.add(
+  #registerDefaultShader() {
+    this.shaderManager.addShader(
       'default',
-      SimpleShader,
+      DefaultShader,
       'src/shader/default/glsl/vertexShader.glsl',
       'src/shader/default/glsl/fragShader.glsl',
     );
-
-    await this.resource.load();
-
-    this.shaderManager._initAll();
-  }
-
-  #registerDefaultMesh() {
-    const shader = this.shaderManager.get('default');
-    const layout = [{ name: 'a_Position', size: 3 }];
-    const vertices = [
-      0.0,
-      -0.5,
-      0.0, // 頂點在「上」 (Y 較小)
-      -0.5,
-      0.5,
-      0.0, // 左下 (Y 較大)
-      0.5,
-      0.5,
-      0.0, // 右下 (Y 較大)
-    ];
-
-    this.meshManager.add('triangle', {
-      shader,
-      layout,
-      vertices,
+    this.shaderManager.addUBO('CameraBlock', 4 * 4 * 4, (ubo, context) => {
+      ubo.update(context.camera.vpMatrix);
     });
   }
 
@@ -124,8 +107,8 @@ export default class Core {
 
   // 螢幕調整大小
   resize() {
-    const { canvas, viewport } = this;
-    const [baseW, baseH] = viewport;
+    const { canvas, screenSize } = this;
+    const [baseW, baseH] = screenSize;
     const dpr = window.devicePixelRatio || 1;
 
     const screenW = window.innerWidth;
@@ -158,10 +141,10 @@ export default class Core {
     }
   }
 
-  async init({ canvasID, scenes, rootDir, viewport = [500, 500] }) {
+  async init({ canvasID, scenes, rootDir = './', screenSize = [500, 500] }) {
     this.rootDir = rootDir;
 
-    this.viewport = viewport;
+    this.screenSize = screenSize;
 
     this.#initWebGL(canvasID);
 
@@ -169,10 +152,7 @@ export default class Core {
     this.#initModule();
 
     // 註冊預設shader
-    await this.#registerDefaultShader();
-
-    // 註冊預設mesh
-    this.#registerDefaultMesh();
+    this.#registerDefaultShader();
 
     // 註冊場景
     this.#loadAllScene(scenes);
@@ -189,7 +169,7 @@ export default class Core {
       throw new Error('遊戲尚未初始化');
     }
 
-    this.sceneManager.goto();
+    await this.sceneManager.goto();
     this.gameLoop.start();
   }
 }

@@ -1,5 +1,3 @@
-// import Level_1_1 from './levels/level_1_1.js';
-// import Level_1_2 from './levels/level_1_2.js';
 import GameEngine from '../src/index.js';
 
 window.onload = async () => {
@@ -8,7 +6,7 @@ window.onload = async () => {
   await myGame.init({
     canvasID: 'canvas',
     rootDir: '..',
-    viewport: [500, 500]
+    screenSize: [1000, 600],
   });
 
   await myGame.start();

@@ -1,8 +1,9 @@
 import { BaseScene } from './baseScene.js';
-import Renderable from '../render/renderable.js';
+import Entity from '../entity/entity.js';
 
 export class ExampleScene extends BaseScene {
-  #worldCamera;
+  #mainCamera;
+  #tree1;
 
   constructor(gameEngine) {
     super(gameEngine, 'example-scene');
@@ -10,61 +11,55 @@ export class ExampleScene extends BaseScene {
 
   preload() {
     const ge = this.gameEngine;
-    console.log(`場景(${this.name}) preload...`);
 
-    ge.resource.add(
-      'SSBU_spirit_Cuphead',
-      './myGame/assets/SSBU_spirit_Cuphead.png',
-    );
+    ge.resourceManager.addMany({
+      texture: './myGame/assets/texture.png',
+      spritesheetJson: './myGame/assets/spritesheet.json',
+    });
+
+    ge.textureManager.add('texture', 'spritesheetJson');
   }
 
   create() {
     const ge = this.gameEngine;
-    console.log(`場景(${this.name}) create...`);
 
     ge.input.setKey({
       a: 65,
       d: 68,
       w: 87,
       x: 88,
+      left: 37,
+      up: 38,
+      right: 39,
+      down: 40,
     });
 
     // 創建相機
-    const worldCamera = 'world';
-    ge.cameraManager.add(worldCamera, {
-      wcCenter: [0, 0],
-      wcWidth: 500,
-      viewport: [0, 0, 500, 500],
-      background: [0.6, 0.1, 1.0, 1.0],
+    const mainCamera = 'main';
+    ge.cameraManager.add(mainCamera, {
+      wcCenter: [-50, -27],
+      wcWidth: 400,
+      viewport: [0, 0, 1000, 600],
+      background: [0.0, 0.0, 0.0, 0.0],
     });
-    this.#worldCamera = ge.cameraManager.get(worldCamera);
-
-    const mapCamera = 'map';
-    ge.cameraManager.add(mapCamera, {
-      wcCenter: [0, 0],
-      wcWidth: 150,
-      viewport: [0, 350, 150, 150],
-      background: [0.6, 0.8, 0.1, 1],
-    });
+    this.#mainCamera = ge.cameraManager.get(mainCamera);
 
     // 創建 layer
-    this.createLayer(worldCamera);
-    this.createLayer(mapCamera);
+    this.createLayer(mainCamera);
 
-    // 創建三角形
-    const blueTriangle = new Renderable();
-    this.addToLayer(worldCamera, blueTriangle);
-    blueTriangle.transform.setSize(500, 500);
-    blueTriangle.transform.setPosition(250, 250);
-    blueTriangle.setColor([0.0, 0.8, 1.0, 1.0]);
-
-    const redTriangle = new Renderable();
-    this.addToLayer(mapCamera, redTriangle);
-    redTriangle.transform.setSize(100, 100);
-    redTriangle.transform.setPosition(50, 50);
-    redTriangle.setColor([0.3, 0.1, 0.0, 1.0]);
-
-    console.log(`場景(${this.name}) start`);
+    // 創建實體
+    const tree1 = new Entity('t1.png');
+    this.addToLayer(mainCamera, tree1);
+    tree1.transform.setSize(100, 50);
+    tree1.transform.setPosition(0, 0);
+    tree1.setZindex(0);
+    this.#tree1 = tree1;
+    
+    const tree2 = new Entity('t2.png');
+    this.addToLayer(mainCamera, tree2);
+    tree2.transform.setSize(50, 70);
+    tree2.transform.setPosition(30, 60);
+    tree2.setZindex(1);
   }
 
   update() {
@@ -72,16 +67,28 @@ export class ExampleScene extends BaseScene {
     const { input } = ge;
 
     if (input.isKeyPressed('a')) {
-      this.#worldCamera.move(1, 0);
+      this.#mainCamera.move(1, 0);
     }
     if (input.isKeyPressed('d')) {
-      this.#worldCamera.move(-1, 0);
+      this.#mainCamera.move(-1, 0);
     }
     if (input.isKeyPressed('w')) {
-      this.#worldCamera.move(0, 1);
+      this.#mainCamera.move(0, 1);
     }
     if (input.isKeyPressed('x')) {
-      this.#worldCamera.move(0, -1);
+      this.#mainCamera.move(0, -1);
+    }
+
+    if (input.isKeyPressed('up')) {
+      this.#tree1.transform.incYPosBy(-1);
+    } else if (input.isKeyPressed('down')) {
+      this.#tree1.transform.incYPosBy(1);
+    } else if (input.isKeyPressed('right')) {
+      this.#tree1.transform.incXPosBy(1);
+    } else if (input.isKeyPressed('left')) {
+      this.#tree1.transform.incXPosBy(-1);
     }
   }
+
+  destroy() {}
 }

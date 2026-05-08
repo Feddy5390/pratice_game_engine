@@ -1,7 +1,11 @@
+#version 300 es
+
 precision mediump float;
 
-uniform vec4 u_PixelColor;
+uniform sampler2D u_atlas;
+in vec2 v_uv;
+out vec4 fragColor;
 
 void main() {
-    gl_FragColor = u_PixelColor;
+    fragColor = texture(u_atlas, v_uv);
 }

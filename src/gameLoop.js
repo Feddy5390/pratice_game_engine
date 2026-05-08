@@ -10,16 +10,16 @@ export default class GameLoop {
   #lastTime = 0;
   #accumulator = 0;
 
-  #mSceneManager;
-  #mRenderer;
-  #mCameraManager;
-  #mInput;
+  #sceneManager;
+  #renderer;
+  #cameraManager;
+  #input;
 
-  _init(sceneManager, renderer, cameraManager, input) {
-    this.#mSceneManager = sceneManager;
-    this.#mRenderer = renderer;
-    this.#mCameraManager = cameraManager;
-    this.#mInput = input;
+  _init(sceneManager, cameraManager, renderer, input) {
+    this.#sceneManager = sceneManager;
+    this.#cameraManager = cameraManager;
+    this.#renderer = renderer;
+    this.#input = input;
   }
 
   start() {
@@ -32,21 +32,22 @@ export default class GameLoop {
         return;
       }
 
-      const scene = this.#mSceneManager.active; // 取得目前正在進行中的場景
+      const scene = this.#sceneManager.active; // 取得目前正在進行中的場景
 
       const dt = (timestamp - this.#lastTime) / 1000;
       this.#lastTime = timestamp;
 
-      this.#updateFPS(dt); // 計算 fps
+      // 計算 fps
+      // this.#updateFPS(dt);
 
-      this.#mInput.update(); // 更新輸入
+      // 更新輸入
+      this.#input.update();
 
       // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
       const frameTime = Math.min(dt, 0.25);
       this.#accumulator += frameTime;
 
       while (this.#accumulator >= this.#logicTickRate) {
-        // this.input.update();
         scene.update(this.#logicTickRate);
         this.#accumulator -= this.#logicTickRate;
       }
@@ -55,11 +56,15 @@ export default class GameLoop {
       // 渲染頻率隨瀏覽器跑 (rAF)
       // 進階：傳入 alpha 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
       const alpha = this.#accumulator / this.#logicTickRate;
-      this.#mCameraManager.update();
-      this.#mRenderer.render(scene, alpha);
+      this.#cameraManager.update();
+      this.#renderer.render(scene, alpha);
     };
 
     this.#rafID = requestAnimationFrame(loop);
+  }
+
+  pause() {
+    this.#isRunning = false;
   }
 
   #updateFPS(dt) {
@@ -72,7 +77,7 @@ export default class GameLoop {
       this.#frameCount = 0;
       this.#fpsTimer = 0;
 
-      // console.log(`當前 FPS: ${this.#fps}`);
+      console.log(`當前 FPS: ${this.#fps}`);
     }
   }
 }

@@ -38,7 +38,6 @@ export default class Camera {
   #viewMatrix = mat4.create();
   #projectionMatrix = mat4.create();
   #vpMatrix = mat4.create();
-  #translateVec = vec3.create(); // 相機平移矩陣
 
   constructor({
     wcCenter = [0, 0],
@@ -47,7 +46,7 @@ export default class Camera {
     rotation = 0,
     near = -1,
     far = 1,
-    background = [0, 0, 0, 1], // 預設黑色
+    background = null,
   } = {}) {
     this.setWcCenter(...wcCenter);
     this.#wcWidth = wcWidth;
@@ -56,6 +55,41 @@ export default class Camera {
     this.#near = near;
     this.#far = far;
     this.setBackground(background);
+  }
+
+  // 更新視圖矩陣
+  #updateViewMatrix() {
+    mat4.identity(this.#viewMatrix); // 重置成單位矩陣
+
+    if (this.#rotation !== 0) {
+      mat4.rotateZ(this.#viewMatrix, this.#viewMatrix, -this.#rotation);
+    }
+
+    mat4.translate(
+      this.#viewMatrix, // out：結果寫到這裡
+      this.#viewMatrix, // 基礎矩陣
+      [-this.#wcCenter[0], -this.#wcCenter[1], 0], // 平移向量
+    );
+  }
+
+  // 更新投影矩陣
+  #updateProjectionMatrix() {
+    const wcHeight = this.wcHeight;
+
+    // 左上為原點
+    mat4.ortho(
+      this.#projectionMatrix,
+      0, // left
+      this.#wcWidth, // right
+      wcHeight, // bottom (現在是畫面底部，y 值較大)
+      0, // top (現在是畫面頂部，y 值為 0)
+      this.#near,
+      this.#far,
+    );
+  }
+
+  #updateVPMatrix() {
+    mat4.multiply(this.#vpMatrix, this.#projectionMatrix, this.#viewMatrix);
   }
 
   // 取得相機高度
@@ -109,43 +143,6 @@ export default class Camera {
   // 移動相機
   move(dx, dy) {
     vec2.add(this.#wcCenter, this.#wcCenter, [dx, dy]);
-  }
-
-  // 更新視圖矩陣
-  #updateViewMatrix() {
-    mat4.identity(this.#viewMatrix); // 重置成單位矩陣
-
-    vec3.set(this.#translateVec, -this.#wcCenter[0], -this.#wcCenter[1], 0);
-
-    mat4.translate(
-      this.#viewMatrix, // out：結果寫到這裡
-      this.#viewMatrix, // 基礎矩陣
-      this.#translateVec, // 平移向量
-    );
-
-    if (this.#rotation !== 0) {
-      mat4.rotateZ(this.#viewMatrix, this.#viewMatrix, this.#rotation);
-    }
-  }
-
-  // 更新投影矩陣
-  #updateProjectionMatrix() {
-    const wcHeight = this.wcHeight;
-
-    // 左上為原點
-    mat4.ortho(
-      this.#projectionMatrix,
-      0, // left
-      this.#wcWidth, // right
-      wcHeight, // bottom (現在是畫面底部，y 值較大)
-      0, // top (現在是畫面頂部，y 值為 0)
-      this.#near,
-      this.#far,
-    );
-  }
-
-  #updateVPMatrix() {
-    mat4.multiply(this.#vpMatrix, this.#projectionMatrix, this.#viewMatrix);
   }
 
   update() {

@@ -6,32 +6,32 @@ export class BaseScene {
   name;
   gameEngine;
 
-  layers = [
-    // { cameraName: 'world', renderables: [] }
-  ];
+  layers = [];
 
   constructor(gameEngine, name) {
-    if (!gameEngine) {
-      throw new Error('scene 必須傳入 gameEngine');
-    }
-    if (!name) {
-      throw new Error('scene 必須傳入 scene 的名稱');
+    if (!gameEngine || !name) {
+      throw new Error('baseScene 必須傳入 gameEngine 跟 name');
     }
 
     this.gameEngine = gameEngine;
     this.name = name;
   }
 
-  createLayer(layerName) {
-    this.layers.push({ cameraName: layerName, renderables: [] });
+  createLayer(cameraName) {
+    const layer = {
+      cameraName,
+      entities: [],
+    };
+
+    this.layers.push(layer);
   }
 
-  addToLayer(layerName, renderable) {
-    const layer = this.layers.find((l) => l.cameraName === layerName);
+  addToLayer(layerName, entity) {
+    const layer = this.layers.find((layer) => layer.cameraName === layerName);
     if (!layer) {
       throw new Error(`layer ${layerName} 不存在`);
     }
-    layer.renderables.push(renderable);
+    layer.entities.push(entity);
   }
 
   preload() {
