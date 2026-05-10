@@ -40,14 +40,13 @@ export default class GameLoop {
       // 計算 fps
       // this.#updateFPS(dt);
 
-      // 更新輸入
-      this.#input.update();
-
       // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
       const frameTime = Math.min(dt, 0.25);
       this.#accumulator += frameTime;
 
       while (this.#accumulator >= this.#logicTickRate) {
+        // 更新輸入
+        this.#input.update();
         scene.update(this.#logicTickRate);
         this.#accumulator -= this.#logicTickRate;
       }

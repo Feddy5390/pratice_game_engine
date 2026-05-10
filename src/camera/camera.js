@@ -76,13 +76,15 @@ export default class Camera {
   #updateProjectionMatrix() {
     const wcHeight = this.wcHeight;
 
-    // 左上為原點
+    const halfW = this.#wcWidth / 2;
+    const halfH = wcHeight / 2;
+
     mat4.ortho(
       this.#projectionMatrix,
-      0, // left
-      this.#wcWidth, // right
-      wcHeight, // bottom (現在是畫面底部，y 值較大)
-      0, // top (現在是畫面頂部，y 值為 0)
+      -halfW,
+      halfW,
+      halfH,
+      -halfH,
       this.#near,
       this.#far,
     );
@@ -125,6 +127,10 @@ export default class Camera {
     this.#wcWidth = wcWidth;
   }
 
+  incZoom(delta) {
+    this.#wcWidth += delta;
+  }
+
   // 設定相機大小
   setViewport(x, y, w, h) {
     this.#viewport = [x, y, w, h];
@@ -133,6 +139,10 @@ export default class Camera {
   // 設定相機旋轉角度
   setRotation(rotation) {
     this.#rotation = rotation;
+  }
+
+  incRotation(delta) {
+    this.#rotation += delta;
   }
 
   // 設定相機背景色

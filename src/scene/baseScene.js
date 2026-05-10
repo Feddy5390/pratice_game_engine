@@ -1,3 +1,5 @@
+import EntityPool from '../entity/entityPool.js';
+
 /**
  * 場景類
  * 保存相機跟entities
@@ -5,33 +7,37 @@
 export class BaseScene {
   name;
   gameEngine;
+  entityPool;
+  layers;
 
-  layers = [];
-
-  constructor(gameEngine, name) {
+  constructor(gameEngine, name, poolInitialSize = 0) {
     if (!gameEngine || !name) {
       throw new Error('baseScene 必須傳入 gameEngine 跟 name');
     }
 
     this.gameEngine = gameEngine;
     this.name = name;
+    this.entityPool = new EntityPool(poolInitialSize);
+    this.layers = new Map();
   }
 
   createLayer(cameraName) {
-    const layer = {
+    if (this.layers.get(cameraName)) {
+      return;
+    }
+
+    this.layers.set(cameraName, {
       cameraName,
       entities: [],
-    };
-
-    this.layers.push(layer);
+    });
   }
 
-  addToLayer(layerName, entity) {
-    const layer = this.layers.find((layer) => layer.cameraName === layerName);
-    if (!layer) {
-      throw new Error(`layer ${layerName} 不存在`);
-    }
+  spawnEntity(layerName, x, y, w, h, settings) {
+    const entity = this.entityPool.acquire(x, y, w, h, settings);
+    const layer = this.layers.get(layerName);
     layer.entities.push(entity);
+
+    return entity;
   }
 
   preload() {

@@ -1,12 +1,12 @@
 import { BaseScene } from './baseScene.js';
-import Entity from '../entity/entity.js';
 
 export class ExampleScene extends BaseScene {
   #mainCamera;
   #tree1;
+  #instanceID = 0;
 
   constructor(gameEngine) {
-    super(gameEngine, 'example-scene');
+    super(gameEngine, 'example-scene', 10);
   }
 
   preload() {
@@ -28,6 +28,8 @@ export class ExampleScene extends BaseScene {
       d: 68,
       w: 87,
       x: 88,
+      q: 81,
+      e: 69,
       left: 37,
       up: 38,
       right: 39,
@@ -37,7 +39,7 @@ export class ExampleScene extends BaseScene {
     // 創建相機
     const mainCamera = 'main';
     ge.cameraManager.add(mainCamera, {
-      wcCenter: [-50, -27],
+      wcCenter: [0, 0],
       wcWidth: 400,
       viewport: [0, 0, 1000, 600],
       background: [0.0, 0.0, 0.0, 0.0],
@@ -48,18 +50,16 @@ export class ExampleScene extends BaseScene {
     this.createLayer(mainCamera);
 
     // 創建實體
-    const tree1 = new Entity('t1.png');
-    this.addToLayer(mainCamera, tree1);
-    tree1.transform.setSize(100, 50);
-    tree1.transform.setPosition(0, 0);
-    tree1.setZindex(0);
+    const tree1 = this.spawnEntity(mainCamera, 0, 0, 300, 50, {
+      zIndex: 0,
+      image: 't1.png',
+    });
     this.#tree1 = tree1;
-    
-    const tree2 = new Entity('t2.png');
-    this.addToLayer(mainCamera, tree2);
-    tree2.transform.setSize(50, 70);
-    tree2.transform.setPosition(30, 60);
-    tree2.setZindex(1);
+
+    const tree2 = this.spawnEntity(mainCamera, 0, 0, 60, 40, {
+      zIndex: 0,
+      image: 't2.png',
+    });
   }
 
   update() {
@@ -78,15 +78,20 @@ export class ExampleScene extends BaseScene {
     if (input.isKeyPressed('x')) {
       this.#mainCamera.move(0, -1);
     }
+    if (input.isKeyPressed('q')) {
+      this.#mainCamera.incZoom(5);
+    } else if (input.isKeyPressed('e')) {
+      this.#mainCamera.incZoom(-5);
+    }
 
-    if (input.isKeyPressed('up')) {
-      this.#tree1.transform.incYPosBy(-1);
-    } else if (input.isKeyPressed('down')) {
-      this.#tree1.transform.incYPosBy(1);
-    } else if (input.isKeyPressed('right')) {
-      this.#tree1.transform.incXPosBy(1);
-    } else if (input.isKeyPressed('left')) {
-      this.#tree1.transform.incXPosBy(-1);
+    if (input.isKeyClicked('up')) {
+      const id = this.#instanceID++
+      this.spawnEntity('main', id+2, 0, 40, 20, {
+        zIndex: 0,
+        image: 't1.png',
+      });
+    } else if (input.isKeyClicked('down')) {
+  
     }
   }
 

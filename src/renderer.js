@@ -17,8 +17,8 @@ export default class Renderer {
 
     const dpr = window.devicePixelRatio || 1;
 
-    for (const layer of layers) {
-      const camera = this.#cameraManager.get(layer.cameraName);
+    for (const [cameraName, layer] of layers) {
+      const camera = this.#cameraManager.get(cameraName);
       const screenScale = this.#cameraManager.screenScale;
       const [x, y, w, h] = camera.viewport;
 
