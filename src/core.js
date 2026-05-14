@@ -8,31 +8,32 @@ import GameLoop from './gameLoop.js';
 import Renderer from './renderer.js';
 import Input from './input.js';
 import DefaultShader from './shader/default/defaultShader.js';
-import { ExampleScene } from './scene/exampleScene.js';
 
 export default class Core {
-  rootDir;
-  #resizeTimer = null;
-  #isBooting = false;
-
   // webgl
   gl;
   canvas;
-  screenSize;
 
-  // modules
+  // gameEngine modules
   resourceManager;
   shaderManager;
   textureManager;
   sceneManager;
-  renderer;
+  cameraManager;
   gameLoop;
+  renderer;
+  input;
 
-  #initWebGL(canvasID) {
+  _rootDir;
+  _resizeTimer;
+  _isBooting = false;
+  screenSize;
+
+  _initWebGL(canvasID) {
     this.canvas = document.getElementById(canvasID);
     const gl = this.canvas.getContext('webgl2');
     if (!gl) {
-      throw new Error(`請傳入正確的canvasID`);
+      throw new Error('請傳入正確的 canvasID');
     }
     this.gl = gl;
 
@@ -41,7 +42,7 @@ export default class Core {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 
-  #initModule() {
+  _initModule() {
     this.resourceManager = new ResourceManager();
     this.shaderManager = new ShaderManager();
     this.textureManager = new TextureManager();
@@ -51,7 +52,7 @@ export default class Core {
     this.renderer = new Renderer();
     this.input = new Input();
 
-    this.resourceManager._init(this.rootDir);
+    this.resourceManager._init(this._rootDir);
     this.shaderManager._init(this.gl, this.resourceManager);
     this.textureManager._init(this.gl, this.resourceManager);
     this.sceneManager._init(
@@ -75,33 +76,34 @@ export default class Core {
     this.input._init();
   }
 
-  #registerDefaultShader() {
+  _registerDefaultShader() {
     this.shaderManager.addShader(
       'default',
       DefaultShader,
       'src/shader/default/glsl/vertexShader.glsl',
       'src/shader/default/glsl/fragShader.glsl',
     );
-    this.shaderManager.addUBO('CameraBlock', 4 * 4 * 4, (ubo, context) => {
-      ubo.update(context.camera.vpMatrix);
+
+    this.shaderManager.addUBO('CameraBlock', 4 * 4 * 4, (ubo, { camera }) => {
+      ubo.update(camera.vpMatrix);
     });
   }
 
-  #loadAllScene(scenes = [ExampleScene]) {
+  _loadAllScene(scenes = []) {
     for (const scene of scenes) {
       this.sceneManager.add(scene);
     }
   }
 
-  #listenResize() {
+  _listenResize() {
     window.addEventListener('resize', () => {
-      if (this.#resizeTimer) {
-        clearTimeout(this.#resizeTimer);
+      if (this._resizeTimer) {
+        clearTimeout(this._resizeTimer);
       }
 
-      this.#resizeTimer = setTimeout(() => {
+      this._resizeTimer = setTimeout(() => {
         this.resize();
-      }, 300);
+      }, 200);
     });
   }
 
@@ -142,34 +144,34 @@ export default class Core {
   }
 
   async init({ canvasID, scenes, rootDir = './', screenSize = [500, 500] }) {
-    this.rootDir = rootDir;
+    this._rootDir = rootDir;
 
     this.screenSize = screenSize;
 
-    this.#initWebGL(canvasID);
+    this._initWebGL(canvasID);
 
     // 初始化系統模組
-    this.#initModule();
+    this._initModule();
 
     // 註冊預設shader
-    this.#registerDefaultShader();
+    this._registerDefaultShader();
 
     // 註冊場景
-    this.#loadAllScene(scenes);
+    this._loadAllScene(scenes);
 
-    this.#listenResize();
+    this._listenResize();
 
-    this.#isBooting = true;
+    this._isBooting = true;
 
     return this;
   }
 
   async start() {
-    if (!this.#isBooting) {
+    if (!this._isBooting) {
       throw new Error('遊戲尚未初始化');
     }
 
-    await this.sceneManager.goto();
+    await this.sceneManager.change();
     this.gameLoop.start();
   }
 }

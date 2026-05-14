@@ -1,27 +1,27 @@
-import { BaseScene } from './baseScene.js';
+import { BaseScene } from '../../src/scene/baseScene.js';
 
 export class ExampleScene extends BaseScene {
   #mainCamera;
   #tree1;
   #instanceID = 0;
 
-  constructor(gameEngine) {
-    super(gameEngine, 'example-scene', 10);
+  constructor(core) {
+    super(core, 10);
   }
 
   preload() {
-    const ge = this.gameEngine;
+    const ge = this.core;
 
     ge.resourceManager.addMany({
-      texture: './myGame/assets/texture.png',
-      spritesheetJson: './myGame/assets/spritesheet.json',
+      texture: 'myGame/assets/texture.png',
+      spritesheetJson: 'myGame/assets/spritesheet.json',
     });
 
     ge.textureManager.add('texture', 'spritesheetJson');
   }
 
   create() {
-    const ge = this.gameEngine;
+    const ge = this.core;
 
     ge.input.setKey({
       a: 65,
@@ -63,7 +63,7 @@ export class ExampleScene extends BaseScene {
   }
 
   update() {
-    const ge = this.gameEngine;
+    const ge = this.core;
     const { input } = ge;
 
     if (input.isKeyPressed('a')) {

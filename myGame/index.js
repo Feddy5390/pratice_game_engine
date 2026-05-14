@@ -5,7 +5,7 @@ window.onload = async () => {
 
   await myGame.init({
     canvasID: 'canvas',
-    rootDir: '..',
+    rootDir: './',
     screenSize: [1000, 600],
   });
 

@@ -1,64 +1,59 @@
 import { BaseScene } from './baseScene.js';
 
 export default class SceneManager {
-  #core;
-  #resoureManager;
-  #textureManager;
-  #shaderManager;
-  #scenes = new Map(); // 所有場景的實例
-  active; // 目前執行的場景實例
+  _core;
+
+  _resoureManager;
+  _textureManager;
+  _shaderManager;
+
+  _scenes = new Map(); // 所有場景的實例
+  _active; // 目前執行的場景
 
   _init(core, resoureManager, textureManager, shaderManager) {
-    this.#core = core;
-    this.#resoureManager = resoureManager;
-    this.#textureManager = textureManager;
-    this.#shaderManager = shaderManager;
+    this._core = core;
+    this._resoureManager = resoureManager;
+    this._textureManager = textureManager;
+    this._shaderManager = shaderManager;
   }
 
-  add(_class) {
-    if (!(_class.prototype instanceof BaseScene)) {
-      throw new Error(
-        `scene class ${_class?.prototype?.constructor?.name} 必須繼承 BaseScene`,
-      );
+  add(name, Class) {
+    if (!(Class.prototype instanceof BaseScene)) {
+      throw new Error(`scene ${name} 必須繼承 BaseScene`);
     }
 
-    const scene = new _class(this.#core);
-    this.#scenes.set(scene.name, scene);
+    const scene = new Class(this._core);
+    this._scenes.set(name, scene);
   }
 
-  async goto(name) {
-    await this.active?.destroy();
+  async change(name) {
+    await this._active?.destroy();
 
     let nextScene;
     if (name) {
-      nextScene = this.#scenes.get(name);
+      nextScene = this._scenes.get(name);
     } else {
-      nextScene = this.#scenes.values().next().value;
+      nextScene = this._scenes.values().next().value;
     }
 
-    console.log(`[場景切換] 開始執行場景 ${nextScene.name}`);
+    console.log(`[場景切換] 開始執行場景 ${name}`);
 
     console.log(`[場景切換] 執行 preload...`);
     await nextScene.preload();
-    console.log(`[場景切換] 執行 preload 結束!`);
 
     console.log('[場景切換] 載入資源...');
-    await this.#resoureManager._load();
-    console.log('[場景切換] 載入資源結束!');
+    await this._resoureManager._load();
 
     console.log('[場景切換] 上傳紋理...');
-    await this.#textureManager._load();
-    console.log('[場景切換] 上傳紋理結束!');
+    await this._textureManager._load();
 
     console.log('[場景切換] 編譯 shader...');
-    this.#shaderManager._compileAll();
-    console.log('[場景切換] 編譯 shader 結束!');
+    this._shaderManager._compileAll();
 
     console.log('[場景切換] 執行場景 create...');
     await nextScene.create();
-    console.log('[場景切換] 執行場景 create 結束!');
 
-    this.#core.resize();
+    this._core.resize();
 
     this.active = nextScene;
   }

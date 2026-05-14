@@ -1,7 +1,7 @@
 export default class UBO {
-  #gl;
-  #buffer;
-  #binding; // 對應 GPU 上的 binding slot 編號
+  _gl;
+  _buffer;
+  _binding; // 對應 GPU 上的 binding slot 編號
 
   /**
    * @param {WebGL2RenderingContext} gl
@@ -9,15 +9,15 @@ export default class UBO {
    * @param {number} byteSize - buffer 大小（bytes）
    */
   constructor(gl, binding, byteSize) {
-    this.#gl = gl;
-    this.#binding = binding;
+    this._gl = gl;
+    this._binding = binding;
 
-    this.#buffer = gl.createBuffer();
-    gl.bindBuffer(gl.UNIFORM_BUFFER, this.#buffer);
+    this._buffer = gl.createBuffer();
+    gl.bindBuffer(gl.UNIFORM_BUFFER, this._buffer);
     gl.bufferData(gl.UNIFORM_BUFFER, byteSize, gl.DYNAMIC_DRAW);
 
     // 將 buffer 固定掛在 binding slot 上，之後 shader 從這個 slot 讀資料
-    gl.bindBufferBase(gl.UNIFORM_BUFFER, binding, this.#buffer);
+    gl.bindBufferBase(gl.UNIFORM_BUFFER, binding, this._buffer);
   }
 
   /**
@@ -26,11 +26,11 @@ export default class UBO {
    * @param {string} blockName - GLSL 中的 uniform block 名稱
    */
   bind(program, blockName) {
-    const gl = this.#gl;
+    const gl = this._gl;
 
     const blockIndex = gl.getUniformBlockIndex(program, blockName);
     if (blockIndex !== gl.INVALID_INDEX) {
-      gl.uniformBlockBinding(program, blockIndex, this.#binding);
+      gl.uniformBlockBinding(program, blockIndex, this._binding);
     }
   }
 
@@ -40,13 +40,13 @@ export default class UBO {
    * @param {number} byteOffset - 從第幾個 byte 開始寫入（預設 0）
    */
   update(data, byteOffset = 0) {
-    const gl = this.#gl;
+    const gl = this._gl;
 
-    gl.bindBuffer(gl.UNIFORM_BUFFER, this.#buffer);
+    gl.bindBuffer(gl.UNIFORM_BUFFER, this._buffer);
     gl.bufferSubData(gl.UNIFORM_BUFFER, byteOffset, data);
   }
 
   destroy() {
-    this.#gl.deleteBuffer(this.#buffer);
+    this._gl.deleteBuffer(this._buffer);
   }
 }

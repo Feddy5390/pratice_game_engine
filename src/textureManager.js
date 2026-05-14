@@ -1,27 +1,29 @@
 export default class TextureManager {
-  #gl;
-  #resource;
+  _gl;
 
-  #atlasMap = new Map(); // imageName -> jsonName
-  #atlases = new Map(); // atlasId -> { texture, width, height, uvMap }
-  #imageToAtlasId = new Map(); // imageName -> atlasId
-  #nextAtlasId = 0;
+  // gameEngine modules
+  _resourceManager;
 
-  _init(gl, resource) {
-    this.#gl = gl;
-    this.#resource = resource;
+  _nextAtlasId = 0;
+  _atlasMap = new Map(); // imageName -> jsonName
+  _atlases = new Map(); // atlasId -> { texture, width, height, uvMap }
+  _imageToAtlasId = new Map(); // imageName -> atlasId
+
+  _init(gl, resourceManager) {
+    this._gl = gl;
+    this._resourceManager = resourceManager;
   }
 
   // 將一張圖片與對應的 JSON 資料注冊為 texture atlas
   _load() {
-    const gl = this.#gl;
+    const gl = this._gl;
 
-    for (var [imageName, jsonName] of this.#atlasMap.entries()) {
-      const image = this.#resource.resources.get(imageName);
+    for (var [imageName, jsonName] of this._atlasMap.entries()) {
+      const image = this._resourceManager.resources.get(imageName);
       if (!image) {
         throw new Error(`TextureManager: 找不到圖片資源 "${imageName}"`);
       }
-      const json = this.#resource.resources.get(jsonName);
+      const json = this._resourceManager.resources.get(jsonName);
       if (!json) {
         throw new Error(`TextureManager: 找不到紋理設定 "${jsonName}"`);
       }
@@ -59,19 +61,19 @@ export default class TextureManager {
           v1: 1 - f.y / atlasHeight, // 下邊界
         });
 
-        this.#imageToAtlasId.set(spriteName, this.#nextAtlasId);
+        this._imageToAtlasId.set(spriteName, this._nextAtlasId);
       }
 
-      this.#atlases.set(this.#nextAtlasId, {
+      this._atlases.set(this._nextAtlasId, {
         texture,
         width: atlasWidth,
         height: atlasHeight,
         uvMap,
       });
-      this.#nextAtlasId++;
+      this._nextAtlasId++;
     }
 
-    this.#atlasMap.clear();
+    this._atlasMap.clear();
   }
 
   /**
@@ -80,19 +82,19 @@ export default class TextureManager {
    * @returns {{ atlasId: number, texture: WebGLTexture, uv: {u0,v0,u1,v1} }}
    */
   getInfo(imageName) {
-    const atlasId = this.#imageToAtlasId.get(imageName);
-    const atlas = this.#atlases.get(atlasId);
+    const atlasId = this._imageToAtlasId.get(imageName);
+    const atlas = this._atlases.get(atlasId);
     const uv = atlas.uvMap.get(imageName);
 
     return { atlasId, texture: atlas.texture, uv };
   }
 
   add(imageName, jsonName) {
-    if (this.#imageToAtlasId.get(imageName)) {
+    if (this._imageToAtlasId.get(imageName)) {
       return;
     }
 
-    this.#atlasMap.set(imageName, jsonName);
+    this._atlasMap.set(imageName, jsonName);
   }
 
   addMany(obj) {
@@ -106,19 +108,19 @@ export default class TextureManager {
    * @param {WebGLTexture} texture
    * @param {number} unit - 紋理單元編號（預設 0）
    */
-  bindTexture(texture, unit = 0) {
-    const gl = this.#gl;
+  _bindTexture(texture, unit = 0) {
+    const gl = this._gl;
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, texture);
   }
 
   /** 釋放所有 atlas 的 GPU 紋理資源 */
   clear() {
-    for (const atlas of this.#atlases.values()) {
-      this.#gl.deleteTexture(atlas.texture);
+    for (const atlas of this._atlases.values()) {
+      this._gl.deleteTexture(atlas.texture);
     }
-    this.#atlases.clear();
-    this.#imageToAtlasId.clear();
-    this.#nextAtlasId = 0;
+    this._atlases.clear();
+    this._imageToAtlasId.clear();
+    this._nextAtlasId = 0;
   }
 }

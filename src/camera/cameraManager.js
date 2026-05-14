@@ -4,16 +4,16 @@ export default class CameraManager {
   #cameras = new Map();
   #screenScale = 1; // 畫面等比縮放值
 
-  get(cameraName) {
-    return this.#cameras.get(cameraName);
+  get(name) {
+    return this.#cameras.get(name);
   }
 
   get screenScale() {
     return this.#screenScale;
   }
 
-  add(cameraName, { wcCenter, wcWidth, viewport, background }) {
-    if (this.#cameras.get(cameraName)) {
+  add(name, { wcCenter, wcWidth, viewport, background }) {
+    if (this.#cameras.get(name)) {
       return;
     }
 
@@ -23,7 +23,7 @@ export default class CameraManager {
       viewport,
       background,
     });
-    this.#cameras.set(cameraName, camera);
+    this.#cameras.set(name, camera);
 
     return camera;
   }
@@ -32,7 +32,7 @@ export default class CameraManager {
     this.#screenScale = scale;
   }
 
-  update() {
+  _update() {
     for (const camera of this.#cameras.values()) {
       camera.update();
     }

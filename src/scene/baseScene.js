@@ -1,72 +1,27 @@
-import EntityPool from '../entity/entityPool.js';
+import World from '../world.js';
 
-/**
- * 場景類
- * 保存相機跟entities
- */
-export class BaseScene {
-  name;
-  gameEngine;
-  entityPool;
-  layers;
+export default class BaseScene {
+  core;
+  world;
 
-  constructor(gameEngine, name, poolInitialSize = 0) {
-    if (!gameEngine || !name) {
-      throw new Error('baseScene 必須傳入 gameEngine 跟 name');
+  constructor(core, maxEntities = 0) {
+    if (!core) {
+      throw new Error('場景初始化參數缺少');
     }
 
-    this.gameEngine = gameEngine;
-    this.name = name;
-    this.entityPool = new EntityPool(poolInitialSize);
-    this.layers = new Map();
+    this.core = core;
+    this.world = new World(maxEntities);
   }
 
-  createLayer(cameraName) {
-    if (this.layers.get(cameraName)) {
-      return;
-    }
+  // 加載資源前
+  preload() {}
 
-    this.layers.set(cameraName, {
-      cameraName,
-      entities: [],
-    });
-  }
+  // 加載資源後
+  create() {}
 
-  spawnEntity(layerName, x, y, w, h, settings) {
-    const entity = this.entityPool.acquire(x, y, w, h, settings);
-    const layer = this.layers.get(layerName);
-    layer.entities.push(entity);
+  // 更新遊戲每幀邏輯
+  update(dt) {}
 
-    return entity;
-  }
-
-  preload() {
-    /**
-     * 加載資源前
-     */
-  }
-
-  create() {
-    /**
-     * 加載資源後
-     */
-  }
-
-  update(dt) {
-    /**
-     * 更新遊戲每幀邏輯
-     */
-  }
-
-  render(dt) {
-    /**
-     * 更新遊戲每幀畫面
-     */
-  }
-
-  destroy() {
-    /**
-     * 清除場景相關資源
-     */
-  }
+  // 清除場景相關資源
+  destroy() {}
 }
