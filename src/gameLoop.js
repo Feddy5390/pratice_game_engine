@@ -10,33 +10,14 @@ export default class GameLoop {
   _lastTime = 0;
   _accumulator = 0;
 
-  // fps
-  _fps = 0;
-  _frameCount = 0;
-  _fpsTimer = 0;
-
   _isRunning = false;
 
-  _init(sceneManager, cameraManager, renderer, input, logicFPS = 1 / 60) {
+  _init(sceneManager, cameraManager, renderer, input, logicFPS = 1 / 30) {
     this._sceneManager = sceneManager;
     this._cameraManager = cameraManager;
     this._renderer = renderer;
     this._input = input;
     this._logicFPS = logicFPS;
-  }
-
-  _updateFPS(dt) {
-    this._fpsTimer += dt;
-    this._frameCount++;
-
-    if (this._fpsTimer >= 1) {
-      // 每隔一秒更新一次數值
-      this.fps = this._frameCount;
-      this._frameCount = 0;
-      this._fpsTimer = 0;
-
-      console.log(`畫面 FPS: ${this._fps}`);
-    }
   }
 
   start() {
@@ -54,17 +35,23 @@ export default class GameLoop {
       const dt = (timestamp - this._lastTime) / 1000;
       this._lastTime = timestamp;
 
-      // 計算 fps
-      // this._updateFPS(dt);
-
       // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
       const frameTime = Math.min(dt, 0.25);
       this._accumulator += frameTime;
 
       while (this._accumulator >= this._logicFPS) {
+        // 保存相機更新前的位置及旋轉狀態
+        this._cameraManager.savePreviousStates();
+
         // 更新輸入
         this._input.update();
+
+        // 更新場景邏輯
         scene.update(this._logicFPS);
+
+        // 執行所有 system
+        scene.world._update(this._logicFPS);
+
         this._accumulator -= this._logicFPS;
       }
 
@@ -74,10 +61,8 @@ export default class GameLoop {
       const alpha = this._accumulator / this._logicFPS;
       // 1. 更新所有相機 vpMatrix
       this._cameraManager._update();
-      // 2. 執行所有 system，取得已排序(zindex) 的實體資料(不確定要怎樣取得比較好)
-      const entities = scene.world._update();
-      // 3. 遍歷所有實體，收集相同 Shader、Texture 的實體，一次draw
-      this._renderer.render(alpha, entities);
+      // 2. 遍歷所有實體，收集相同 Shader、Texture、camera 的實體，一次draw
+      this._renderer.render(alpha, scene);
     };
 
     requestAnimationFrame(loop);

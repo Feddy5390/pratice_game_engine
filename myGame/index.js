@@ -1,11 +1,13 @@
-import GameEngine from '../src/index.js';
+import { Core } from '../src/index.js';
+import { ExampleScene } from './scenes/exampleScene.js';
 
 window.onload = async () => {
-  const myGame = new GameEngine.Core();
+  const myGame = new Core();
 
   await myGame.init({
-    canvasID: 'canvas',
-    rootDir: './',
+    canvasId: 'canvas',
+    scenes: [ExampleScene],
+    rootDir: '..',
     screenSize: [1000, 600],
   });
 

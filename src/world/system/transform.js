@@ -112,19 +112,11 @@ export default class Transform {
     // operations must be in reverse.
 
     // Step A: compute translation, for now z is always at 0.0
-    mat4.translate(
-      matrix,
-      matrix,
-      vec3.fromValues(this.getXPos(), this.getYPos(), 0.0),
-    );
+    mat4.translate(matrix, matrix, vec3.fromValues(this.getXPos(), this.getYPos(), 0.0));
     // Step B: concatenate with rotation.
     mat4.rotateZ(matrix, matrix, this.getRotationInRad());
     // Step C: concatenate with scaling
-    mat4.scale(
-      matrix,
-      matrix,
-      vec3.fromValues(this.getWidth(), this.getHeight(), 1.0),
-    );
+    mat4.scale(matrix, matrix, vec3.fromValues(this.getWidth(), this.getHeight(), 1.0));
 
     return matrix;
   }

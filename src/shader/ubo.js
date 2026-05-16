@@ -25,7 +25,7 @@ export default class UBO {
    * @param {WebGLProgram} program
    * @param {string} blockName - GLSL 中的 uniform block 名稱
    */
-  bind(program, blockName) {
+  _bind(program, blockName) {
     const gl = this._gl;
 
     const blockIndex = gl.getUniformBlockIndex(program, blockName);

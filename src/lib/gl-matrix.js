@@ -32,11 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
   var shim = {};
   if (typeof exports === 'undefined') {
-    if (
-      typeof define == 'function' &&
-      typeof define.amd == 'object' &&
-      define.amd
-    ) {
+    if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
       shim.exports = {};
       define(function () {
         return shim.exports;
@@ -78,8 +74,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
     }
 
     if (!GLMAT_ARRAY_TYPE) {
-      var GLMAT_ARRAY_TYPE =
-        typeof Float32Array !== 'undefined' ? Float32Array : Array;
+      var GLMAT_ARRAY_TYPE = typeof Float32Array !== 'undefined' ? Float32Array : Array;
     }
 
     if (!GLMAT_RANDOM) {
@@ -2109,10 +2104,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
      */
     mat2.frob = function (a) {
       return Math.sqrt(
-        Math.pow(a[0], 2) +
-          Math.pow(a[1], 2) +
-          Math.pow(a[2], 2) +
-          Math.pow(a[3], 2),
+        Math.pow(a[0], 2) + Math.pow(a[1], 2) + Math.pow(a[2], 2) + Math.pow(a[3], 2),
       );
     };
 
@@ -2406,19 +2398,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
      */
     mat2d.str = function (a) {
       return (
-        'mat2d(' +
-        a[0] +
-        ', ' +
-        a[1] +
-        ', ' +
-        a[2] +
-        ', ' +
-        a[3] +
-        ', ' +
-        a[4] +
-        ', ' +
-        a[5] +
-        ')'
+        'mat2d(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + a[3] + ', ' + a[4] + ', ' + a[5] + ')'
       );
     };
 
@@ -2943,8 +2923,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
         b10 = a21 * a33 - a23 * a31,
         b11 = a22 * a33 - a23 * a32,
         // Calculate the determinant
-        det =
-          b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+        det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
       if (!det) {
         return null;
@@ -3242,8 +3221,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
         b10 = a21 * a33 - a23 * a31,
         b11 = a22 * a33 - a23 * a32,
         // Calculate the determinant
-        det =
-          b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+        det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
       if (!det) {
         return null;
@@ -3407,9 +3385,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
         b11 = a22 * a33 - a23 * a32;
 
       // Calculate the determinant
-      return (
-        b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
-      );
+      return b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
     };
 
     /**
@@ -4245,8 +4221,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
         var dot = vec3.dot(a, b);
         if (dot < -0.999999) {
           vec3.cross(tmpvec3, xUnitVec3, a);
-          if (vec3.length(tmpvec3) < 0.000001)
-            vec3.cross(tmpvec3, yUnitVec3, a);
+          if (vec3.length(tmpvec3) < 0.000001) vec3.cross(tmpvec3, yUnitVec3, a);
           vec3.normalize(tmpvec3, tmpvec3);
           quat.setAxisAngle(out, tmpvec3, Math.PI);
           return out;

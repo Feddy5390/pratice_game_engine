@@ -8,7 +8,6 @@ export default class ShaderManager {
   _shaderConfigs = new Map(); // 待編譯的 shader 設定（name -> { Class, vsPath, fsPath }）
   _shaders = new Map(); // 已編譯的 shader 實例（name -> BaseShader）
   _ubos = new Map(); // UBO 實例（blockName -> UBO）
-  _uboUpdaters = new Map();
 
   active; // 目前綁定中的 shader 名稱（避免重複 useProgram）
   _nextUboBinding = 0; // UBO binding slot 自動遞增
@@ -33,7 +32,7 @@ export default class ShaderManager {
 
       // 將所有已建立的 UBO 綁定到這個 shader
       for (const [blockName, ubo] of this._ubos) {
-        ubo.bind(shader.program, blockName);
+        ubo._bind(shader.program, blockName);
       }
 
       this._shaders.set(name, shader);
@@ -44,10 +43,6 @@ export default class ShaderManager {
 
   getShader(name) {
     return this._shaders.get(name);
-  }
-
-  getUBO(blockName) {
-    return this._ubos.get(blockName);
   }
 
   /**
@@ -72,29 +67,6 @@ export default class ShaderManager {
   }
 
   /**
-   * 建立一個 UBO 並分配 binding slot。
-   * @param {string} blockName - 對應 GLSL 中的 uniform block 名稱
-   * @param {number} byteSize - buffer 大小（bytes）
-   */
-  addUBO(blockName, byteSize, updater) {
-    const binding = this._nextUboBinding++;
-    const ubo = new UBO(this._gl, binding, byteSize);
-    this._ubos.set(blockName, ubo);
-
-    if (updater) {
-      this._uboUpdaters.set(blockName, updater);
-    }
-  }
-
-  _updateUBOs(context) {
-    for (const [blockName, updater] of this._uboUpdaters) {
-      const ubo = this._ubos.get(blockName);
-
-      updater(ubo, context);
-    }
-  }
-
-  /**
    * 啟用指定 shader（相同 shader 連續呼叫不會重複切換）。
    * @returns {BaseShader} shader 實例
    */
@@ -106,5 +78,22 @@ export default class ShaderManager {
     }
 
     return this._shaders.get(name);
+  }
+
+  getUBO(blockName) {
+    return this._ubos.get(blockName);
+  }
+
+  /**
+   * 建立一個 UBO 並分配 binding slot。
+   * @param {string} blockName - 對應 GLSL 中的 uniform block 名稱
+   * @param {number} byteSize - buffer 大小（bytes）
+   */
+  addUBO(blockName, byteSize) {
+    const binding = this._nextUboBinding++;
+    const ubo = new UBO(this._gl, binding, byteSize);
+    this._ubos.set(blockName, ubo);
+
+    return ubo;
   }
 }

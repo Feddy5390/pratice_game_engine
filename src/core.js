@@ -7,7 +7,6 @@ import CameraManager from './camera/cameraManager.js';
 import GameLoop from './gameLoop.js';
 import Renderer from './renderer.js';
 import Input from './input.js';
-import DefaultShader from './shader/default/defaultShader.js';
 
 export default class Core {
   // webgl
@@ -29,11 +28,11 @@ export default class Core {
   _isBooting = false;
   screenSize;
 
-  _initWebGL(canvasID) {
-    this.canvas = document.getElementById(canvasID);
+  _initWebGL(canvasId) {
+    this.canvas = document.getElementById(canvasId);
     const gl = this.canvas.getContext('webgl2');
     if (!gl) {
-      throw new Error('請傳入正確的 canvasID');
+      throw new Error('請傳入正確的 canvasId');
     }
     this.gl = gl;
 
@@ -55,38 +54,10 @@ export default class Core {
     this.resourceManager._init(this._rootDir);
     this.shaderManager._init(this.gl, this.resourceManager);
     this.textureManager._init(this.gl, this.resourceManager);
-    this.sceneManager._init(
-      this,
-      this.resourceManager,
-      this.textureManager,
-      this.shaderManager,
-    );
-    this.gameLoop._init(
-      this.sceneManager,
-      this.cameraManager,
-      this.renderer,
-      this.input,
-    );
-    this.renderer._init(
-      this.gl,
-      this.shaderManager,
-      this.textureManager,
-      this.cameraManager,
-    );
+    this.sceneManager._init(this, this.resourceManager, this.textureManager, this.shaderManager);
+    this.gameLoop._init(this.sceneManager, this.cameraManager, this.renderer, this.input);
+    this.renderer._init(this.gl, this.shaderManager, this.textureManager, this.cameraManager);
     this.input._init();
-  }
-
-  _registerDefaultShader() {
-    this.shaderManager.addShader(
-      'default',
-      DefaultShader,
-      'src/shader/default/glsl/vertexShader.glsl',
-      'src/shader/default/glsl/fragShader.glsl',
-    );
-
-    this.shaderManager.addUBO('CameraBlock', 4 * 4 * 4, (ubo, { camera }) => {
-      ubo.update(camera.vpMatrix);
-    });
   }
 
   _loadAllScene(scenes = []) {
@@ -143,18 +114,15 @@ export default class Core {
     }
   }
 
-  async init({ canvasID, scenes, rootDir = './', screenSize = [500, 500] }) {
+  async init({ canvasId, scenes, rootDir = './', screenSize = [500, 500] }) {
     this._rootDir = rootDir;
 
     this.screenSize = screenSize;
 
-    this._initWebGL(canvasID);
+    this._initWebGL(canvasId);
 
     // 初始化系統模組
     this._initModule();
-
-    // 註冊預設shader
-    this._registerDefaultShader();
 
     // 註冊場景
     this._loadAllScene(scenes);

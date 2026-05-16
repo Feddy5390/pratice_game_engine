@@ -75,7 +75,7 @@ export default class ResoureManager {
 
       this.resources.set(key, data);
     } catch (error) {
-      console.error(`資源載入失敗: ${src}`, error);
+      throw new Error(`資源載入失敗: ${src}`);
     }
   }
 

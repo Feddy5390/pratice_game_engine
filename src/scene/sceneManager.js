@@ -1,4 +1,4 @@
-import { BaseScene } from './baseScene.js';
+import BaseScene from './baseScene.js';
 
 export default class SceneManager {
   _core;
@@ -17,7 +17,7 @@ export default class SceneManager {
     this._shaderManager = shaderManager;
   }
 
-  add(name, Class) {
+  add(Class) {
     if (!(Class.prototype instanceof BaseScene)) {
       throw new Error(`scene ${name} 必須繼承 BaseScene`);
     }
@@ -27,13 +27,20 @@ export default class SceneManager {
   }
 
   async change(name) {
-    await this._active?.destroy();
+    if (this._active) {
+      await this._active.destroy();
+    }
 
     let nextScene;
     if (name) {
       nextScene = this._scenes.get(name);
     } else {
       nextScene = this._scenes.values().next().value;
+    }
+
+    if (nextScene === undefined) {
+      console.warn('請先加入一個場景');
+      return;
     }
 
     console.log(`[場景切換] 開始執行場景 ${name}`);

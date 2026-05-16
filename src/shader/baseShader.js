@@ -59,10 +59,7 @@ export default class BaseShader {
   _initUniformCache() {
     const gl = this._gl;
 
-    const uniformCount = gl.getProgramParameter(
-      this.program,
-      gl.ACTIVE_UNIFORMS,
-    );
+    const uniformCount = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
 
     for (let i = 0; i < uniformCount; i++) {
       const info = gl.getActiveUniform(this.program, i);

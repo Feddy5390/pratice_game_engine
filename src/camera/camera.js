@@ -18,26 +18,28 @@
 
 export default class Camera {
   // 世界空間設定
-  #wcCenter; // 相機中心 (世界單位)
-  #wcWidth; // 相機視野寬 (世界單位) 鏡頭焦距，數值越大，看得到的範圍越廣
+  _previousWcCenter; // 紀錄上一次相機中心
+  _wcCenter; // 相機中心 (世界單位)
+  _wcWidth; // 相機視野寬 (世界單位) 鏡頭焦距，數值越大，看得到的範圍越廣
 
   // 視口設定（螢幕像素)
-  #viewport; // [x, y, width, height]
+  _viewport; // [x, y, width, height]
 
   // 投影深度
-  #near;
-  #far;
+  _near;
+  _far;
 
   // 相機旋轉（弧度）
-  #rotation;
+  _rotation;
 
   // 背景顏色
-  #background;
+  _background;
 
   // 矩陣
-  #viewMatrix = mat4.create();
-  #projectionMatrix = mat4.create();
-  #vpMatrix = mat4.create();
+  _viewMatrix = mat4.create();
+  _projectionMatrix = mat4.create();
+  vpMatrix = mat4.create();
+  _renderCenter = vec2.create(); // 用於渲染
 
   constructor({
     wcCenter = [0, 0],
@@ -48,116 +50,113 @@ export default class Camera {
     far = 1,
     background = null,
   } = {}) {
-    this.setWcCenter(...wcCenter);
-    this.#wcWidth = wcWidth;
-    this.#rotation = rotation;
+    this._wcCenter = vec2.fromValues(...wcCenter); // 建立一個新的 vec2 陣列(底層 Float32Array)
+    this._previousWcCenter = vec2.clone(this._wcCenter);
+    this._wcWidth = wcWidth;
+    this._rotation = rotation;
     this.setViewport(...viewport);
-    this.#near = near;
-    this.#far = far;
+    this._near = near;
+    this._far = far;
     this.setBackground(background);
   }
 
   // 更新視圖矩陣
-  #updateViewMatrix() {
-    mat4.identity(this.#viewMatrix); // 重置成單位矩陣
+  _updateViewMatrix() {
+    mat4.identity(this._viewMatrix); // 重置成單位矩陣
 
-    if (this.#rotation !== 0) {
-      mat4.rotateZ(this.#viewMatrix, this.#viewMatrix, -this.#rotation);
+    if (this._rotation != 0) {
+      mat4.rotateZ(this._viewMatrix, this._viewMatrix, -this._rotation);
     }
 
     mat4.translate(
-      this.#viewMatrix, // out：結果寫到這裡
-      this.#viewMatrix, // 基礎矩陣
-      [-this.#wcCenter[0], -this.#wcCenter[1], 0], // 平移向量
+      this._viewMatrix, // out：結果寫到這裡
+      this._viewMatrix, // 基礎矩陣
+      [-this._renderCenter[0], -this._renderCenter[1], 0], // 平移向量
     );
   }
 
   // 更新投影矩陣
-  #updateProjectionMatrix() {
+  _updateProjectionMatrix() {
     const wcHeight = this.wcHeight;
 
-    const halfW = this.#wcWidth / 2;
+    const halfW = this._wcWidth / 2;
     const halfH = wcHeight / 2;
 
-    mat4.ortho(
-      this.#projectionMatrix,
-      -halfW,
-      halfW,
-      halfH,
-      -halfH,
-      this.#near,
-      this.#far,
-    );
+    mat4.ortho(this._projectionMatrix, -halfW, halfW, halfH, -halfH, this._near, this._far);
   }
 
-  #updateVPMatrix() {
-    mat4.multiply(this.#vpMatrix, this.#projectionMatrix, this.#viewMatrix);
+  _updateVPMatrix() {
+    mat4.multiply(this.vpMatrix, this._projectionMatrix, this._viewMatrix);
+  }
+
+  // 紀錄上一幀的相機位置
+  savePreviousState() {
+    vec2.copy(this._previousWcCenter, this._wcCenter);
   }
 
   // 取得相機高度
   get wcHeight() {
-    const w = this.#viewport[2];
-    const h = this.#viewport[3];
+    const w = this._viewport[2];
+    const h = this._viewport[3];
 
     // 等比例計算高度
-    return (this.#wcWidth * h) / w;
+    return (this._wcWidth * h) / w;
   }
 
   // 取得相機背景色
   get background() {
-    return this.#background;
+    return this._background;
   }
 
   get viewport() {
-    return this.#viewport;
-  }
-
-  get vpMatrix() {
-    return this.#vpMatrix;
+    return this._viewport;
   }
 
   // 設定相機中心
   setWcCenter(x, y) {
-    // 建立一個新的 vec2 陣列，底層用 Float32Array
-    this.#wcCenter = vec2.fromValues(x, y);
+    this._wcCenter[0] += dx;
+    this._wcCenter[1] += dy;
   }
 
   // 設定相機距離
   setZoom(wcWidth) {
-    this.#wcWidth = wcWidth;
+    this._wcWidth = wcWidth;
   }
 
   incZoom(delta) {
-    this.#wcWidth += delta;
+    this._wcWidth += delta;
   }
 
   // 設定相機大小
   setViewport(x, y, w, h) {
-    this.#viewport = [x, y, w, h];
+    this._viewport = [x, y, w, h];
   }
 
   // 設定相機旋轉角度
   setRotation(rotation) {
-    this.#rotation = rotation;
+    this._rotation = rotation;
   }
 
   incRotation(delta) {
-    this.#rotation += delta;
+    this._rotation += delta;
   }
 
   // 設定相機背景色
   setBackground(color) {
-    this.#background = color;
+    this._background = color;
   }
 
   // 移動相機
   move(dx, dy) {
-    vec2.add(this.#wcCenter, this.#wcCenter, [dx, dy]);
+    vec2.add(this._wcCenter, this._wcCenter, [dx, dy]);
   }
 
-  update() {
-    this.#updateViewMatrix();
-    this.#updateProjectionMatrix();
-    this.#updateVPMatrix();
+  update(interpolation) {
+    // 相機插值
+    vec2.lerp(this._renderCenter, this._previousWcCenter, this._wcCenter, interpolation);
+
+    this._updateViewMatrix();
+    this._updateProjectionMatrix();
+    this._updateVPMatrix();
   }
 }

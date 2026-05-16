@@ -1,19 +1,22 @@
 import Camera from './camera.js';
 
 export default class CameraManager {
-  #cameras = new Map();
-  #screenScale = 1; // 畫面等比縮放值
+  _cameraAI = 0;
+  _cameras = new Map();
+  _cameraId = new Map(); // id -> cameraName
+  screenScale = 1; // 畫面等比縮放值
 
-  get(name) {
-    return this.#cameras.get(name);
+  getByName(name) {
+    return this._cameras.get(name);
   }
 
-  get screenScale() {
-    return this.#screenScale;
+  getById(id) {
+    const cameraName = this._cameraId.get(id);
+    return this._cameras.get(cameraName);
   }
 
   add(name, { wcCenter, wcWidth, viewport, background }) {
-    if (this.#cameras.get(name)) {
+    if (this._cameras.get(name)) {
       return;
     }
 
@@ -23,22 +26,32 @@ export default class CameraManager {
       viewport,
       background,
     });
-    this.#cameras.set(name, camera);
+    this._cameras.set(name, camera);
 
-    return camera;
+    this._cameraId[this._cameraAI] = name;
+
+    return this._cameraAI++;
   }
 
   setScreenScale(scale) {
-    this.#screenScale = scale;
+    this.screenScale = scale;
+  }
+
+  savePreviousStates() {
+    for (const camera of this._cameras.values()) {
+      camera.savePreviousState();
+    }
   }
 
   _update() {
-    for (const camera of this.#cameras.values()) {
+    for (const camera of this._cameras.values()) {
       camera.update();
     }
   }
 
   clear() {
-    this.#cameras.clear();
+    this._cameras.clear();
+    this._camerasId.clear();
+    this._cameraAI = 0;
   }
 }
