@@ -8,6 +8,7 @@ export default class ShaderManager {
   _shaderConfigs = new Map(); // 待編譯的 shader 設定（name -> { Class, vsPath, fsPath }）
   _shaders = new Map(); // 已編譯的 shader 實例（name -> BaseShader）
   _ubos = new Map(); // UBO 實例（blockName -> UBO）
+  _uboUpdaters = new Map();
 
   _nextUboBinding = 0; // UBO binding slot 自動遞增
 
@@ -82,7 +83,11 @@ export default class ShaderManager {
     return ubo;
   }
 
-  _updateUBO() {
-    
+  _updateUBOs(context) {
+    for (const [blockName, updater] of this._uboUpdaters) {
+      const ubo = this._ubos.get(blockName);
+
+      updater(ubo, context);
+    }
   }
 }

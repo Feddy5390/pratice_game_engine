@@ -21,7 +21,7 @@ export default class BaseScene {
 
   _registerDefaultShader() {
     this.core.shaderManager.addShader(
-      'default',
+      0,
       DefaultShader,
       'src/shader/default/glsl/vertexShader.glsl',
       'src/shader/default/glsl/fragShader.glsl',

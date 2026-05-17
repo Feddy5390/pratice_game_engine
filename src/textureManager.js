@@ -8,6 +8,7 @@ export default class TextureManager {
   _atlasMap = new Map(); // imageName -> jsonName
   _atlases = new Map(); // atlasId -> { texture, width, height, uvMap }
   _imageToAtlasId = new Map(); // imageName -> atlasId
+  _atlasIdToImage = new Map(); // atlasId -> imageName
 
   _init(gl, resourceManager) {
     this._gl = gl;
@@ -55,6 +56,7 @@ export default class TextureManager {
         });
 
         this._imageToAtlasId.set(spriteName, this._nextAtlasId);
+        this._atlasIdToImage.set(this._nextAtlasId, spriteName);
       }
 
       this._atlases.set(this._nextAtlasId, {
@@ -80,6 +82,12 @@ export default class TextureManager {
     const uv = atlas.uvMap.get(imageName);
 
     return { atlasId, texture: atlas.texture, uv };
+  }
+
+  getTexture(atlasId) {
+    const { texture } = this._atlases.get(atlasId);
+
+    return texture;
   }
 
   add(imageName, jsonName) {

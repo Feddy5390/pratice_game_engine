@@ -13,136 +13,43 @@ export default class Renderer {
     this.cameraManager = cameraManager;
   }
 
-  // render(scene, alpha) {
-  //   const gl = this._gl;
-  //   const { layers } = scene;
-
-  //   const dpr = window.devicePixelRatio || 1;
-
-  //   for (const [cameraName, layer] of layers) {
-  //     const camera = this._cameraManager.get(cameraName);
-  //     const screenScale = this._cameraManager.screenScale;
-  //     const [x, y, w, h] = camera.viewport;
-
-  //     const px = Math.round(x * dpr * screenScale);
-  //     const py_top = Math.round(y * dpr * screenScale); // 距頂部距離
-  //     const pw = Math.round(w * dpr * screenScale);
-  //     const ph = Math.round(h * dpr * screenScale);
-
-  //     // 2. 翻轉 Y 軸以符合 WebGL 的左下角基準
-  //     // WebGL 的 Y = 畫布總高 - (距離頂部的距離 + 自身高度)
-  //     const py_webgl = gl.canvas.height - (py_top + ph);
-
-  //     gl.viewport(px, py_webgl, pw, ph);
-  //     gl.scissor(px, py_webgl, pw, ph);
-
-  //     gl.enable(gl.SCISSOR_TEST);
-  //     if (camera.background) {
-  //       gl.clearColor(...camera.background);
-  //     }
-  //     gl.clear(gl.COLOR_BUFFER_BIT);
-  //     gl.disable(gl.SCISSOR_TEST);
-
-  //     // 更新ubo(todo: 目前context固定)
-  //     this._shaderManager._updateUBOs({
-  //       camera,
-  //       scene,
-  //       alpha,
-  //     });
-
-  //     let i = 0;
-  //     const entities = layer.entities;
-  //     const numEntity = entities.length;
-  //     while (i < numEntity) {
-  //       const firstEntity = entities[i];
-  //       const currentShaderName = firstEntity.shader;
-  //       const currentShader = this._shaderManager.getShader(currentShaderName);
-
-  //       // 獲取第一個實體的紋理資訊作為 Batch 的基準
-  //       const { atlasId: currentAtlasId, texture } =
-  //         this._textureManager.getInfo(firstEntity.image);
-
-  //       let count = 0;
-  //       let floatOffset = 0;
-  //       let j = i;
-
-  //       // --- 內層循環：收集相同 Shader 和相同 Texture 的實體 ---
-  //       while (j < numEntity) {
-  //         const targetEntity = entities[j];
-  //         const { atlasId: targetAtlasId, uv } = this._textureManager.getInfo(
-  //           targetEntity.image,
-  //         );
-
-  //         // 如果 Shader 不同或 Texture 不同，就切斷 Batch
-  //         if (
-  //           targetEntity.shader !== currentShaderName ||
-  //           targetAtlasId !== currentAtlasId
-  //         ) {
-  //           break;
-  //         }
-
-  //         // 打包數據到 Float32Array
-  //         currentShader.pack(floatOffset, targetEntity.transform, uv);
-
-  //         count++;
-  //         floatOffset += currentShader.stride;
-  //         j++;
-  //       }
-
-  //       // --- 開始繪製這個 Batch ---
-
-  //       // A. 切換 Shader 程序
-  //       currentShader.use();
-
-  //       // B. 綁定紋理與設定 Uniform
-  //       this._textureManager._bindTexture(texture, 0);
-  //       currentShader.setUniform1i('u_atlas', 0); // u_atlas 這個 sampler，去讀第 0 號紋理單元的資料
-
-  //       // C. 上傳這一段 Buffer 數據到 GPU
-  //       currentShader.update(floatOffset);
-
-  //       // D. 執行實例化繪製
-  //       currentShader.draw(count);
-
-  //       // --- 更新索引，跳到下一個 Batch 的起點 ---
-  //       i = j;
-  //     }
-  //   }
-  // }
-
   render(scene, interpolation) {
     const { world } = scene;
     const components = world.components;
-    const entities = this.world.createQuery(['TRANSFORM', 'SPRITE']).entities;
+    const entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
     const { store: transformStore, stride: transformStride } = components.TRANSFORM;
     const { store: spriteStore, stride: spriteStride } = components.SPRITE;
     const { store: renderInstanceStore, stride: renderInstanceStride } = components.RENDER_INSTANCE;
 
-    // 排序 camera > shader > texture > zIndex
+    // 排序 camera > zIndex > shader > texture 
     entities.sort((a, b) => {
       const aOffset = a * spriteStride;
       const bOffset = b * spriteStride;
 
       return (
-        sprite[aOffset + 6] - sprite[bOffset + 6] ||
-        sprite[aOffset + 7] - sprite[bOffset + 7] ||
-        sprite[aOffset + 5] - sprite[bOffset + 5] ||
-        sprite[aOffset] - sprite[bOffset]
+        // camera
+        spriteStore[aOffset + 6] - spriteStore[bOffset + 6] ||
+        // z
+        spriteStore[aOffset + 7] - spriteStore[bOffset + 7] ||
+        // shader
+        spriteStore[aOffset + 5] - spriteStore[bOffset + 5] ||
+        // texture
+        spriteStore[aOffset + 0] - spriteStore[bOffset + 0]
       );
     });
 
     // 打包 + 上傳渲染
     const numEntity = entities.length;
     let i = 0;
-    let lastCameraId;
-    let lastShader;
-    let lastAtlasId;
     while (i < numEntity) {
-      const entityId = entities[i];
-      const s = entityId * spriteStride;
+      const firstEntity  = entities[i];
+      const s = firstEntity * spriteStride;
       const atlasId = spriteStore[s];
       const shaderName = spriteStore[s + 5];
       const cameraId = spriteStore[s + 6];
+      const shader = this.shaderManager.getShader(shaderName);
+      const texture = this.textureManager.getTexture(atlasId);
+      const camera = this.cameraManager.getById(cameraId);
 
       let count = 0;
       let floatOffset = 0;
@@ -155,10 +62,6 @@ export default class Renderer {
         const targetAtlasId = spriteStore[s];
         const targetShaderName = spriteStore[s + 5];
         const targetCameraId = spriteStore[s + 6];
-
-        // 切換相機
-        const camera = this.cameraManager.getById(targetCameraId);
-        this._shaderManager.getUBO(context);
 
         if (
           cameraId != targetCameraId ||
@@ -180,9 +83,9 @@ export default class Renderer {
         renderInstanceStore[r + 3] =
           transformStore[t + 8] + (transformStore[t + 3] - transformStore[t + 8]) * interpolation;
         renderInstanceStore[r + 4] = spriteStore[s + 1];
-        renderInstanceStore[r + 4] = spriteStore[s + 2];
-        renderInstanceStore[r + 4] = spriteStore[s + 3];
-        renderInstanceStore[r + 4] = spriteStore[s + 4];
+        renderInstanceStore[r + 5] = spriteStore[s + 2];
+        renderInstanceStore[r + 6] = spriteStore[s + 3];
+        renderInstanceStore[r + 7] = spriteStore[s + 4];
 
         count++;
         floatOffset += renderInstanceStride;
@@ -191,13 +94,21 @@ export default class Renderer {
 
       // 開始繪製此 Batch
       const renderInstanceData = renderInstanceStore.subarray(0, floatOffset);
-      const shader = this._shaderManager.getShader(shaderName);
+      console.log(renderInstanceData);
+      debugger;
+
+      // 更新所有 ubo
+      this.shaderManager._updateUBOs({
+        scene,
+        camera,
+        interpolation,
+      });
 
       // 切換 Shader 程序
       shader.use();
 
       // 綁定紋理與設定 Uniform
-      this._textureManager._bindTexture(texture, 0);
+      this.textureManager._bindTexture(texture, 0);
       shader.setUniform1i('u_atlas', 0);
 
       // Buffer 數據上傳到 GPU
