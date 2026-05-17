@@ -9,7 +9,6 @@ export default class ShaderManager {
   _shaders = new Map(); // 已編譯的 shader 實例（name -> BaseShader）
   _ubos = new Map(); // UBO 實例（blockName -> UBO）
 
-  active; // 目前綁定中的 shader 名稱（避免重複 useProgram）
   _nextUboBinding = 0; // UBO binding slot 自動遞增
 
   _init(gl, resoureManager) {
@@ -66,20 +65,6 @@ export default class ShaderManager {
     this._resoureManager.add(fsPath, fsPath);
   }
 
-  /**
-   * 啟用指定 shader（相同 shader 連續呼叫不會重複切換）。
-   * @returns {BaseShader} shader 實例
-   */
-  useShader(name) {
-    if (this.active !== name) {
-      const shader = this._shaders.get(name);
-      shader.use();
-      this.active = name;
-    }
-
-    return this._shaders.get(name);
-  }
-
   getUBO(blockName) {
     return this._ubos.get(blockName);
   }
@@ -95,5 +80,9 @@ export default class ShaderManager {
     this._ubos.set(blockName, ubo);
 
     return ubo;
+  }
+
+  _updateUBO() {
+    
   }
 }

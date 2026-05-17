@@ -1,5 +1,4 @@
 import { BaseScene, MovementSystem, SavePreviousStatesSystem } from '../../src/index.js';
-import RenderSystem from '../../src/world/system/renderSystem.js';
 
 export class ExampleScene extends BaseScene {
   mainCamera;
@@ -25,7 +24,6 @@ export class ExampleScene extends BaseScene {
     // 加入場景需要的系統
     this.world.addSystem(SavePreviousStatesSystem);
     this.world.addSystem(MovementSystem);
-    this.world.addSystem(RenderSystem);
   }
 
   create() {

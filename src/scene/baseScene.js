@@ -1,4 +1,4 @@
-import World from '../world.js';
+import World from '../world/world.js';
 import DefaultShader from '../shader/default/defaultShader.js';
 
 export default class BaseScene {

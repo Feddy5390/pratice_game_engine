@@ -57,12 +57,12 @@ export default class GameLoop {
 
       // --- 畫面渲染 (Render) ---
       // 渲染頻率隨瀏覽器跑 (rAF)
-      // 傳入 alpha 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
-      const alpha = this._accumulator / this._logicFPS;
+      // 傳入 interpolation 值進行「插值渲染」，消除邏輯與渲染頻率不一導致的微抖動
+      const interpolation = this._accumulator / this._logicFPS;
       // 1. 更新所有相機 vpMatrix
       this._cameraManager._update();
       // 2. 遍歷所有實體，收集相同 Shader、Texture、camera 的實體，一次draw
-      this._renderer.render(alpha, scene);
+      this._renderer.render(scene, interpolation);
     };
 
     requestAnimationFrame(loop);
