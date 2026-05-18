@@ -40,7 +40,7 @@ export default class DefaultShader extends BaseShader {
     gl.bufferData(
       // 預先建立空間
       gl.ARRAY_BUFFER,
-      this._maxInstance * this.stride * 4,
+      1000 * 8 * 4,
       gl.DYNAMIC_DRAW,
     );
     // a_instanceOffset (location=1): offset 0

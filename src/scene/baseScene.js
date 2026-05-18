@@ -6,6 +6,7 @@ export default class BaseScene {
   name;
   world;
   conponentId;
+  maxEntities;
 
   constructor(core, name, maxEntities = 0) {
     if (!core | !name) {
@@ -14,9 +15,10 @@ export default class BaseScene {
 
     this.core = core;
     this.name = name;
+    this.maxEntities = maxEntities;
     this.world = new World(maxEntities);
     this._registerDefaultShader();
-    this._registerDefaultComponent(maxEntities);
+    this._registerDefaultComponent();
   }
 
   _registerDefaultShader() {
@@ -32,8 +34,9 @@ export default class BaseScene {
     });
   }
 
-  _registerDefaultComponent(maxEntities) {
-    // =============== default component ===============
+  _registerDefaultComponent() {
+    const maxEntities = this.maxEntities;
+
     // 1. TRANSFORM 索引：prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
     this.world.registerComponent(
       'TRANSFORM',
@@ -46,13 +49,6 @@ export default class BaseScene {
 
     // 3. VELOCITY 索引：v0, v1
     this.world.registerComponent('VELOCITY', (maxEntities) => new Float32Array(maxEntities * 2), 2);
-
-    // 4. RENDER_INSTANCE 索引：x, y, w, h, u0, v0, u1, v1
-    this.world.registerComponent(
-      'RENDER_INSTANCE',
-      (maxEntities) => new Float32Array(maxEntities * 8),
-      8,
-    );
   }
 
   /**

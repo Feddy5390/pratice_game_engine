@@ -12,6 +12,7 @@ export default class CameraManager {
 
   getById(id) {
     const cameraName = this._cameraId.get(id);
+
     return this._cameras.get(cameraName);
   }
 
@@ -27,8 +28,7 @@ export default class CameraManager {
       background,
     });
     this._cameras.set(name, camera);
-
-    this._cameraId[this._cameraAI] = name;
+    this._cameraId.set(this._cameraAI, name);
 
     return this._cameraAI++;
   }
@@ -43,9 +43,9 @@ export default class CameraManager {
     }
   }
 
-  _update() {
+  _update(interpolation) {
     for (const camera of this._cameras.values()) {
-      camera.update();
+      camera.update(interpolation);
     }
   }
 

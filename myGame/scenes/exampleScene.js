@@ -55,7 +55,8 @@ export class ExampleScene extends BaseScene {
 
     // 創建實體
     this.tree1 = this.world.createEntity();
-    this.world.addComponent(this.tree1, 'TRANSFORM', [0, 0, 40, 60, 0]);
+    // prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
+    this.world.addComponent(this.tree1, 'TRANSFORM', [3, 5, 40, 60, 0, 3, 5, 40, 60, 0]);
     let { atlasId, uv } = ge.textureManager.getInfo('t1.png');
     // atlasId, u0, v0, du, dv, shaderId, cameraId, zIndex
     this.world.addComponent(this.tree1, 'SPRITE', [

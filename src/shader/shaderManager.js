@@ -75,15 +75,20 @@ export default class ShaderManager {
    * @param {string} blockName - 對應 GLSL 中的 uniform block 名稱
    * @param {number} byteSize - buffer 大小（bytes）
    */
-  addUBO(blockName, byteSize) {
+  addUBO(blockName, byteSize, updater) {
     const binding = this._nextUboBinding++;
     const ubo = new UBO(this._gl, binding, byteSize);
     this._ubos.set(blockName, ubo);
+
+    if (updater) {
+      this._uboUpdaters.set(blockName, updater);
+    }
 
     return ubo;
   }
 
   _updateUBOs(context) {
+
     for (const [blockName, updater] of this._uboUpdaters) {
       const ubo = this._ubos.get(blockName);
 
