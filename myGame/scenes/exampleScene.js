@@ -60,7 +60,7 @@ export class ExampleScene extends BaseScene {
       wcCenter: [0, 0],
       wcWidth: 400,
       viewport: [0, 0, 1000, 600],
-      background: [0.0, 0.0, 0.0, 0.0],
+      // background: [0.9, 0.3, 0.95, 1],
     });
     this.mainCamera = engine.cameraManager.getByName(mainCamera);
 
@@ -78,7 +78,6 @@ export class ExampleScene extends BaseScene {
     // prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
     this.world.addComponent(this.tree1, 'TRANSFORM', [3, 5, 40, 60, 0, 3, 5, 40, 60, 0]);
     // u0, v0, du, dv, materialId, cameraId, zIndex
-
     this.world.addComponent(this.tree1, 'SPRITE', [
       uv.u0,
       uv.v0,
@@ -95,23 +94,23 @@ export class ExampleScene extends BaseScene {
     const engine = this.engine;
     const { input } = engine;
 
-    // if (input.isKeyPressed('a')) {
-    //   this.mainCamera.move(1, 0);
-    // }
-    // if (input.isKeyPressed('d')) {
-    //   this.mainCamera.move(-1, 0);
-    // }
-    // if (input.isKeyPressed('w')) {
-    //   this.mainCamera.move(0, 1);
-    // }
-    // if (input.isKeyPressed('x')) {
-    //   this.mainCamera.move(0, -1);
-    // }
-    // if (input.isKeyPressed('q')) {
-    //   this.mainCamera.incZoom(5);
-    // } else if (input.isKeyPressed('e')) {
-    //   this.mainCamera.incZoom(-5);
-    // }
+    if (input.isKeyPressed('a')) {
+      this.mainCamera.move(1, 0);
+    }
+    if (input.isKeyPressed('d')) {
+      this.mainCamera.move(-1, 0);
+    }
+    if (input.isKeyPressed('w')) {
+      this.mainCamera.move(0, 1);
+    }
+    if (input.isKeyPressed('x')) {
+      this.mainCamera.move(0, -1);
+    }
+    if (input.isKeyPressed('q')) {
+      this.mainCamera.incZoom(5);
+    } else if (input.isKeyPressed('e')) {
+      this.mainCamera.incZoom(-5);
+    }
   }
 
   destroy() {}

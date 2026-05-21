@@ -1,4 +1,4 @@
-import Material from "./material.js";
+import Material from './material.js';
 
 export default class MaterialManager {
   _shaderManager;
@@ -11,11 +11,8 @@ export default class MaterialManager {
 
   create(shaderName = 'default') {
     const id = this._nextId++;
-
     const shader = this._shaderManager.get(shaderName);
-
     const material = new Material(shader);
-
     this._materials.set(id, material);
 
     return id;
@@ -27,11 +24,7 @@ export default class MaterialManager {
 
   destroy(id) {
     const material = this._materials.get(id);
-
-    if (!material) return;
-
-    material.destroy?.();
-
+    material.destroy();
     this._materials.delete(id);
   }
 }

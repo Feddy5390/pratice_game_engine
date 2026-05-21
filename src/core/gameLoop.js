@@ -20,11 +20,11 @@ export default class GameLoop {
     this._isRunning = true;
 
     const tick = (timestamp = 0) => {
-      requestAnimationFrame(tick);
+      // requestAnimationFrame(tick);
 
-      if (!this._isRunning) {
-        return;
-      }
+      // if (!this._isRunning) {
+      //   return;
+      // }
 
       const scene = this._sceneManager.active; // 取得目前正在進行中的場景
 
@@ -60,7 +60,7 @@ export default class GameLoop {
       // 2. 遍歷所有實體，收集相同 Shader、Texture、camera 的實體，一次draw
       this._renderer.draw(interpolation);
 
-      // requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     };
 
     requestAnimationFrame(tick);

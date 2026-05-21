@@ -139,7 +139,7 @@ export default class Renderer {
   draw(interpolation) {
     const gl = this._gl;
     const dpr = this._dpr;
-    const screenScale = this._cameraManager.screenScale;
+    const screenScale = this._cameraManager._screenScale;
     const entities = this._entities;
     const numEntity = entities.length;
     const transformStore = this._transformStore;
@@ -228,10 +228,10 @@ export default class Renderer {
         gl.viewport(px, py_webgl, pw, ph);
         gl.scissor(px, py_webgl, pw, ph);
         gl.enable(gl.SCISSOR_TEST);
+        gl.clear(gl.COLOR_BUFFER_BIT);
         if (camera.background) {
           gl.clearColor(...camera.background);
         }
-        gl.clear(gl.COLOR_BUFFER_BIT);
         gl.disable(gl.SCISSOR_TEST);
 
         // 更新相機 ubo
