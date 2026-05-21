@@ -1,20 +1,20 @@
 import BaseScene from './baseScene.js';
 
 export default class SceneManager {
-  _core;
-
+  _engine;
   _resoureManager;
   _textureManager;
   _shaderManager;
-
+  _renderer;
   _scenes = new Map(); // 所有場景的實例
   _active; // 目前執行的場景
 
-  _init(core, resoureManager, textureManager, shaderManager) {
-    this._core = core;
+  _init(engine, resoureManager, textureManager, shaderManager, renderer) {
+    this._engine = engine;
     this._resoureManager = resoureManager;
     this._textureManager = textureManager;
     this._shaderManager = shaderManager;
+    this._renderer = renderer;
   }
 
   add(Class) {
@@ -22,8 +22,12 @@ export default class SceneManager {
       throw new Error(`scene ${name} 必須繼承 BaseScene`);
     }
 
-    const scene = new Class(this._core);
+    const scene = new Class(this._engine);
     this._scenes.set(name, scene);
+  }
+
+  get active() {
+    return this._active;
   }
 
   async change(name) {
@@ -60,8 +64,11 @@ export default class SceneManager {
     console.log('[場景切換] 執行場景 create...');
     await nextScene.create();
 
-    this._core.resize();
+    console.log('[場景切換] render pipeline change world...');
+    this._renderer.changeWorld(nextScene);
 
-    this.active = nextScene;
+    this._engine._resize();
+
+    this._active = nextScene;
   }
 }

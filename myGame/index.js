@@ -1,8 +1,8 @@
-import { Core } from '../src/index.js';
+import { Engine } from '../src/index.js';
 import { ExampleScene } from './scenes/exampleScene.js';
 
 window.onload = async () => {
-  const myGame = new Core();
+  const myGame = new Engine();
 
   await myGame.init({
     canvasId: 'canvas',

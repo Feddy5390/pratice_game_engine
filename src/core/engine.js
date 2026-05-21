@@ -1,17 +1,24 @@
-import './lib/gl-matrix.js';
-import ResourceManager from './resourceManager.js';
-import ShaderManager from './shader/shaderManager.js';
-import TextureManager from './textureManager.js';
-import SceneManager from './scene/sceneManager.js';
-import CameraManager from './camera/cameraManager.js';
+import ResourceManager from '../resource/resourceManager.js';
+import ShaderManager from '../render/shader/shaderManager.js';
+import TextureManager from '../render/texture/textureManager.js';
+import SceneManager from '../scene/sceneManager.js';
+import CameraManager from '../camera/cameraManager.js';
+import MeshManager from '../render/mesh/meshManager.js';
+import Input from '../input/input.js';
+import UBOmanager from '../render/UBOmanager.js';
 import GameLoop from './gameLoop.js';
-import Renderer from './renderer.js';
-import Input from './input.js';
+import Renderer from '../render/renderer.js';
+import MaterialManager from '../render/material/materialManager.js';
 
-export default class Core {
-  // webgl
+export default class Engine {
   gl;
   canvas;
+
+  _screenSize; // 原始設定畫面大小 [500, 500]
+  _rootDir;
+  _isBooting = false;
+  _resizeTimer;
+  _dpr = window.devicePixelRatio || 1;
 
   // gameEngine modules
   resourceManager;
@@ -19,14 +26,12 @@ export default class Core {
   textureManager;
   sceneManager;
   cameraManager;
-  gameLoop;
-  renderer;
+  meshManager;
+  materialManager;
   input;
-
-  _rootDir;
-  _resizeTimer;
-  _isBooting = false;
-  screenSize;
+  _uboManager;
+  _gameLoop;
+  _renderer;
 
   _initWebGL(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -47,20 +52,41 @@ export default class Core {
     this.textureManager = new TextureManager();
     this.sceneManager = new SceneManager();
     this.cameraManager = new CameraManager();
-    this.gameLoop = new GameLoop();
-    this.renderer = new Renderer();
+    this.meshManager = new MeshManager();
+    this.materialManager = new MaterialManager();
     this.input = new Input();
+    this._uboManager = new UBOmanager();
+    this._gameLoop = new GameLoop();
+    this._renderer = new Renderer();
 
     this.resourceManager._init(this._rootDir);
-    this.shaderManager._init(this.gl, this.resourceManager);
+    this.shaderManager._init(this.gl, this.resourceManager, this._uboManager);
     this.textureManager._init(this.gl, this.resourceManager);
-    this.sceneManager._init(this, this.resourceManager, this.textureManager, this.shaderManager);
-    this.gameLoop._init(this.sceneManager, this.cameraManager, this.renderer, this.input);
-    this.renderer._init(this.gl, this.shaderManager, this.textureManager, this.cameraManager);
+    this.sceneManager._init(
+      this,
+      this.resourceManager,
+      this.textureManager,
+      this.shaderManager,
+      this._renderer,
+    );
+    this.meshManager._init(this.gl);
+    this.materialManager._init(this.shaderManager);
     this.input._init();
+    this._uboManager._init(this.gl);
+    this._gameLoop._init(this.sceneManager, this.cameraManager, this._renderer, this.input);
+    this._renderer._init(
+      this.gl,
+      this.shaderManager,
+      this.textureManager,
+      this.cameraManager,
+      this.meshManager,
+      this._uboManager,
+      this.materialManager,
+      this._dpr,
+    );
   }
 
-  _loadAllScene(scenes = []) {
+  _loadScene(scenes = []) {
     for (const scene of scenes) {
       this.sceneManager.add(scene);
     }
@@ -73,16 +99,16 @@ export default class Core {
       }
 
       this._resizeTimer = setTimeout(() => {
-        this.resize();
+        this._resize();
       }, 200);
     });
   }
 
   // 螢幕調整大小
-  resize() {
-    const { canvas, screenSize } = this;
-    const [baseW, baseH] = screenSize;
-    const dpr = window.devicePixelRatio || 1;
+  _resize() {
+    const { canvas, _screenSize } = this;
+    const [baseW, baseH] = _screenSize;
+    const dpr = this._dpr;
 
     const screenW = window.innerWidth;
     const screenH = window.innerHeight;
@@ -110,14 +136,14 @@ export default class Core {
       canvas.height = renderH;
 
       // 通知相機
-      this.cameraManager.setScreenScale(scale);
+      this.cameraManager._setScreenScale(scale);
     }
   }
 
   async init({ canvasId, scenes, rootDir = './', screenSize = [500, 500] }) {
     this._rootDir = rootDir;
 
-    this.screenSize = screenSize;
+    this._screenSize = screenSize;
 
     this._initWebGL(canvasId);
 
@@ -125,7 +151,7 @@ export default class Core {
     this._initModule();
 
     // 註冊場景
-    this._loadAllScene(scenes);
+    this._loadScene(scenes);
 
     this._listenResize();
 
@@ -136,10 +162,10 @@ export default class Core {
 
   async start() {
     if (!this._isBooting) {
-      throw new Error('遊戲尚未初始化');
+      throw new Error('引擎尚未初始化');
     }
 
     await this.sceneManager.change();
-    this.gameLoop.start();
+    this._gameLoop.start();
   }
 }

@@ -1,19 +1,22 @@
 export default class ResoureManager {
-  #rootDir;
-
-  #resourceMap = new Map();
-  resources = new Map();
+  _rootDir;
+  _pending = new Map();
+  _resources = new Map();
 
   _init(rootDir) {
-    this.#rootDir = rootDir;
+    this._rootDir = rootDir;
+  }
+
+  get(name) {
+    return this._resources.get(name);
   }
 
   add(name, path) {
-    if (this.resources.get(name)) {
+    if (this._resources.get(name)) {
       return;
     }
 
-    this.#resourceMap.set(name, path);
+    this._pending.set(name, path);
   }
 
   addMany(obj) {
@@ -24,19 +27,19 @@ export default class ResoureManager {
 
   async _load() {
     const promises = [];
-    for (var [key, src] of this.#resourceMap) {
+    for (var [key, src] of this._pending) {
       console.log(`[資源加載] ${key} - ${src}`);
-      const promise = this.#loader(key, src);
+      const promise = this._loader(key, src);
       promises.push(promise);
     }
 
     await Promise.all(promises);
 
     // 清空待載入清單，避免重複載入
-    this.#resourceMap.clear();
+    this._pending.clear();
   }
 
-  #createImageFromBlob(blob) {
+  _createImageFromBlob(blob) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       const url = URL.createObjectURL(blob);
@@ -49,9 +52,9 @@ export default class ResoureManager {
     });
   }
 
-  async #loader(key, src) {
+  async _loader(key, src) {
     try {
-      src = `${this.#rootDir}/${src}`;
+      src = `${this._rootDir}/${src}`;
       const response = await fetch(src);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -63,7 +66,7 @@ export default class ResoureManager {
       let data;
       if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'].includes(extension)) {
         const blob = await response.blob();
-        data = await this.#createImageFromBlob(blob);
+        data = await this._createImageFromBlob(blob);
       } else if (['glsl', 'vert', 'frag'].includes(extension)) {
         data = await response.text();
       } else if (extension === 'json') {
@@ -73,13 +76,13 @@ export default class ResoureManager {
         data = await response.blob();
       }
 
-      this.resources.set(key, data);
+      this._resources.set(key, data);
     } catch (error) {
       throw new Error(`資源載入失敗: ${src}`);
     }
   }
 
   clear() {
-    this.resources.clear();
+    this._resources.clear();
   }
 }

@@ -1,21 +1,17 @@
 export default class GameLoop {
-  // gameEngine modules
   _sceneManager;
   _cameraManager;
   _renderer;
   _input;
-
-  // loop
   _logicFPS;
   _lastTime = 0;
   _accumulator = 0;
-
   _isRunning = false;
 
-  _init(sceneManager, cameraManager, renderer, input, logicFPS = 1 / 30) {
+  _init(sceneManager, cameraManager, render, input, logicFPS = 1 / 30) {
     this._sceneManager = sceneManager;
     this._cameraManager = cameraManager;
-    this._renderer = renderer;
+    this._renderer = render;
     this._input = input;
     this._logicFPS = logicFPS;
   }
@@ -23,8 +19,8 @@ export default class GameLoop {
   start() {
     this._isRunning = true;
 
-    const loop = (timestamp = 0) => {
-      requestAnimationFrame(loop);
+    const tick = (timestamp = 0) => {
+      requestAnimationFrame(tick);
 
       if (!this._isRunning) {
         return;
@@ -41,10 +37,10 @@ export default class GameLoop {
 
       while (this._accumulator >= this._logicFPS) {
         // 保存相機更新前的位置及旋轉狀態
-        this._cameraManager.savePreviousStates();
+        this._cameraManager._savePreviousStates();
 
         // 更新輸入
-        this._input.update();
+        this._input._update();
 
         // 更新場景邏輯
         scene.update(this._logicFPS);
@@ -62,10 +58,12 @@ export default class GameLoop {
       // 1. 更新所有相機 vpMatrix
       this._cameraManager._update(interpolation);
       // 2. 遍歷所有實體，收集相同 Shader、Texture、camera 的實體，一次draw
-      this._renderer.render(scene, interpolation);
+      this._renderer.draw(interpolation);
+
+      // requestAnimationFrame(tick);
     };
 
-    requestAnimationFrame(loop);
+    requestAnimationFrame(tick);
   }
 
   pause() {

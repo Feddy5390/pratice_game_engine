@@ -1,36 +1,47 @@
-import { BaseScene, MovementSystem, SavePreviousStatesSystem } from '../../src/index.js';
+import { BaseScene } from '../../src/index.js';
+import MovementSystem from '../scripts/movement.js';
 
 export class ExampleScene extends BaseScene {
   mainCamera;
   tree1;
   instanceId = 0;
 
-  constructor(core) {
-    super(core, 'example', 10);
+  constructor(engine) {
+    super(engine, 'example', 10);
   }
 
   preload() {
-    const ge = this.core;
+    const engine = this.engine;
 
     // 註冊加載的資源
-    ge.resourceManager.addMany({
+    engine.resourceManager.addMany({
       texture: 'myGame/assets/texture.png',
       spritesheetJson: 'myGame/assets/spritesheet.json',
     });
 
     // 註冊上傳的紋理資源
-    ge.textureManager.add('texture', 'spritesheetJson');
+    engine.textureManager.add('texture', 'spritesheetJson');
+
+    // 加入 component
+    // VELOCITY 索引：v0, v1
+    this.world.registerComponent({
+      type: 'VELOCITY',
+      stride: 2,
+
+      createStore(maxEntities) {
+        return new Float32Array(maxEntities * 2);
+      },
+    });
 
     // 加入場景需要的系統
-    this.world.addSystem(SavePreviousStatesSystem);
     this.world.addSystem(MovementSystem);
   }
 
   create() {
-    const ge = this.core;
+    const engine = this.engine;
 
     // 註冊按鍵
-    ge.input.setKey({
+    engine.input.setKey({
       a: 65,
       d: 68,
       w: 87,
@@ -45,27 +56,35 @@ export class ExampleScene extends BaseScene {
 
     // 創建相機
     const mainCamera = 'main';
-    const mainCameraId = ge.cameraManager.add(mainCamera, {
+    const mainCameraId = engine.cameraManager.add(mainCamera, {
       wcCenter: [0, 0],
       wcWidth: 400,
       viewport: [0, 0, 1000, 600],
       background: [0.0, 0.0, 0.0, 0.0],
     });
-    this.mainCamera = ge.cameraManager.getByName(mainCamera);
+    this.mainCamera = engine.cameraManager.getByName(mainCamera);
+
+    // 創建貼圖
+    const treeTexture = engine.textureManager.get('texture');
+    const uv = treeTexture.getSprite('t1.png');
+
+    // 創建材質
+    const materialId = engine.materialManager.create('default');
+    const material = engine.materialManager.get(materialId);
+    material.setTexture('u_atlas', treeTexture);
 
     // 創建實體
     this.tree1 = this.world.createEntity();
     // prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
     this.world.addComponent(this.tree1, 'TRANSFORM', [3, 5, 40, 60, 0, 3, 5, 40, 60, 0]);
-    let { atlasId, uv } = ge.textureManager.getInfo('t1.png');
-    // atlasId, u0, v0, du, dv, shaderId, cameraId, zIndex
+    // u0, v0, du, dv, materialId, cameraId, zIndex
+
     this.world.addComponent(this.tree1, 'SPRITE', [
-      atlasId,
       uv.u0,
       uv.v0,
-      uv.u1,
-      uv.v1,
-      0,
+      uv.du,
+      uv.dv,
+      materialId,
       mainCameraId,
       1,
     ]);
@@ -73,8 +92,8 @@ export class ExampleScene extends BaseScene {
   }
 
   update() {
-    const ge = this.core;
-    const { input } = ge;
+    const engine = this.engine;
+    const { input } = engine;
 
     // if (input.isKeyPressed('a')) {
     //   this.mainCamera.move(1, 0);

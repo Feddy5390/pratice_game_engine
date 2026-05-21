@@ -1,12 +1,16 @@
-export default class BaseShader {
+export default class Shader {
   _gl;
-  program;
-  _uniformLocCache = new Map();
+  _program;
+  _uniforms = new Map();
 
   constructor(gl, vsSource, fsSource) {
     this._gl = gl;
-    this.program = this._createProgram(vsSource, fsSource);
-    this._initUniformCache();
+    this._program = this._createProgram(vsSource, fsSource);
+    this._cacheUniforms();
+  }
+
+  get program() {
+    return this._program;
   }
 
   _createProgram(vsSource, fsSource) {
@@ -56,65 +60,69 @@ export default class BaseShader {
    * UBO 內的成員 getUniformLocation 會回傳 null，藉此自動排除。
    * Array uniform 名稱（如 u_colors[0]）會去除 [0] 後綴再存入。
    */
-  _initUniformCache() {
+  _cacheUniforms() {
     const gl = this._gl;
 
-    const uniformCount = gl.getProgramParameter(this.program, gl.ACTIVE_UNIFORMS);
+    const uniformCount = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
 
     for (let i = 0; i < uniformCount; i++) {
-      const info = gl.getActiveUniform(this.program, i);
-      const loc = gl.getUniformLocation(this.program, info.name);
+      const info = gl.getActiveUniform(this._program, i);
+      const loc = gl.getUniformLocation(this._program, info.name);
 
       if (loc !== null) {
         const name = info.name.replace(/\[0\]$/, '');
-        this._uniformLocCache.set(name, loc);
+        this._uniforms.set(name, loc);
       }
     }
   }
 
-  use() {
-    this._gl.useProgram(this.program);
+  // 綁定
+  bindUBO(blockName, binding) {
+    const gl = this._gl;
+
+    const blockIndex = gl.getUniformBlockIndex(this._program, blockName);
+    if (blockIndex !== gl.INVALID_INDEX) {
+      gl.uniformBlockBinding(this._program, blockIndex, binding);
+    }
   }
 
-  /** 由子類實作，用於每幀上傳 instance data 等動態資料 */
-  update() {}
-
-  /** 由子類實作，打包自己的格式 */
-  pack() {}
+  use() {
+    this._gl.useProgram(this._program);
+  }
 
   destroy() {
-    this._gl.deleteProgram(this.program);
-    this._uniformLocCache.clear();
+    this._gl.deleteProgram(this._program);
+    this._uniforms.clear();
   }
 
   // ==================== Uniform Setters ====================
   setUniform1i(name, v) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniform1i(loc, v);
   }
 
   setUniform1f(name, v) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniform1f(loc, v);
   }
 
   setUniform2f(name, x, y) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniform2f(loc, x, y);
   }
 
   setUniform3f(name, x, y, z) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniform3f(loc, x, y, z);
   }
 
   setUniform4f(name, x, y, z, w) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniform4f(loc, x, y, z, w);
   }
 
   setUniformMatrix4fv(name, mat) {
-    const loc = this._uniformLocCache.get(name);
+    const loc = this._uniforms.get(name);
     this._gl.uniformMatrix4fv(loc, false, mat);
   }
 }

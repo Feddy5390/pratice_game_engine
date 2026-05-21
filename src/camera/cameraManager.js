@@ -1,43 +1,40 @@
 import Camera from './camera.js';
 
 export default class CameraManager {
-  _cameraAI = 0;
-  _cameras = new Map();
-  _cameraId = new Map(); // id -> cameraName
-  screenScale = 1; // 畫面等比縮放值
+  _nextId = 0;
+  _cameras = new Map(); // name -> Camera
+  _idToName = new Map(); // id -> name
+  _screenScale = 1;
 
   getByName(name) {
     return this._cameras.get(name);
   }
 
   getById(id) {
-    const cameraName = this._cameraId.get(id);
+    const name = this._idToName.get(id);
 
-    return this._cameras.get(cameraName);
+    return this._cameras.get(name);
   }
 
   add(name, { wcCenter, wcWidth, viewport, background }) {
-    if (this._cameras.get(name)) {
-      return;
+    if (this._cameras.has(name)) {
+      throw new Error(`相機 ${name} 已加入`);
     }
 
-    const camera = new Camera({
-      wcCenter,
-      wcWidth,
-      viewport,
-      background,
-    });
+    const camera = new Camera({ wcCenter, wcWidth, viewport, background });
+    const id = this._nextId++;
+
     this._cameras.set(name, camera);
-    this._cameraId.set(this._cameraAI, name);
+    this._idToName.set(id, name);
 
-    return this._cameraAI++;
+    return id;
   }
 
-  setScreenScale(scale) {
-    this.screenScale = scale;
+  _setScreenScale(scale) {
+    this._screenScale = scale;
   }
 
-  savePreviousStates() {
+  _savePreviousStates() {
     for (const camera of this._cameras.values()) {
       camera.savePreviousState();
     }
@@ -45,13 +42,13 @@ export default class CameraManager {
 
   _update(interpolation) {
     for (const camera of this._cameras.values()) {
-      camera.update(interpolation);
+      camera._update(interpolation);
     }
   }
 
   clear() {
     this._cameras.clear();
-    this._camerasId.clear();
-    this._cameraAI = 0;
+    this._idToName.clear();
+    this._nextId = 0;
   }
 }

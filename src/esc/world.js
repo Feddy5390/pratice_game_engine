@@ -14,12 +14,13 @@ export default class World {
     this._masks = new Uint32Array(maxEntities);
   }
 
-  registerComponent(type, createStoreFn, stride) {
+  registerComponent(component) {
     const id = this._componentCursor++;
+    const { type, stride, createStore } = component;
 
     this._componentBits[type] = 1 << id;
     this.components[type] = {
-      store: createStoreFn(this._maxEntities),
+      store: createStore(this._maxEntities),
       stride,
     };
   }

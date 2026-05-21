@@ -1,6 +1,6 @@
-import Core from './core.js';
+import './utils/gl-matrix.js';
+import Engine from './core/engine.js';
 import BaseScene from './scene/baseScene.js';
-import MovementSystem from './world/system/movementSystem.js';
-import SavePreviousStatesSystem from './world/system/savePreviousStatesSystem.js';
+import VertexLayout from './render/vertexLayout.js';
 
-export { Core, BaseScene, MovementSystem, SavePreviousStatesSystem };
+export { Engine, BaseScene, VertexLayout };

@@ -1,4 +1,4 @@
-export default class MovementSystem {
+export default class Movement {
   world;
   query;
 

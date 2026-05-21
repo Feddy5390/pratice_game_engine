@@ -35,10 +35,9 @@ export default class Camera {
   // 背景顏色
   _background;
 
-  // 矩陣
   _viewMatrix = mat4.create();
   _projectionMatrix = mat4.create();
-  vpMatrix = mat4.create();
+  _vpMatrix = mat4.create();
   _renderCenter = vec2.create(); // 用於渲染
 
   constructor({
@@ -86,7 +85,7 @@ export default class Camera {
   }
 
   _updateVPMatrix() {
-    mat4.multiply(this.vpMatrix, this._projectionMatrix, this._viewMatrix);
+    mat4.multiply(this._vpMatrix, this._projectionMatrix, this._viewMatrix);
   }
 
   // 紀錄上一幀的相機位置
@@ -112,24 +111,34 @@ export default class Camera {
     return this._viewport;
   }
 
+  get vpMatrix() {
+    return this._vpMatrix;
+  }
+
+  // 設定相機大小
+  setViewport(x, y, w, h) {
+    this._viewport = [x, y, w, h];
+  }
+
   // 設定相機中心
   setWcCenter(x, y) {
+    this._wcCenter[0] = x;
+    this._wcCenter[1] = y;
+  }
+
+  // 移動相機
+  move(dx, dy) {
     this._wcCenter[0] += dx;
     this._wcCenter[1] += dy;
   }
 
-  // 設定相機距離
+  // 設定相機遠近
   setZoom(wcWidth) {
     this._wcWidth = wcWidth;
   }
 
   incZoom(delta) {
     this._wcWidth += delta;
-  }
-
-  // 設定相機大小
-  setViewport(x, y, w, h) {
-    this._viewport = [x, y, w, h];
   }
 
   // 設定相機旋轉角度
@@ -146,12 +155,7 @@ export default class Camera {
     this._background = color;
   }
 
-  // 移動相機
-  move(dx, dy) {
-    vec2.add(this._wcCenter, this._wcCenter, [dx, dy]);
-  }
-
-  update(interpolation) {
+  _update(interpolation) {
     // 相機插值
     vec2.lerp(this._renderCenter, this._previousWcCenter, this._wcCenter, interpolation);
 

@@ -1,54 +1,32 @@
-import World from '../world/world.js';
-import DefaultShader from '../shader/default/defaultShader.js';
+import World from '../esc/world.js';
+import TransformComponent from '../esc/component/transform.js';
+import SpriteComponent from '../esc/component/sprite.js';
+import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
 
 export default class BaseScene {
-  core;
+  engine;
   name;
   world;
-  conponentId;
-  maxEntities;
 
-  constructor(core, name, maxEntities = 0) {
-    if (!core | !name) {
+  constructor(engine, name, maxEntities = 0) {
+    if (!engine | !name) {
       throw new Error('場景初始化參數缺少');
     }
 
-    this.core = core;
+    this.engine = engine;
     this.name = name;
-    this.maxEntities = maxEntities;
     this.world = new World(maxEntities);
-    this._registerDefaultShader();
     this._registerDefaultComponent();
-  }
-
-  _registerDefaultShader() {
-    this.core.shaderManager.addShader(
-      0,
-      DefaultShader,
-      'src/shader/default/glsl/vertexShader.glsl',
-      'src/shader/default/glsl/fragShader.glsl',
-    );
-
-    this.core.shaderManager.addUBO('CameraBlock', 4 * 4 * 4, (ubo, context) => {
-      ubo.update(context.camera.vpMatrix);
-    });
+    this._registerDefaultSystem();
   }
 
   _registerDefaultComponent() {
-    const maxEntities = this.maxEntities;
+    this.world.registerComponent(TransformComponent);
+    this.world.registerComponent(SpriteComponent);
+  }
 
-    // 1. TRANSFORM 索引：prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
-    this.world.registerComponent(
-      'TRANSFORM',
-      (maxEntities) => new Float32Array(maxEntities * 10),
-      10,
-    );
-
-    // 2. SPRITE 索引：atlasId, u0, v0, du, dv, shaderId, cameraId, zIndex
-    this.world.registerComponent('SPRITE', (maxEntities) => new Float32Array(maxEntities * 8), 8);
-
-    // 3. VELOCITY 索引：v0, v1
-    this.world.registerComponent('VELOCITY', (maxEntities) => new Float32Array(maxEntities * 2), 2);
+  _registerDefaultSystem() {
+    this.world.addSystem(SavePreviousStatesSystem);
   }
 
   /**
@@ -61,7 +39,7 @@ export default class BaseScene {
   create() {}
 
   // 更新遊戲每幀邏輯
-  update(dt) {}
+  update() {}
 
   // 清除場景相關資源
   destroy() {}
