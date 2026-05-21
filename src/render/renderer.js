@@ -142,6 +142,9 @@ export default class Renderer {
     const screenScale = this._cameraManager._screenScale;
     const entities = this._entities;
     const numEntity = entities.length;
+
+    if (numEntity === 0) return;
+
     const transformStore = this._transformStore;
     const transformStride = this._transformStride;
     const spriteStore = this._spriteStore;
@@ -241,9 +244,9 @@ export default class Renderer {
       }
 
       // Buffer 數據上傳到 GPU
-      const renderInstanceData = instanceData.subarray(0, floatOffset);
-      this._instanceBuffer.update(renderInstanceData);
+      this._instanceBuffer.update({ srcData: instanceData, length: floatOffset });
 
+      // 綁定 VAO
       this._mesh.bind();
 
       // 綁定紋理與設定 Uniform

@@ -62,14 +62,9 @@ export default class Mesh {
     this._indexCount = count;
     this._indexType = type;
 
-    // =========================
     // 錄製 EBO 到 VAO
-    // =========================
-
     gl.bindVertexArray(this._vao);
-
     buffer.bind();
-
     gl.bindVertexArray(null);
   }
 
@@ -78,19 +73,14 @@ export default class Mesh {
   }
 
   clear() {
-    // =========================
     // 清除 managed buffers
-    // =========================
-
     for (const entry of this._buffers) {
       if (entry.managed) {
         entry.buffer.clear();
       }
     }
 
-    // =========================
     // 清除 managed index buffer
-    // =========================s
     if (this._indexBufferInfo && this._indexBufferInfo.managed) {
       this._indexBufferInfo.buffer.clear();
     }
