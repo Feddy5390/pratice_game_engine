@@ -16,7 +16,7 @@ export default class Renderer {
   _entities; // 所有實體
 
   _maxBatchDraw = 1000; // 一個 batch 最大的數量
-  _stride = 8;
+  _stride = 9;
   _instanceData;
   _instanceBuffer;
 
@@ -111,6 +111,14 @@ export default class Renderer {
               stride: this._stride * 4,
               offset: 4 * 4,
               divisor: 1,
+            })
+            .add({
+              location: 4,
+              size: 1,
+              type: gl.FLOAT,
+              stride: this._stride * 4,
+              offset: 8 * 4,
+              divisor: 1,
             }),
         },
       ],
@@ -120,6 +128,15 @@ export default class Renderer {
     });
     this._mesh = this._meshManager.get(meshId);
   }
+
+   lerpAngle(a, b, t) {
+  let diff = b - a;
+
+  while (diff > 180) diff -= 360;
+  while (diff < -180) diff += 360;
+
+  return a + diff * t;
+}
 
   changeWorld(scene) {
     const { world } = scene;
@@ -178,10 +195,13 @@ export default class Renderer {
         const prevY = transformStore[t + 6];
         const prevW = transformStore[t + 7];
         const prevH = transformStore[t + 8];
+        const prevRotation = transformStore[t + 9];
         const x = transformStore[t];
         const y = transformStore[t + 1];
         const w = transformStore[t + 2];
         const h = transformStore[t + 3];
+        const rotation = transformStore[t + 4];
+
         instanceData[floatOffset++] = prevX + (x - prevX) * interpolation;
         instanceData[floatOffset++] = prevY + (y - prevY) * interpolation;
         instanceData[floatOffset++] = prevW + (w - prevW) * interpolation;
@@ -190,6 +210,7 @@ export default class Renderer {
         instanceData[floatOffset++] = spriteStore[s + 1];
         instanceData[floatOffset++] = spriteStore[s + 2];
         instanceData[floatOffset++] = spriteStore[s + 3];
+        instanceData[floatOffset++] = this.lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180);
 
         count++;
         j++;

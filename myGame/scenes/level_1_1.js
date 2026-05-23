@@ -92,7 +92,7 @@ export class Level_1_1 extends BaseScene {
 
     for (let i = 0; i < 100; i++) {
       const tree = this.world.createEntity();
-      this.world.addComponent(tree, 'TRANSFORM', [i * 50, 0, 30, 60, 0]);
+      this.world.addComponent(tree, 'TRANSFORM', [i * 50, 0, 30, 60, i * 20]);
       this.world.addComponent(tree, 'SPRITE', [
         tree2UV.u0,
         tree2UV.v0,
