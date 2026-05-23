@@ -7,7 +7,7 @@ export class Level_1_1 extends BaseScene {
   instanceId = 0;
 
   constructor(engine) {
-    super(engine, 10000);
+    super(engine, 101);
   }
 
   preload() {
@@ -128,7 +128,7 @@ export class Level_1_1 extends BaseScene {
       this.mainCamera.incZoom(-5);
     }
 
-    if (input.isKeyPressed('enter')) {
+    if (input.isKeyClicked('enter')) {
       engine.sceneManager.change('Level_1_2');
     }
 

@@ -7,7 +7,7 @@ export class Level_1_2 extends BaseScene {
   instanceId = 0;
 
   constructor(engine) {
-    super(engine, 10000);
+    super(engine, 11);
   }
 
   preload() {
@@ -52,6 +52,7 @@ export class Level_1_2 extends BaseScene {
       up: 38,
       right: 39,
       down: 40,
+      enter: 13,
     });
 
     // 創建相機
@@ -125,6 +126,10 @@ export class Level_1_2 extends BaseScene {
       this.mainCamera.incZoom(5);
     } else if (input.isKeyPressed('e')) {
       this.mainCamera.incZoom(-5);
+    }
+
+    if (input.isKeyClicked('enter')) {
+      engine.sceneManager.change('Level_1_1');
     }
 
     let vx = 0;
