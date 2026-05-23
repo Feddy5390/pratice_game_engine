@@ -144,6 +144,4 @@ export class Level_1_2 extends BaseScene {
 
     this.world.setComponent(this.tree1, 'VELOCITY', [vx, vy]);
   }
-
-  destroy() {}
 }

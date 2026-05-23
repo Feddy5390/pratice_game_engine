@@ -9,7 +9,7 @@ export default class SceneManager {
   _shaderManager;
   _renderer;
   _scenes = new Map(); // 所有場景的實例
-  _active; // 目前執行的場景
+  active; // 目前執行的場景
 
   _init(engine, resoureManager, textureManager, shaderManager, renderer) {
     this._engine = engine;
@@ -29,13 +29,10 @@ export default class SceneManager {
     this._scenes.set(Class.name, scene);
   }
 
-  get active() {
-    return this._active;
-  }
-
   async change(name) {
-    if (this._active) {
-      await this._active.destroy();
+    if (this.active) {
+      console.log(`============= 場景清除開始 =============`);
+      await this.active.destroy();
     }
 
     let nextScene;
@@ -50,7 +47,7 @@ export default class SceneManager {
       return;
     }
 
-    console.log(`[場景切換] 開始執行場景 ${nextScene.name}`);
+    console.log(`============= 開始執行場景 ${nextScene.name} =============`);
 
     console.log(`[場景切換] 執行 preload...`);
     await nextScene.preload();
@@ -72,6 +69,6 @@ export default class SceneManager {
 
     this._engine._resize();
 
-    this._active = nextScene;
+    this.active = nextScene;
   }
 }

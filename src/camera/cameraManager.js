@@ -33,7 +33,7 @@ export default class CameraManager {
     }
   }
 
-  _clear() {
+  clear() {
     this._cameras.clear();
     this._nextId = 0;
   }

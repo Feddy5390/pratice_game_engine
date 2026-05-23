@@ -5,7 +5,7 @@ export default class ShaderManager {
   _gl;
   _resoureManager;
   _uboManager;
-  _shaderConfigs = new Map(); // 待編譯的 shader 設定 name -> { vsPath, fsPath }
+  _pending = new Map(); // 待編譯的 shader 設定 name -> { vsPath, fsPath }
   _shaders = new Map(); // 已編譯的 shader 實例 name -> BaseShader
 
   _init(gl, resoureManager, uboManager) {
@@ -19,7 +19,7 @@ export default class ShaderManager {
    * 通常在資源載入完成後呼叫一次。
    */
   _compileAll() {
-    for (const [name, config] of this._shaderConfigs) {
+    for (const [name, config] of this._pending) {
       const { vsPath, fsPath } = config;
 
       const vsSource = this._resoureManager.get(vsPath);
@@ -33,7 +33,7 @@ export default class ShaderManager {
       this._shaders.set(name, shader);
     }
 
-    this._shaderConfigs.clear();
+    this._pending.clear();
   }
 
   get(name) {
@@ -46,7 +46,7 @@ export default class ShaderManager {
       return;
     }
 
-    this._shaderConfigs.set(name, { vsPath, fsPath });
+    this._pending.set(name, { vsPath, fsPath });
     this._resoureManager.add(vsPath, vsPath);
     this._resoureManager.add(fsPath, fsPath);
   }

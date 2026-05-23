@@ -22,9 +22,8 @@ export default class MaterialManager {
     return this._materials.get(id);
   }
 
-  destroy(id) {
-    const material = this._materials.get(id);
-    material.destroy();
-    this._materials.delete(id);
+  clear() {
+    this._materials.clear();
+    this._nextId = 0;
   }
 }

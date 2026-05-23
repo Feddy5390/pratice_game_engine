@@ -7,10 +7,6 @@ export default class Material {
     this._shader = shader;
   }
 
-  get shader() {
-    return this._shader;
-  }
-
   setTexture(uniformName, texture) {
     this._textures.set(uniformName, texture);
   }

@@ -8,23 +8,15 @@ export default class BaseScene {
   engine;
   world;
 
-  constructor(engine, maxEntities = 0) {
+  constructor(engine, maxEntities = 100) {
     if (!engine) {
       throw new Error('場景初始化參數缺少');
     }
 
     this.engine = engine;
     this.world = new World(maxEntities);
-    this._registerDefaultComponent();
-    this._registerDefaultSystem();
-  }
-
-  _registerDefaultComponent() {
     this.world.registerComponent(TransformComponent);
     this.world.registerComponent(SpriteComponent);
-  }
-
-  _registerDefaultSystem() {
     this.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
     this.world.addSystem(RenderSyncSystem, 'afterUpdate');
   }
@@ -42,5 +34,19 @@ export default class BaseScene {
   update() {}
 
   // 清除場景相關資源
-  destroy() {}
+  destroy() {
+    const engine = this.engine;
+
+    console.log(`[場景清除] world reset...`);
+    this.world.reset();
+
+    console.log(`[場景清除] camera clear...`);
+    engine.cameraManager.clear();
+
+    console.log(`[場景清除] material clear...`);
+    engine.materialManager.clear();
+
+    console.log(`[場景清除] texture clear...`);
+    engine.textureManager.clear();
+  }
 }

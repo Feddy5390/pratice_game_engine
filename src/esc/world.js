@@ -101,26 +101,26 @@ export default class World {
   }
 
   _onMaskChanged(entityId, oldMask, newMask) {
-    for (const query of this._queries.values()) {
-      const mask = query.mask;
+    for (const { mask, entities, indices } of this._queries.values()) {
       const wasMatch = (oldMask & mask) === mask;
       const isMatch = (newMask & mask) === mask;
+      const entityCount = entities.length;
 
       if (!wasMatch && isMatch) {
         // add
-        query.indices.set(entityId, query.entities.length);
-        query.entities.push(entityId);
+        indices.set(entityId, entities.length);
+        entities.push(entityId);
       } else if (wasMatch && !isMatch) {
         // remove
-        const index = query.indices.get(entityId);
-        const lastEntityId = query.entities[query.entities.length - 1];
+        const index = indices.get(entityId);
+        const lastEntityId = entities[entityCount - 1];
         // swap remove
         if (entityId !== lastEntityId) {
-          query.entities[index] = lastEntityId;
-          query.indices.set(lastEntityId, index);
+          entities[index] = lastEntityId;
+          indices.set(lastEntityId, index);
         }
-        query.indices.delete(entityId);
-        query.entities.pop();
+        indices.delete(entityId);
+        entities.pop();
       }
     }
   }
@@ -135,5 +135,23 @@ export default class World {
     for (let i = 0, c = systems.length; i < c; i++) {
       systems[i].update(dt);
     }
+  }
+
+  reset() {
+    // entity 狀態重置
+    this._nextEntityId = 0;
+    this._recycledEntities.length = 0;
+
+    // masks 清空
+    this._masks.fill(0);
+
+    // queries 清空
+    for (const query of this._queries.values()) {
+      query.entities.length = 0;
+      query.indices.clear();
+    }
+
+    // render queue 清空
+    this._renderQueue.length = 0;
   }
 }

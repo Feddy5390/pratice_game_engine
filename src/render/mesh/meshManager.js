@@ -77,19 +77,17 @@ export default class MeshManager {
     return id;
   }
 
-  destroy(id) {
-    const mesh = this._meshes.get(id);
+  // destroy(id) {
+  //   const mesh = this._meshes.get(id);
+  //   mesh.clear();
+  //   this._meshes.delete(id);
+  // }
 
-    mesh.clear();
+  // clear() {
+  //   for (const mesh of this._meshes.values()) {
+  //     mesh.clear();
+  //   }
 
-    this._meshes.delete(id);
-  }
-
-  clear() {
-    for (const mesh of this._meshes.values()) {
-      mesh.clear();
-    }
-
-    this._meshes.clear();
-  }
+  //   this._meshes.clear();
+  // }
 }
