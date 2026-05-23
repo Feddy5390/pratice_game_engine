@@ -21,11 +21,12 @@ export default class SceneManager {
 
   add(Class) {
     if (!(Class.prototype instanceof BaseScene)) {
-      throw new Error(`scene ${name} 必須繼承 BaseScene`);
+      throw new Error(`scene ${Class.name} 必須繼承 BaseScene`);
     }
 
     const scene = new Class(this._engine);
-    this._scenes.set(name, scene);
+    scene.name = Class.name;
+    this._scenes.set(Class.name, scene);
   }
 
   get active() {
@@ -49,7 +50,7 @@ export default class SceneManager {
       return;
     }
 
-    console.log(`[場景切換] 開始執行場景 ${name}`);
+    console.log(`[場景切換] 開始執行場景 ${nextScene.name}`);
 
     console.log(`[場景切換] 執行 preload...`);
     await nextScene.preload();

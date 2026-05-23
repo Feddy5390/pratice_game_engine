@@ -23,7 +23,7 @@ export default class Camera {
   _wcWidth; // 相機視野寬 (世界單位) 鏡頭焦距，數值越大，看得到的範圍越廣
 
   // 視口設定（螢幕像素)
-  _viewport; // [x, y, width, height]
+  viewport; // [x, y, width, height]
 
   // 投影深度
   _near;
@@ -33,11 +33,11 @@ export default class Camera {
   _rotation;
 
   // 背景顏色
-  _background;
+  background;
 
   _viewMatrix = mat4.create();
   _projectionMatrix = mat4.create();
-  _vpMatrix = mat4.create();
+  vpMatrix = mat4.create();
   _renderCenter = vec2.create(); // 用於渲染
 
   constructor({
@@ -76,7 +76,7 @@ export default class Camera {
 
   // 更新投影矩陣
   _updateProjectionMatrix() {
-    const wcHeight = this.wcHeight;
+    const wcHeight = this.wcHeight();
 
     const halfW = this._wcWidth / 2;
     const halfH = wcHeight / 2;
@@ -85,7 +85,7 @@ export default class Camera {
   }
 
   _updateVPMatrix() {
-    mat4.multiply(this._vpMatrix, this._projectionMatrix, this._viewMatrix);
+    mat4.multiply(this.vpMatrix, this._projectionMatrix, this._viewMatrix);
   }
 
   // 紀錄上一幀的相機位置
@@ -94,30 +94,17 @@ export default class Camera {
   }
 
   // 取得相機高度
-  get wcHeight() {
-    const w = this._viewport[2];
-    const h = this._viewport[3];
+  wcHeight() {
+    const w = this.viewport[2];
+    const h = this.viewport[3];
 
     // 等比例計算高度
     return (this._wcWidth * h) / w;
   }
 
-  // 取得相機背景色
-  get background() {
-    return this._background;
-  }
-
-  get viewport() {
-    return this._viewport;
-  }
-
-  get vpMatrix() {
-    return this._vpMatrix;
-  }
-
   // 設定相機大小
   setViewport(x, y, w, h) {
-    this._viewport = [x, y, w, h];
+    this.viewport = [x, y, w, h];
   }
 
   // 設定相機中心
@@ -152,7 +139,7 @@ export default class Camera {
 
   // 設定相機背景色
   setBackground(color) {
-    this._background = color;
+    this.background = color;
   }
 
   _update(interpolation) {

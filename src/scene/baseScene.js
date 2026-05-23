@@ -6,16 +6,14 @@ import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
 
 export default class BaseScene {
   engine;
-  name;
   world;
 
-  constructor(engine, name, maxEntities = 0) {
-    if (!engine | !name) {
+  constructor(engine, maxEntities = 0) {
+    if (!engine) {
       throw new Error('場景初始化參數缺少');
     }
 
     this.engine = engine;
-    this.name = name;
     this.world = new World(maxEntities);
     this._registerDefaultComponent();
     this._registerDefaultSystem();

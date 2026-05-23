@@ -14,11 +14,11 @@ export default class Mesh {
     this._drawMode = drawMode;
   }
 
-  get drawInfo() {
+  drawInfo() {
     return {
-      mode: this._drawMode,
-      count: this._indexCount,
-      type: this._indexType,
+      drawMode: this._drawMode,
+      indexCount: this._indexCount,
+      indexType: this._indexType,
     };
   }
 

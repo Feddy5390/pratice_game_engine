@@ -1,13 +1,13 @@
 import { BaseScene } from '../../src/index.js';
 import MovementSystem from '../scripts/movement.js';
 
-export class ExampleScene extends BaseScene {
+export class Level_1_1 extends BaseScene {
   mainCamera;
   tree1;
   instanceId = 0;
 
   constructor(engine) {
-    super(engine, 'example', 10000);
+    super(engine, 10000);
   }
 
   preload() {
@@ -52,17 +52,17 @@ export class ExampleScene extends BaseScene {
       up: 38,
       right: 39,
       down: 40,
+      enter: 13,
     });
 
     // 創建相機
-    const mainCamera = 'main';
-    const mainCameraId = engine.cameraManager.add(mainCamera, {
+    const mainCameraId = engine.cameraManager.add({
       wcCenter: [0, 0],
       wcWidth: 400,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });
-    this.mainCamera = engine.cameraManager.getByName(mainCamera);
+    this.mainCamera = engine.cameraManager.get(mainCameraId);
 
     // 創建貼圖
     const treeTexture = engine.textureManager.get('texture');
@@ -106,7 +106,7 @@ export class ExampleScene extends BaseScene {
     }
   }
 
-  update() {
+  update(dt) {
     const engine = this.engine;
     const { input } = engine;
 
@@ -126,6 +126,10 @@ export class ExampleScene extends BaseScene {
       this.mainCamera.incZoom(5);
     } else if (input.isKeyPressed('e')) {
       this.mainCamera.incZoom(-5);
+    }
+
+    if (input.isKeyPressed('enter')) {
+      engine.sceneManager.change('Level_1_2');
     }
 
     let vx = 0;

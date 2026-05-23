@@ -9,10 +9,6 @@ export default class Shader {
     this._cacheUniforms();
   }
 
-  get program() {
-    return this._program;
-  }
-
   _createProgram(vsSource, fsSource) {
     const gl = this._gl;
 

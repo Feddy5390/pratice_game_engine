@@ -2,30 +2,17 @@ import Camera from './camera.js';
 
 export default class CameraManager {
   _nextId = 0;
-  _cameras = new Map(); // name -> Camera
-  _idToName = new Map(); // id -> name
+  _cameras = new Map(); // id -> Camera
   _screenScale = 1;
 
-  getByName(name) {
-    return this._cameras.get(name);
+  get(id) {
+    return this._cameras.get(id);
   }
 
-  getById(id) {
-    const name = this._idToName.get(id);
-
-    return this._cameras.get(name);
-  }
-
-  add(name, { wcCenter, wcWidth, viewport, background }) {
-    if (this._cameras.has(name)) {
-      throw new Error(`相機 ${name} 已加入`);
-    }
-
-    const camera = new Camera({ wcCenter, wcWidth, viewport, background });
+  add({ wcCenter, wcWidth, viewport, background }) {
     const id = this._nextId++;
-
-    this._cameras.set(name, camera);
-    this._idToName.set(id, name);
+    const camera = new Camera({ wcCenter, wcWidth, viewport, background });
+    this._cameras.set(id, camera);
 
     return id;
   }
@@ -46,9 +33,8 @@ export default class CameraManager {
     }
   }
 
-  clear() {
+  _clear() {
     this._cameras.clear();
-    this._idToName.clear();
     this._nextId = 0;
   }
 }

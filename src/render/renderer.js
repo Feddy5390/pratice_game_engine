@@ -196,7 +196,7 @@ export default class Renderer {
       }
 
       // ===================== 開始繪製此 Batch =====================
-      const camera = this._cameraManager.getById(cameraId);
+      const camera = this._cameraManager.get(cameraId);
       const material = this._materialManager.get(materialId);
 
       // 設定 viewport
@@ -232,8 +232,8 @@ export default class Renderer {
       material.bind();
 
       // 執行實例化繪製
-      const drawInfo = this._mesh.drawInfo;
-      gl.drawElementsInstanced(drawInfo.mode, drawInfo.count, drawInfo.type, 0, count);
+      const { drawMode, indexCount, indexType } = this._mesh.drawInfo();
+      gl.drawElementsInstanced(drawMode, indexCount, indexType, 0, count);
 
       // 跳到下一個 batch 起點
       i = j;
