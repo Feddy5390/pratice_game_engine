@@ -7,7 +7,7 @@ export class ExampleScene extends BaseScene {
   instanceId = 0;
 
   constructor(engine) {
-    super(engine, 'example', 10);
+    super(engine, 'example', 10000);
   }
 
   preload() {
@@ -76,8 +76,8 @@ export class ExampleScene extends BaseScene {
 
     // 創建實體
     this.tree1 = this.world.createEntity();
-    // x, y, w, h, rotation, prevX, prevY, prevW, prevH, prevRotation
-    this.world.addComponent(this.tree1, 'TRANSFORM', [69, 5, 40, 60, 0]);
+    // x, y, w, h, rotation
+    this.world.addComponent(this.tree1, 'TRANSFORM', [20, 40, 40, 60, 0]);
     // u0, v0, du, dv, materialId, cameraId, zIndex
     this.world.addComponent(this.tree1, 'SPRITE', [
       tree1UV.u0,
@@ -86,22 +86,24 @@ export class ExampleScene extends BaseScene {
       tree1UV.dv,
       materialId,
       mainCameraId,
-      2,
+      1,
     ]);
     this.world.addComponent(this.tree1, 'VELOCITY', [0, 0]);
 
-    const tree2 = this.world.createEntity();
-    this.world.addComponent(tree2, 'TRANSFORM', [20, 40, 100, 180, 0]);
-    this.world.addComponent(tree2, 'SPRITE', [
-      tree2UV.u0,
-      tree2UV.v0,
-      tree2UV.du,
-      tree2UV.dv,
-      materialId,
-      mainCameraId,
-      1,
-    ]);
-    this.world.addComponent(tree2, 'VELOCITY', [0, 0]);
+    for (let i = 0; i < 100; i++) {
+      const tree = this.world.createEntity();
+      this.world.addComponent(tree, 'TRANSFORM', [i * 50, 0, 30, 60, 0]);
+      this.world.addComponent(tree, 'SPRITE', [
+        tree2UV.u0,
+        tree2UV.v0,
+        tree2UV.du,
+        tree2UV.dv,
+        materialId,
+        mainCameraId,
+        1,
+      ]);
+      this.world.addComponent(tree, 'VELOCITY', [0, 0]);
+    }
   }
 
   update() {
@@ -125,6 +127,23 @@ export class ExampleScene extends BaseScene {
     } else if (input.isKeyPressed('e')) {
       this.mainCamera.incZoom(-5);
     }
+
+    let vx = 0;
+    let vy = 0;
+
+    if (input.isKeyPressed('right')) {
+      vx = 50;
+    } else if (input.isKeyPressed('left')) {
+      vx = -50;
+    }
+
+    if (input.isKeyPressed('up')) {
+      vy = -50;
+    } else if (input.isKeyPressed('down')) {
+      vy = 50;
+    }
+
+    this.world.setComponent(this.tree1, 'VELOCITY', [vx, vy]);
   }
 
   destroy() {}

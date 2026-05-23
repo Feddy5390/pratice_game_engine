@@ -23,10 +23,8 @@ export default class Renderer {
   _cameraUBO;
   _mesh;
 
-  _transformStore;
-  _transformStride;
-  _spriteStore;
-  _spriteStride;
+  _transform;
+  _sprite;
 
   _init(
     gl,
@@ -127,14 +125,12 @@ export default class Renderer {
     const { world } = scene;
     this._world = world;
     this._entities = world._renderQueue;
-    this._transformStore = world.components.TRANSFORM.store;
-    this._transformStride = world.components.TRANSFORM.stride;
-    this._spriteStore = world.components.SPRITE.store;
-    this._spriteStride = world.components.SPRITE.stride;
+    this._transform = world.components.TRANSFORM;
+    this._sprite = world.components.SPRITE;
   }
 
   // SPRITE 索引：u0, v0, du, dv, materialId, cameraId, zIndex
-  // TRANSFORM 索引：prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
+  // TRANSFORM 索引： x, y, w, h, rotation, prevX, prevY, prevW, prevH, prevRotation
   // instanceData 索引：x, y, w, h, u0, v0, du, dv
   draw(interpolation) {
     const gl = this._gl;
@@ -145,26 +141,9 @@ export default class Renderer {
 
     if (numEntity === 0) return;
 
-    const transformStore = this._transformStore;
-    const transformStride = this._transformStride;
-    const spriteStore = this._spriteStore;
-    const spriteStride = this._spriteStride;
+    const { store: transformStore, stride: transformStride } = this._transform;
+    const { store: spriteStore, stride: spriteStride } = this._sprite;
     const instanceData = this._instanceData;
-
-    // 排序 camera > zIndex > material
-    entities.sort((a, b) => {
-      const aOffset = a * spriteStride;
-      const bOffset = b * spriteStride;
-
-      return (
-        // camera
-        spriteStore[aOffset + 5] - spriteStore[bOffset + 5] ||
-        // z
-        spriteStore[aOffset + 6] - spriteStore[bOffset + 6] ||
-        // material
-        spriteStore[aOffset + 4] - spriteStore[bOffset + 4]
-      );
-    });
 
     // 打包 + 上傳渲染
     let lastCameraId = -1;
@@ -195,14 +174,14 @@ export default class Renderer {
         }
 
         const t = targetEntityId * transformStride;
-        const prevX = transformStore[t];
-        const prevY = transformStore[t + 1];
-        const prevW = transformStore[t + 2];
-        const prevH = transformStore[t + 3];
-        const x = transformStore[t + 5];
-        const y = transformStore[t + 6];
-        const w = transformStore[t + 7];
-        const h = transformStore[t + 8];
+        const prevX = transformStore[t + 5];
+        const prevY = transformStore[t + 6];
+        const prevW = transformStore[t + 7];
+        const prevH = transformStore[t + 8];
+        const x = transformStore[t];
+        const y = transformStore[t + 1];
+        const w = transformStore[t + 2];
+        const h = transformStore[t + 3];
         instanceData[floatOffset++] = prevX + (x - prevX) * interpolation;
         instanceData[floatOffset++] = prevY + (y - prevY) * interpolation;
         instanceData[floatOffset++] = prevW + (w - prevW) * interpolation;

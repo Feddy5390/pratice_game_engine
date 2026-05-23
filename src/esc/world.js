@@ -70,6 +70,16 @@ export default class World {
     this._recycledEntities.push(entityId);
   }
 
+  getComponent(entityId, type) {
+    const { store, stride } = this.components[type];
+    const offset = entityId * stride;
+    const re = [];
+    for (let i = 0; i < stride; i++) {
+      re.push(store[offset + i]);
+    }
+    return re;
+  }
+
   addComponent(entityId, type, data) {
     const bit = this._componentBits[type];
     const oldMask = this._masks[entityId];
