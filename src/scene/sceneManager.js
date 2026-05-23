@@ -1,3 +1,5 @@
+import SpriteComponent from '../esc/component/sprite.js';
+import TransformComponent from '../esc/component/transform.js';
 import BaseScene from './baseScene.js';
 
 export default class SceneManager {

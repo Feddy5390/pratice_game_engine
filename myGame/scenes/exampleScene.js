@@ -66,7 +66,8 @@ export class ExampleScene extends BaseScene {
 
     // 創建貼圖
     const treeTexture = engine.textureManager.get('texture');
-    const uv = treeTexture.getSprite('t1.png');
+    const tree1UV = treeTexture.getSprite('t1.png');
+    const tree2UV = treeTexture.getSprite('t2.png');
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
@@ -75,19 +76,32 @@ export class ExampleScene extends BaseScene {
 
     // 創建實體
     this.tree1 = this.world.createEntity();
-    // prevX, prevY, prevW, prevH, prevRotation, x, y, w, h, rotation
-    this.world.addComponent(this.tree1, 'TRANSFORM', [3, 5, 40, 60, 0, 3, 5, 40, 60, 0]);
+    // x, y, w, h, rotation, prevX, prevY, prevW, prevH, prevRotation
+    this.world.addComponent(this.tree1, 'TRANSFORM', [69, 5, 40, 60, 0]);
     // u0, v0, du, dv, materialId, cameraId, zIndex
     this.world.addComponent(this.tree1, 'SPRITE', [
-      uv.u0,
-      uv.v0,
-      uv.du,
-      uv.dv,
+      tree1UV.u0,
+      tree1UV.v0,
+      tree1UV.du,
+      tree1UV.dv,
+      materialId,
+      mainCameraId,
+      2,
+    ]);
+    this.world.addComponent(this.tree1, 'VELOCITY', [0, 0]);
+
+    const tree2 = this.world.createEntity();
+    this.world.addComponent(tree2, 'TRANSFORM', [20, 40, 100, 180, 0]);
+    this.world.addComponent(tree2, 'SPRITE', [
+      tree2UV.u0,
+      tree2UV.v0,
+      tree2UV.du,
+      tree2UV.dv,
       materialId,
       mainCameraId,
       1,
     ]);
-    this.world.addComponent(this.tree1, 'VELOCITY', [0, 0]);
+    this.world.addComponent(tree2, 'VELOCITY', [0, 0]);
   }
 
   update() {

@@ -39,14 +39,19 @@ export default class GameLoop {
         // 保存相機更新前的位置及旋轉狀態
         this._cameraManager._savePreviousStates();
 
+        // 執行所有 system (beforeUpdate)
+        scene.world._update('beforeUpdate', this._logicFPS);
+
         // 更新輸入
         this._input._update();
 
         // 更新場景邏輯
         scene.update(this._logicFPS);
 
-        // 執行所有 system
-        scene.world._update(this._logicFPS);
+        // 執行所有 system (update)
+        scene.world._update('update', this._logicFPS);
+        // 執行所有 system (afterUpdate)
+        scene.world._update('afterUpdate', this._logicFPS);
 
         this._accumulator -= this._logicFPS;
       }

@@ -126,7 +126,7 @@ export default class Renderer {
   changeWorld(scene) {
     const { world } = scene;
     this._world = world;
-    this._entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
+    this._entities = world._renderQueue;
     this._transformStore = world.components.TRANSFORM.store;
     this._transformStride = world.components.TRANSFORM.stride;
     this._spriteStore = world.components.SPRITE.store;

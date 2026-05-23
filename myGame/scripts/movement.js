@@ -1,26 +1,23 @@
 export default class Movement {
   world;
-  query;
-
-  transforms;
-  velocities;
+  transform;
+  velocity;
+  entities;
 
   constructor(world) {
     this.world = world;
 
-    if (!this.world.components.TRANSFORM || !this.world.components.VELOCITY) {
+    if (!world.components.TRANSFORM || !world.components.VELOCITY) {
       throw new Error('MovementSystem 尚未建立 component');
     }
 
-    // 建立 query
-    this.query = this.world.createQuery(['TRANSFORM', 'VELOCITY']);
-    // 建立 component store 快取
-    this.transform = this.world.components.TRANSFORM;
-    this.velocity = this.world.components.VELOCITY;
+    this.transform = world.components.TRANSFORM;
+    this.velocity = world.components.VELOCITY;
+    this.entities = world.createQuery(['TRANSFORM', 'VELOCITY']).entities;
   }
 
   update(dt) {
-    const entities = this.query.entities;
+    const entities = this.entities;
     const { store: transformStore, stride: transformStride } = this.transform;
     const { store: velocityStore, stride: velocityStride } = this.velocity;
 

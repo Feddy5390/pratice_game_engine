@@ -2,6 +2,7 @@ import World from '../esc/world.js';
 import TransformComponent from '../esc/component/transform.js';
 import SpriteComponent from '../esc/component/sprite.js';
 import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
+import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
 
 export default class BaseScene {
   engine;
@@ -26,7 +27,8 @@ export default class BaseScene {
   }
 
   _registerDefaultSystem() {
-    this.world.addSystem(SavePreviousStatesSystem);
+    this.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
+    this.world.addSystem(RenderSyncSystem, 'afterUpdate');
   }
 
   /**

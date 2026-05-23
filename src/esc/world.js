@@ -4,10 +4,15 @@ export default class World {
   _componentCursor = 0; // component bit index
   _componentBits = {}; // type -> bit
   components = {}; // type -> store
-  _systems = [];
+  _systems = {
+    beforeUpdate: [],
+    update: [],
+    afterUpdate: [],
+  };
   _nextEntityId = 0;
   _recycledEntities = [];
   _queries = new Map();
+  _renderQueue = []; // renderer 最終需要繪製的 entityId
 
   constructor(maxEntities = 100) {
     this._maxEntities = maxEntities;
@@ -16,7 +21,7 @@ export default class World {
 
   registerComponent(component) {
     const id = this._componentCursor++;
-    const { type, stride, createStore } = component;
+    const { type, stride, createStore, onAdd, onRemove, onChange } = component;
 
     this._componentBits[type] = 1 << id;
     this.components[type] = {
@@ -65,12 +70,12 @@ export default class World {
     this._recycledEntities.push(entityId);
   }
 
-  addComponent(entityId, type, defaultData) {
+  addComponent(entityId, type, data) {
     const bit = this._componentBits[type];
     const oldMask = this._masks[entityId];
     this._masks[entityId] |= bit;
     this._onMaskChanged(entityId, oldMask, this._masks[entityId]);
-    this.setComponent(entityId, type, defaultData);
+    this.setComponent(entityId, type, data);
   }
 
   removeComponent(entityId, types) {
@@ -110,13 +115,13 @@ export default class World {
     }
   }
 
-  addSystem(Class) {
+  addSystem(Class, phase = 'update') {
     const system = new Class(this);
-    this._systems.push(system);
+    this._systems[phase].push(system);
   }
 
-  _update(dt) {
-    const systems = this._systems;
+  _update(phase, dt) {
+    const systems = this._systems[phase];
     for (let i = 0, c = systems.length; i < c; i++) {
       systems[i].update(dt);
     }
