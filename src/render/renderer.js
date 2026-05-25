@@ -129,14 +129,14 @@ export default class Renderer {
     this._mesh = this._meshManager.get(meshId);
   }
 
-   lerpAngle(a, b, t) {
-  let diff = b - a;
+  lerpAngle(a, b, t) {
+    let diff = b - a;
 
-  while (diff > 180) diff -= 360;
-  while (diff < -180) diff += 360;
+    while (diff > 180) diff -= 360;
+    while (diff < -180) diff += 360;
 
-  return a + diff * t;
-}
+    return a + diff * t;
+  }
 
   changeWorld(scene) {
     const { world } = scene;
@@ -210,7 +210,8 @@ export default class Renderer {
         instanceData[floatOffset++] = spriteStore[s + 1];
         instanceData[floatOffset++] = spriteStore[s + 2];
         instanceData[floatOffset++] = spriteStore[s + 3];
-        instanceData[floatOffset++] = this.lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180);
+        instanceData[floatOffset++] =
+          this.lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180);
 
         count++;
         j++;

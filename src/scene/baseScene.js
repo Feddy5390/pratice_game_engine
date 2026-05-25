@@ -1,8 +1,4 @@
 import World from '../esc/world.js';
-import TransformComponent from '../esc/component/transform.js';
-import SpriteComponent from '../esc/component/sprite.js';
-import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
-import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
 
 export default class BaseScene {
   engine;
@@ -15,10 +11,6 @@ export default class BaseScene {
 
     this.engine = engine;
     this.world = new World(maxEntities);
-    this.world.registerComponent(TransformComponent);
-    this.world.registerComponent(SpriteComponent);
-    this.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
-    this.world.addSystem(RenderSyncSystem, 'afterUpdate');
   }
 
   /**

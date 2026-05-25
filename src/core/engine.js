@@ -9,6 +9,7 @@ import UBOmanager from '../render/UBOmanager.js';
 import GameLoop from './gameLoop.js';
 import Renderer from '../render/renderer.js';
 import MaterialManager from '../render/material/materialManager.js';
+import AnimationManager from '../anim/animationManager.js';
 
 export default class Engine {
   gl;
@@ -28,6 +29,7 @@ export default class Engine {
   cameraManager;
   meshManager;
   materialManager;
+  animationManager;
   input;
   _uboManager;
   _gameLoop;
@@ -55,6 +57,7 @@ export default class Engine {
     this.meshManager = new MeshManager();
     this.materialManager = new MaterialManager();
     this.input = new Input();
+    this.animationManager = new AnimationManager();
     this._uboManager = new UBOmanager();
     this._gameLoop = new GameLoop();
     this._renderer = new Renderer();
@@ -68,10 +71,12 @@ export default class Engine {
       this.textureManager,
       this.shaderManager,
       this._renderer,
+      this.animationManager,
     );
     this.meshManager._init(this.gl);
     this.materialManager._init(this.shaderManager);
     this.input._init();
+    this.animationManager._init(this.resourceManager, this.textureManager);
     this._uboManager._init(this.gl);
     this._gameLoop._init(this.sceneManager, this.cameraManager, this._renderer, this.input);
     this._renderer._init(

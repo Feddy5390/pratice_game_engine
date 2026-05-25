@@ -3,8 +3,8 @@ import MovementSystem from '../scripts/movement.js';
 
 export class Level_1_1 extends BaseScene {
   mainCamera;
-  tree1;
-  instanceId = 0;
+  cuphead;
+  anims = new Map();
 
   constructor(engine) {
     super(engine, 101);
@@ -15,12 +15,17 @@ export class Level_1_1 extends BaseScene {
 
     // 註冊加載的資源
     engine.resourceManager.addMany({
-      texture: 'myGame/assets/texture.png',
-      spritesheetJson: 'myGame/assets/spritesheet.json',
+      texture: 'myGame/assets/texture/texture.png',
+      spritesheetJson: 'myGame/assets/texture/spritesheet.json',
+      cupheadAnim: 'myGame/assets/anims/cuphead.json',
     });
 
     // 註冊上傳的紋理資源
     engine.textureManager.add('texture', 'spritesheetJson');
+
+    // 註冊動畫
+    const cupheadIdleAnimId = engine.animationManager.create('texture', 'cupheadAnim');
+    this.anims.set('cuphead_idle', cupheadIdleAnimId);
 
     // 加入 component
     // VELOCITY 索引：v0, v1
@@ -64,46 +69,32 @@ export class Level_1_1 extends BaseScene {
     });
     this.mainCamera = engine.cameraManager.get(mainCameraId);
 
-    // 創建貼圖
-    const treeTexture = engine.textureManager.get('texture');
-    const tree1UV = treeTexture.getSprite('t1.png');
-    const tree2UV = treeTexture.getSprite('t2.png');
+    // 取得紋理uv
+    const cupheadTexture = engine.textureManager.get('texture');
+    const cupheadUV = cupheadTexture.getSprite('cuphead_idle_0001.png');
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
     const material = engine.materialManager.get(materialId);
-    material.setTexture('u_atlas', treeTexture);
+    material.setTexture('u_atlas', cupheadTexture);
 
     // 創建實體
-    this.tree1 = this.world.createEntity();
+    this.cuphead = this.world.createEntity();
     // x, y, w, h, rotation
-    this.world.addComponent(this.tree1, 'TRANSFORM', [20, 40, 40, 60, 0]);
+    this.world.addComponent(this.cuphead, 'TRANSFORM', [20, 40, 150, 150, 0]);
     // u0, v0, du, dv, materialId, cameraId, zIndex
-    this.world.addComponent(this.tree1, 'SPRITE', [
-      tree1UV.u0,
-      tree1UV.v0,
-      tree1UV.du,
-      tree1UV.dv,
+    this.world.addComponent(this.cuphead, 'SPRITE', [
+      cupheadUV.u0,
+      cupheadUV.v0,
+      cupheadUV.du,
+      cupheadUV.dv,
       materialId,
       mainCameraId,
       1,
     ]);
-    this.world.addComponent(this.tree1, 'VELOCITY', [0, 0]);
-
-    for (let i = 0; i < 100; i++) {
-      const tree = this.world.createEntity();
-      this.world.addComponent(tree, 'TRANSFORM', [i * 50, 0, 30, 60, i * 20]);
-      this.world.addComponent(tree, 'SPRITE', [
-        tree2UV.u0,
-        tree2UV.v0,
-        tree2UV.du,
-        tree2UV.dv,
-        materialId,
-        mainCameraId,
-        1,
-      ]);
-      this.world.addComponent(tree, 'VELOCITY', [0, 0]);
-    }
+    this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
+    const cupheadIdleAnimId = this.anims.get('cuphead_idle');
+    this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
   }
 
   update(dt) {
@@ -128,10 +119,6 @@ export class Level_1_1 extends BaseScene {
       this.mainCamera.incZoom(-5);
     }
 
-    if (input.isKeyClicked('enter')) {
-      engine.sceneManager.change('Level_1_2');
-    }
-
     let vx = 0;
     let vy = 0;
 
@@ -147,6 +134,6 @@ export class Level_1_1 extends BaseScene {
       vy = 50;
     }
 
-    this.world.setComponent(this.tree1, 'VELOCITY', [vx, vy]);
+    this.world.setComponent(this.cuphead, 'VELOCITY', [vx, vy]);
   }
 }

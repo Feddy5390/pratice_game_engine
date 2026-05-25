@@ -1,0 +1,41 @@
+{
+  "frames": [
+    {
+      "image": "cuphead_idle_0001.png",
+      "duration": 0.025
+    },
+    {
+      "image": "cuphead_idle_0002.png",
+      "duration": 0.05
+    },
+    {
+      "image": "cuphead_idle_0003.png",
+      "duration": 0.025
+    },
+    {
+      "image": "cuphead_idle_0004.png",
+      "duration": 0.05
+    },
+    {
+      "image": "cuphead_idle_0005.png",
+      "duration": 0.125
+    },
+    {
+      "image": "cuphead_idle_0004.png",
+      "duration": 0.05
+    },
+    {
+      "image": "cuphead_idle_0003.png",
+      "duration": 0.025
+    },
+    {
+      "image": "cuphead_idle_0002.png",
+      "duration": 0.05
+    },
+    {
+      "image": "cuphead_idle_0001.png",
+      "duration": 0.1
+    }
+  ],
+  "loop": true
+}

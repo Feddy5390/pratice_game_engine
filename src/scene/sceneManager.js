@@ -1,5 +1,9 @@
+import AnimationComponent from '../esc/component/animation.js';
 import SpriteComponent from '../esc/component/sprite.js';
 import TransformComponent from '../esc/component/transform.js';
+import AnimationSystem from '../esc/system/animationSystem.js';
+import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
+import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
 import BaseScene from './baseScene.js';
 
 export default class SceneManager {
@@ -8,15 +12,17 @@ export default class SceneManager {
   _textureManager;
   _shaderManager;
   _renderer;
+  _animationManager;
   _scenes = new Map(); // 所有場景的實例
   active; // 目前執行的場景
 
-  _init(engine, resoureManager, textureManager, shaderManager, renderer) {
+  _init(engine, resoureManager, textureManager, shaderManager, renderer, animationManager) {
     this._engine = engine;
     this._resoureManager = resoureManager;
     this._textureManager = textureManager;
     this._shaderManager = shaderManager;
     this._renderer = renderer;
+    this._animationManager = animationManager;
   }
 
   add(Class) {
@@ -26,6 +32,18 @@ export default class SceneManager {
 
     const scene = new Class(this._engine);
     scene.name = Class.name;
+
+    // 加入外部資源
+    scene.world.resources['animationClip'] = this._animationManager._clip;
+
+    // 加入預設系統、組件
+    scene.world.registerComponent(TransformComponent);
+    scene.world.registerComponent(SpriteComponent);
+    scene.world.registerComponent(AnimationComponent);
+    scene.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
+    scene.world.addSystem(AnimationSystem, 'afterUpdate');
+    scene.world.addSystem(RenderSyncSystem, 'afterUpdate');
+
     this._scenes.set(Class.name, scene);
   }
 
@@ -57,6 +75,9 @@ export default class SceneManager {
 
     console.log('[場景切換] 上傳紋理...');
     await this._textureManager._load();
+
+    console.log('[場景切換] 加載動畫...');
+    this._animationManager._load();
 
     console.log('[場景切換] 編譯 shader...');
     this._shaderManager._compileAll();

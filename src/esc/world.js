@@ -1,4 +1,5 @@
 export default class World {
+  resources = {}; // 外部資源
   _maxEntities;
   _masks; // entity masks
   _componentCursor = 0; // component bit index

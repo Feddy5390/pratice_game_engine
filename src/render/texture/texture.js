@@ -20,9 +20,9 @@ export default class Texture {
     for (const [name, info] of Object.entries(frames)) {
       const f = info.frame;
       const u0 = f.x / image.width;
-      const v0 = 1 - (f.y + f.h) / image.height;
+      const v0 = f.y / image.height;
       const u1 = (f.x + f.w) / image.width;
-      const v1 = 1 - f.y / image.height;
+      const v1 = (f.y + f.h) / image.height;
 
       this._sprites.set(name, {
         u0,
