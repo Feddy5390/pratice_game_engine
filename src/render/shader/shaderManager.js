@@ -3,14 +3,14 @@ import Shader from './shader.js';
 // uniform cache/upload
 export default class ShaderManager {
   _gl;
-  _resoureManager;
+  _resourceManager;
   _uboManager;
   _pending = new Map(); // 待編譯的 shader 設定 name -> { vsPath, fsPath }
   _shaders = new Map(); // 已編譯的 shader 實例 name -> BaseShader
 
-  _init(gl, resoureManager, uboManager) {
+  _init(gl, resourceManager, uboManager) {
     this._gl = gl;
-    this._resoureManager = resoureManager;
+    this._resourceManager = resourceManager;
     this._uboManager = uboManager;
   }
 
@@ -18,12 +18,12 @@ export default class ShaderManager {
    * 編譯所有已登記的 shader，並自動將現有 UBO 綁定進去。
    * 通常在資源載入完成後呼叫一次。
    */
-  _compileAll() {
+  _compile() {
     for (const [name, config] of this._pending) {
       const { vsPath, fsPath } = config;
 
-      const vsSource = this._resoureManager.get(vsPath);
-      const fsSource = this._resoureManager.get(fsPath);
+      const vsSource = this._resourceManager.get(vsPath);
+      const fsSource = this._resourceManager.get(fsPath);
 
       const shader = new Shader(this._gl, vsSource, fsSource);
 
@@ -40,14 +40,15 @@ export default class ShaderManager {
     return this._shaders.get(name);
   }
 
-  // 只會先註冊!
   add(name, vsPath, fsPath) {
-    if (this._shaders.get(name)) {
+    if (this._shaders.has(name)) {
       return;
     }
 
     this._pending.set(name, { vsPath, fsPath });
-    this._resoureManager.add(vsPath, vsPath);
-    this._resoureManager.add(fsPath, fsPath);
+    this._resourceManager.load({
+      [vsPath]: vsPath,
+      [fsPath]: fsPath,
+    });
   }
 }

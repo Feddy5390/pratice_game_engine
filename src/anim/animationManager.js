@@ -1,93 +1,66 @@
 export default class AnimationManager {
   _resourceManager;
-  _textureManager;
+  _atlasManager;
   _nextId = 0;
   _pending = [];
-  _clip = new Map(); // id -> clip
+  _loadedLibraries = new Set();
+  _clip = new Map(); // name -> clip
+  _clipId = new Map(); // id -> clip
 
-  _init(resourceManager, textureManager) {
+  _init(resourceManager, atlasManager) {
     this._resourceManager = resourceManager;
-    this._textureManager = textureManager;
+    this._atlasManager = atlasManager;
   }
 
-  /**
-   * clip =
-     {
-        frames: [
-            {
-                image: 'run1.png',
-                duration: 0.2 // sec
-            },
-            {
-                image: 'run2.png',
-                duration: 0.4
-            },
-            {
-                image: 'run3.png',
-                duration: 0.1
-            }
-        ],
-        loop: true
+  load({ name, atlas, clip }) {
+    if (this._loadedLibraries.has(name)) {
+      return;
     }
 
-    會轉換
-     clip =
-     {
-        frames: [
-            {
-                uv: { u0, v0, du, dv },
-                duration: 0.2 // sec
-            },
-            {
-                uv: { u0, v0, du, dv },
-                duration: 0.4
-            },
-            {
-                uv: { u0, v0, du, dv },
-                duration: 0.1
-            }
-        ],
-        loop: true
-    }
-     */
-  create(textureName, clipJson) {
-    const id = this._nextId++;
-
+    this._loadedLibraries.add(name);
     this._pending.push({
-      id,
-      textureName,
-      clipJson,
+      name,
+      atlas,
+      clip,
     });
-
-    return id;
   }
 
   _load() {
-    for (let i = 0, c = this._pending.length; i < c; i++) {
-      const { id, clipJson, textureName } = this._pending[i];
-      const oriClip = this._resourceManager.get(clipJson);
-      const clip = JSON.parse(JSON.stringify(oriClip));
+    for (const { name, atlas: atlasName, clip } of this._pending) {
+      const clipJson = this._resourceManager.get(clip);
+      const atlas = this._atlasManager.get(atlasName);
 
-      let cumulativeDuration = 0;
-      for (const frame of clip.frames) {
-        const texture = this._textureManager.get(textureName);
-        frame.uv = texture.getSprite(frame.image);
-        cumulativeDuration += frame.duration;
-        frame.cumulativeDuration = cumulativeDuration;
-        delete frame.image;
-        delete frame.duration;
+      for (const [action, data] of Object.entries(clipJson)) {
+        const anim = { id: this._nextId++, frames: [], loop: false };
+
+        let cumulativeDuration = 0;
+        for (const f of data.frames) {
+          cumulativeDuration += f.duration;
+          anim.frames.push({
+            uv: atlas.getSprite(f.image),
+            cumulativeDuration,
+          });
+        }
+        anim.loop = data.loop;
+
+        this._clip.set(`${name}.${action}`, anim);
+        this._clipId.set(anim.id, anim);
       }
-      this._clip.set(id, clip);
     }
 
     this._pending.length = 0;
   }
 
-  get(id) {
-    return this._clip.get(id);
+  get(name) {
+    return this._clip.get(name);
+  }
+
+  getById(id) {
+    return this._clipId.get(id);
   }
 
   clear() {
     this._clip.clear();
+    this._clipId.clear();
   }
 }

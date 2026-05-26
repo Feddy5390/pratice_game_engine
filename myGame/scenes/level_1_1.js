@@ -4,7 +4,6 @@ import MovementSystem from '../scripts/movement.js';
 export class Level_1_1 extends BaseScene {
   mainCamera;
   cuphead;
-  anims = new Map();
 
   constructor(engine) {
     super(engine, 101);
@@ -13,19 +12,26 @@ export class Level_1_1 extends BaseScene {
   preload() {
     const engine = this.engine;
 
-    // 註冊加載的資源
-    engine.resourceManager.addMany({
-      texture: 'myGame/assets/texture/texture.png',
-      spritesheetJson: 'myGame/assets/texture/spritesheet.json',
-      cupheadAnim: 'myGame/assets/anims/cuphead.json',
+    // 註冊資源
+    engine.resourceManager.load({
+      cupheadTexture: 'myGame/assets/cuphead/texture.png',
+      cupheadSpritesheet: 'myGame/assets/cuphead/spritesheet.json',
+      cupheadAnims: 'myGame/assets/cuphead/cupheadAnims.json',
     });
 
-    // 註冊上傳的紋理資源
-    engine.textureManager.add('texture', 'spritesheetJson');
+    // 註冊圖集
+    engine.atlasManager.load({
+      name: 'cupheadAtlas',
+      json: 'cupheadSpritesheet',
+      image: 'cupheadTexture',
+    });
 
     // 註冊動畫
-    const cupheadIdleAnimId = engine.animationManager.create('texture', 'cupheadAnim');
-    this.anims.set('cuphead_idle', cupheadIdleAnimId);
+    engine.animationManager.load({
+      name: 'cuphead',
+      atlas: 'cupheadAtlas',
+      clip: 'cupheadAnims',
+    });
 
     // 加入 component
     // VELOCITY 索引：v0, v1
@@ -69,14 +75,14 @@ export class Level_1_1 extends BaseScene {
     });
     this.mainCamera = engine.cameraManager.get(mainCameraId);
 
-    // 取得紋理uv
-    const cupheadTexture = engine.textureManager.get('texture');
-    const cupheadUV = cupheadTexture.getSprite('cuphead_idle_0001.png');
+    const cupheadAtlas = engine.atlasManager.get('cupheadAtlas'); // 取得atlas
+    const cupheadIdle = cupheadAtlas.getSprite('cuphead_idle_0001.png');
+    console.log(cupheadIdle);
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
     const material = engine.materialManager.get(materialId);
-    material.setTexture('u_atlas', cupheadTexture);
+    material.setTexture('u_atlas', cupheadAtlas.texture);
 
     // 創建實體
     this.cuphead = this.world.createEntity();
@@ -84,16 +90,16 @@ export class Level_1_1 extends BaseScene {
     this.world.addComponent(this.cuphead, 'TRANSFORM', [20, 40, 150, 150, 0]);
     // u0, v0, du, dv, materialId, cameraId, zIndex
     this.world.addComponent(this.cuphead, 'SPRITE', [
-      cupheadUV.u0,
-      cupheadUV.v0,
-      cupheadUV.du,
-      cupheadUV.dv,
+      cupheadIdle.u0,
+      cupheadIdle.v0,
+      cupheadIdle.du,
+      cupheadIdle.dv,
       materialId,
       mainCameraId,
       1,
     ]);
     this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
-    const cupheadIdleAnimId = this.anims.get('cuphead_idle');
+    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.idle');
     this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
   }
 

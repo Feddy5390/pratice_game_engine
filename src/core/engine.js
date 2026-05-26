@@ -1,6 +1,6 @@
 import ResourceManager from '../resource/resourceManager.js';
 import ShaderManager from '../render/shader/shaderManager.js';
-import TextureManager from '../render/texture/textureManager.js';
+import TextureManager from '../resource/texture/textureManager.js';
 import SceneManager from '../scene/sceneManager.js';
 import CameraManager from '../camera/cameraManager.js';
 import MeshManager from '../render/mesh/meshManager.js';
@@ -10,6 +10,7 @@ import GameLoop from './gameLoop.js';
 import Renderer from '../render/renderer.js';
 import MaterialManager from '../render/material/materialManager.js';
 import AnimationManager from '../anim/animationManager.js';
+import AtlasManager from '../resource/atlas/atlasManager.js';
 
 export default class Engine {
   gl;
@@ -23,6 +24,7 @@ export default class Engine {
 
   // gameEngine modules
   resourceManager;
+  atlasManager;
   shaderManager;
   textureManager;
   sceneManager;
@@ -50,6 +52,7 @@ export default class Engine {
 
   _initModule() {
     this.resourceManager = new ResourceManager();
+    this.atlasManager = new AtlasManager();
     this.shaderManager = new ShaderManager();
     this.textureManager = new TextureManager();
     this.sceneManager = new SceneManager();
@@ -63,6 +66,7 @@ export default class Engine {
     this._renderer = new Renderer();
 
     this.resourceManager._init(this._rootDir);
+    this.atlasManager._init(this.resourceManager, this.textureManager);
     this.shaderManager._init(this.gl, this.resourceManager, this._uboManager);
     this.textureManager._init(this.gl, this.resourceManager);
     this.sceneManager._init(
@@ -71,12 +75,13 @@ export default class Engine {
       this.textureManager,
       this.shaderManager,
       this._renderer,
+      this.atlasManager,
       this.animationManager,
     );
     this.meshManager._init(this.gl);
     this.materialManager._init(this.shaderManager);
     this.input._init();
-    this.animationManager._init(this.resourceManager, this.textureManager);
+    this.animationManager._init(this.resourceManager, this.atlasManager);
     this._uboManager._init(this.gl);
     this._gameLoop._init(this.sceneManager, this.cameraManager, this._renderer, this.input);
     this._renderer._init(

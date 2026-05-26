@@ -1,28 +1,10 @@
-export default class ResoureManager {
+export default class ResourceManager {
   _rootDir;
   _pending = new Map();
   _resources = new Map();
 
   _init(rootDir) {
     this._rootDir = rootDir;
-  }
-
-  get(name) {
-    return this._resources.get(name);
-  }
-
-  add(name, path) {
-    if (this._resources.get(name)) {
-      return;
-    }
-
-    this._pending.set(name, path);
-  }
-
-  addMany(obj) {
-    for (const [name, path] of Object.entries(obj)) {
-      this.add(name, path);
-    }
   }
 
   async _load() {
@@ -79,6 +61,20 @@ export default class ResoureManager {
       this._resources.set(key, data);
     } catch (error) {
       throw new Error(`資源載入失敗: ${src}`);
+    }
+  }
+
+  get(name) {
+    return this._resources.get(name);
+  }
+
+  load(resource) {
+    for (const [name, path] of Object.entries(resource)) {
+      if (this._resources.has(name)) {
+        return;
+      }
+
+      this._pending.set(name, path);
     }
   }
 

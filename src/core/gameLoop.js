@@ -8,7 +8,7 @@ export default class GameLoop {
   _accumulator = 0;
   _isRunning = false;
 
-  _init(sceneManager, cameraManager, render, input, logicFPS = 1 / 60) {
+  _init(sceneManager, cameraManager, render, input, logicFPS = 1 / 30) {
     this._sceneManager = sceneManager;
     this._cameraManager = cameraManager;
     this._renderer = render;

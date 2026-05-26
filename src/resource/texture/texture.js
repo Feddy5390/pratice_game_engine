@@ -1,9 +1,8 @@
 export default class Texture {
   _gl;
   _texture;
-  _sprites = new Map(); // spriteName -> uv info
 
-  constructor(gl, image, frames) {
+  constructor(gl, image) {
     this._gl = gl;
 
     // 建立 GPU Texture
@@ -15,26 +14,6 @@ export default class Texture {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-    // atlas uv
-    for (const [name, info] of Object.entries(frames)) {
-      const f = info.frame;
-      const u0 = f.x / image.width;
-      const v0 = f.y / image.height;
-      const u1 = (f.x + f.w) / image.width;
-      const v1 = (f.y + f.h) / image.height;
-
-      this._sprites.set(name, {
-        u0,
-        v0,
-        du: u1 - u0,
-        dv: v1 - v0,
-      });
-    }
-  }
-
-  getSprite(name) {
-    return this._sprites.get(name);
   }
 
   bind(slot = 0) {

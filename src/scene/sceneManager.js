@@ -8,20 +8,30 @@ import BaseScene from './baseScene.js';
 
 export default class SceneManager {
   _engine;
-  _resoureManager;
+  _resourceManager;
   _textureManager;
   _shaderManager;
   _renderer;
+  _atlasManager;
   _animationManager;
   _scenes = new Map(); // 所有場景的實例
   active; // 目前執行的場景
 
-  _init(engine, resoureManager, textureManager, shaderManager, renderer, animationManager) {
+  _init(
+    engine,
+    resourceManager,
+    textureManager,
+    shaderManager,
+    renderer,
+    atlasManager,
+    animationManager,
+  ) {
     this._engine = engine;
-    this._resoureManager = resoureManager;
+    this._resourceManager = resourceManager;
     this._textureManager = textureManager;
     this._shaderManager = shaderManager;
     this._renderer = renderer;
+    this._atlasManager = atlasManager;
     this._animationManager = animationManager;
   }
 
@@ -34,7 +44,7 @@ export default class SceneManager {
     scene.name = Class.name;
 
     // 加入外部資源
-    scene.world.resources['animationClip'] = this._animationManager._clip;
+    scene.world.resources['animationClip'] = this._animationManager._clipId;
 
     // 加入預設系統、組件
     scene.world.registerComponent(TransformComponent);
@@ -71,16 +81,19 @@ export default class SceneManager {
     await nextScene.preload();
 
     console.log('[場景切換] 載入資源...');
-    await this._resoureManager._load();
+    await this._resourceManager._load();
 
     console.log('[場景切換] 上傳紋理...');
     await this._textureManager._load();
+
+    console.log('[場景切換] 讀取 atlas uv...');
+    this._atlasManager._load();
 
     console.log('[場景切換] 加載動畫...');
     this._animationManager._load();
 
     console.log('[場景切換] 編譯 shader...');
-    this._shaderManager._compileAll();
+    this._shaderManager._compile();
 
     console.log('[場景切換] 執行場景 create...');
     await nextScene.create();
