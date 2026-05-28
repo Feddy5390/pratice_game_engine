@@ -119,16 +119,14 @@ export default class Renderer {
               stride: this._stride * 4,
               offset: 8 * 4,
               divisor: 1,
-            })
-            .add({
+            }).add({
               location: 5,
               size: 2,
               type: gl.FLOAT,
               stride: this._stride * 4,
               offset: 9 * 4,
               divisor: 1,
-            })
-            .add({
+            }).add({
               location: 6,
               size: 2,
               type: gl.FLOAT,
@@ -211,22 +209,35 @@ export default class Renderer {
         const prevX = transformStore[to + 5];
         const prevY = transformStore[to + 6];
         const prevRotation = transformStore[to + 7];
+        const prevScaleX = transformStore[to + 8];
+        const prevScaleY = transformStore[to + 9];
 
-        // instanceData 索引：x, y, w, h, u0, v0, du, dv, rotation, pivotX, pivotY, trimOffsetX, trimOffsetY
-        instanceData[floatOffset++] = prevX + (x - prevX) * interpolation; // x
-        instanceData[floatOffset++] = prevY + (y - prevY) * interpolation; // y
-        instanceData[floatOffset++] = spriteStore[so + 4] * scaleX; // w
-        instanceData[floatOffset++] = spriteStore[so + 5] * scaleY; // h
+        const renderX = prevX + (x - prevX) * interpolation;
+        const renderY = prevY + (y - prevY) * interpolation;
+        const renderScaleX = prevScaleX + (scaleX - prevScaleX) * interpolation;
+        const renderScaleY = prevScaleY + (scaleY - prevScaleY) * interpolation;
+        const renderWidth = spriteStore[so + 4] * renderScaleX;
+        const renderHeight = spriteStore[so + 5] * renderScaleY;
+        const renderRotation =
+          this._lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180);
+
+        const w = spriteStore[so + 5] * scaleX;
+        const h = spriteStore[so + 6] * scaleY;
+
+        // instanceData 索引：x, y, w, h, u0, v0, du, dv, pivotX, pivotY, trimOffsetX, trimOffsetY, rotation
+        instanceData[floatOffset++] = renderX; // x
+        instanceData[floatOffset++] = renderY; // y
+        instanceData[floatOffset++] = renderWidth; // w
+        instanceData[floatOffset++] = renderHeight; // h
         instanceData[floatOffset++] = spriteStore[so]; // u0
         instanceData[floatOffset++] = spriteStore[so + 1]; // v0
         instanceData[floatOffset++] = spriteStore[so + 2]; // du
         instanceData[floatOffset++] = spriteStore[so + 3]; // dv
-        instanceData[floatOffset++] =
-          this._lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180); // rotation
         instanceData[floatOffset++] = spriteStore[so + 6]; // pivotX
         instanceData[floatOffset++] = spriteStore[so + 7]; // pivotY
         instanceData[floatOffset++] = spriteStore[so + 8]; // trimOffsetX
         instanceData[floatOffset++] = spriteStore[so + 9]; // trimOffsetY
+        instanceData[floatOffset++] = renderRotation; // rotation
 
         count++;
         j++;

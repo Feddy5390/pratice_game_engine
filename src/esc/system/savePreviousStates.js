@@ -19,11 +19,11 @@ export default class SavePreviousStatesSystem {
       const entityId = entities[i];
       const o = entityId * stride;
 
-      store[o + 5] = store[o + 0];
-      store[o + 6] = store[o + 1];
-      store[o + 7] = store[o + 2];
-      store[o + 8] = store[o + 3];
-      store[o + 9] = store[o + 4];
+      store[o + 5] = store[o]; // x
+      store[o + 6] = store[o + 1]; // y
+      store[o + 7] = store[o + 2]; // rotation
+      store[o + 8] = store[o + 3]; // scaleX
+      store[o + 9] = store[o + 4]; // scaleY
     }
   }
 }

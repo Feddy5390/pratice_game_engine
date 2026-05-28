@@ -12,7 +12,7 @@ export default class AnimationManager {
     this._atlasManager = atlasManager;
   }
 
-  load({ name, atlas, clip }) {
+  load(name, { atlas, clip }) {
     if (this._loadedLibraries.has(name)) {
       return;
     }
@@ -37,7 +37,7 @@ export default class AnimationManager {
         for (const f of data.frames) {
           cumulativeDuration += f.duration;
           anim.frames.push({
-            uv: atlas.getSprite(f.image),
+            sprite: atlas.getSprite(f.image),
             cumulativeDuration,
           });
         }

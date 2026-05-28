@@ -26,7 +26,7 @@ export default class AtlasManager {
     return this._atlas.get(name);
   }
 
-  load({ name, json, image }) {
+  load(name, { json, image }) {
     if (this._atlas.has(name)) {
       return;
     }

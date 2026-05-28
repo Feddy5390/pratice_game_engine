@@ -16,8 +16,6 @@ export default class AnimationSystem {
     this._animationClip = world.resources['animationClip'];
   }
 
-  // SPRITE 索引：u0, v0, du, dv, materialId, cameraId, zIndex
-  // ANIMATION 索引：clipId, time, frameIndex, finished
   update(dt) {
     const entities = this._entities;
     const animationClip = this._animationClip;
@@ -39,11 +37,16 @@ export default class AnimationSystem {
       const rawIndex = clip.frames.findIndex((f) => loopedTime < f.cumulativeDuration);
       const frameIndex = rawIndex === -1 ? clip.frames.length - 1 : rawIndex;
 
-      const uv = clip.frames[frameIndex].uv;
-      spriteStore[so] = uv.u0;
-      spriteStore[so + 1] = uv.v0;
-      spriteStore[so + 2] = uv.du;
-      spriteStore[so + 3] = uv.dv;
+      const { u0, v0, du, dv, width, height, trimOffsetX, trimOffsetY } =
+        clip.frames[frameIndex].sprite;
+      spriteStore[so] = u0;
+      spriteStore[so + 1] = v0;
+      spriteStore[so + 2] = du;
+      spriteStore[so + 3] = dv;
+      spriteStore[so + 4] = width;
+      spriteStore[so + 5] = height;
+      spriteStore[so + 8] = trimOffsetX;
+      spriteStore[so + 9] = trimOffsetY;
 
       animationStore[ao + 1] = time;
       animationStore[ao + 2] = frameIndex;

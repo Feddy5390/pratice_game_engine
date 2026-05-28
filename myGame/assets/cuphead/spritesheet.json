@@ -2,114 +2,219 @@
   "frames": {
     "cuphead_idle_0001.png": {
       "frame": {
-        "x": 1,
-        "y": 1,
-        "w": 512,
-        "h": 512
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
+        "w": 97,
+        "h": 153,
+        "ox": 0,
+        "oy": 0
       }
     },
     "cuphead_idle_0002.png": {
       "frame": {
-        "x": 515,
-        "y": 1,
-        "w": 512,
-        "h": 512
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
+        "x": 103,
         "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
+        "w": 99,
+        "h": 152,
+        "ox": 2,
+        "oy": -3
       }
     },
     "cuphead_idle_0003.png": {
       "frame": {
-        "x": 1,
-        "y": 515,
-        "w": 512,
-        "h": 512
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
+        "x": 217,
         "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
+        "w": 97,
+        "h": 156,
+        "ox": 0,
+        "oy": 0
       }
     },
     "cuphead_idle_0004.png": {
       "frame": {
-        "x": 515,
-        "y": 515,
-        "w": 512,
-        "h": 512
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
+        "x": 324,
         "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
+        "w": 100,
+        "h": 143,
+        "ox": 2,
+        "oy": -12
       }
     },
     "cuphead_idle_0005.png": {
       "frame": {
-        "x": 1029,
-        "y": 1,
-        "w": 512,
-        "h": 512
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
+        "x": 427,
+        "y": 6,
+        "w": 97,
+        "h": 138,
+        "ox": -1,
+        "oy": -19
+      }
+    },
+    "cuphead_run_0001.png": {
+      "frame": {
+        "x": 1453,
+        "y": 166,
+        "w": 134,
+        "h": 155,
+        "ox": 12,
+        "oy": -4
+      }
+    },
+    "cuphead_run_0002.png": {
+      "frame": {
+        "x": 1586,
+        "y": 164,
+        "w": 122,
+        "h": 147,
+        "ox": 4,
+        "oy": -10
+      }
+    },
+    "cuphead_run_0003.png": {
+      "frame": {
+        "x": 1709,
+        "y": 160,
+        "w": 112,
+        "h": 157,
+        "ox": -3,
+        "oy": -2
+      }
+    },
+    "cuphead_run_0004.png": {
+      "frame": {
+        "x": 1822,
+        "y": 151,
+        "w": 108,
+        "h": 160,
+        "ox": -4,
+        "oy": 1
+      }
+    },
+    "cuphead_run_0005.png": {
+      "frame": {
+        "x": 1932,
+        "y": 147,
+        "w": 109,
+        "h": 168,
+        "ox": -4,
+        "oy": 10
+      }
+    },
+    "cuphead_run_0006.png": {
+      "frame": {
         "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
+        "y": 297,
+        "w": 112,
+        "h": 140,
+        "ox": 0,
+        "oy": -12
+      }
+    },
+    "cuphead_run_0007.png": {
+      "frame": {
+        "x": 113,
+        "y": 295,
+        "w": 123,
+        "h": 143,
+        "ox": 8,
+        "oy": -9
+      }
+    },
+    "cuphead_run_0008.png": {
+      "frame": {
+        "x": 236,
+        "y": 287,
+        "w": 127,
+        "h": 146,
+        "ox": 13,
+        "oy": -7
+      }
+    },
+    "cuphead_run_0009.png": {
+      "frame": {
+        "x": 363,
+        "y": 304,
+        "w": 123,
+        "h": 149,
+        "ox": 9,
+        "oy": -3
+      }
+    },
+    "cuphead_run_0010.png": {
+      "frame": {
+        "x": 488,
+        "y": 310,
+        "w": 113,
+        "h": 146,
+        "ox": 0,
+        "oy": -8
+      }
+    },
+    "cuphead_run_0011.png": {
+      "frame": {
+        "x": 601,
+        "y": 309,
+        "w": 112,
+        "h": 148,
+        "ox": 1,
+        "oy": -7
+      }
+    },
+    "cuphead_run_0012.png": {
+      "frame": {
+        "x": 714,
+        "y": 298,
+        "w": 113,
+        "h": 150,
+        "ox": 0,
+        "oy": -2
+      }
+    },
+    "cuphead_run_0013.png": {
+      "frame": {
+        "x": 828,
+        "y": 291,
+        "w": 119,
+        "h": 145,
+        "ox": 4,
+        "oy": -9
+      }
+    },
+    "cuphead_run_0014.png": {
+      "frame": {
+        "x": 949,
+        "y": 307,
+        "w": 117,
+        "h": 142,
+        "ox": 2,
+        "oy": -8
+      }
+    },
+    "cuphead_run_0015.png": {
+      "frame": {
+        "x": 1068,
+        "y": 328,
+        "w": 125,
+        "h": 143,
+        "ox": 10,
+        "oy": -5
+      }
+    },
+    "cuphead_run_0016.png": {
+      "frame": {
+        "x": 1194,
+        "y": 336,
+        "w": 136,
+        "h": 150,
+        "ox": 19,
+        "oy": -3
       }
     }
   },
   "meta": {
-    "app": "http://www.codeandweb.com/texturepacker",
-    "version": "1.0",
-    "image": "spritesheet.png",
-    "format": "RGBA8888",
     "size": {
-      "w": 1542,
-      "h": 1028
-    },
-    "scale": "1"
+      "w": 2048,
+      "h": 2048
+    }
   }
 }

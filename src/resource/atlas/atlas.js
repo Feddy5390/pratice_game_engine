@@ -1,15 +1,25 @@
 export default class Atlas {
   texture;
-  _uv = new Map();
+  _sprites = new Map();
 
   constructor(atlasJson, texture) {
     this.texture = texture;
     const { w: atlasWidth, h: atlasHeight } = atlasJson.meta.size;
 
     for (const [imageName, data] of Object.entries(atlasJson.frames)) {
-      const { x, y, w, h } = data.frame;
+      const { x, y, w, h, ox, oy } = data.frame;
       const uv = this._calculateUV(atlasWidth, atlasHeight, x, y, w, h);
-      this._uv.set(imageName, uv);
+      this._sprites.set(imageName, {
+        ...uv,
+
+        // trimmed size
+        width: w,
+        height: h,
+
+        // trim offset
+        trimOffsetX: ox ?? 0,
+        trimOffsetY: oy ?? 0,
+      });
     }
   }
 
@@ -28,6 +38,6 @@ export default class Atlas {
   }
 
   getSprite(imageName) {
-    return this._uv.get(imageName);
+    return this._sprites.get(imageName);
   }
 }

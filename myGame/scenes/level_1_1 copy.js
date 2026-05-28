@@ -67,7 +67,7 @@ export class Level_1_1 extends BaseScene {
     // 創建相機
     const mainCameraId = engine.cameraManager.add({
       wcCenter: [0, 0],
-      wcWidth: 1500,
+      wcWidth: 1000,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });
@@ -92,8 +92,8 @@ export class Level_1_1 extends BaseScene {
       cupheadSprite.v0,
       cupheadSprite.du,
       cupheadSprite.dv,
-      97,
-      153,
+      60,
+      107,
       0.5,
       0,
       0,
@@ -111,59 +111,39 @@ export class Level_1_1 extends BaseScene {
     const engine = this.engine;
     const { input } = engine;
 
-    // 1. 取得玩家目前的動畫狀態，避免每影格重複 addComponent 導致動畫卡死
-    const currentAnim = this.world.getComponent(this.cuphead, 'ANIMATION');
-    const currentAnimId = currentAnim ? currentAnim[0] : null;
+    if (input.isKeyPressed('a')) {
+      this.mainCamera.move(1, 0);
+    }
+    if (input.isKeyPressed('d')) {
+      this.mainCamera.move(-1, 0);
+    }
+    if (input.isKeyPressed('w')) {
+      this.mainCamera.move(0, 1);
+    }
+    if (input.isKeyPressed('x')) {
+      this.mainCamera.move(0, -1);
+    }
+    if (input.isKeyPressed('q')) {
+      this.mainCamera.incZoom(5);
+    } else if (input.isKeyPressed('e')) {
+      this.mainCamera.incZoom(-5);
+    }
 
     let vx = 0;
     let vy = 0;
-    let targetAnimId = null;
 
-    // 2. 判斷水平移動與動畫
     if (input.isKeyPressed('right')) {
-      const { id: cupheadRunAnimId } = engine.animationManager.get('cuphead.run');
-      targetAnimId = cupheadRunAnimId;
-      vx = 600;
+      vx = 50;
     } else if (input.isKeyPressed('left')) {
-      const { id: cupheadRunAnimId } = engine.animationManager.get('cuphead.run');
-      targetAnimId = cupheadRunAnimId;
-      vx = -600; // 修正往左的速度，與往右對稱（原本 -50 太慢）
-    } else {
-      const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.idle');
-      targetAnimId = cupheadIdleAnimId;
+      vx = -50;
     }
 
-    // 判斷垂直移動
     if (input.isKeyPressed('up')) {
-      vy = 600; // 配合世界座標方向調整，通常向上是正
+      vy = -50;
     } else if (input.isKeyPressed('down')) {
-      vy = -600;
+      vy = 50;
     }
 
-    // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
-    if (targetAnimId !== null && targetAnimId !== currentAnimId) {
-      this.world.addComponent(this.cuphead, 'ANIMATION', [targetAnimId, 0, 0, 0]);
-    }
-
-    // 更新速度
     this.world.setComponent(this.cuphead, 'VELOCITY', [vx, vy]);
-
-    // ----------------------------------------------------
-    // 4. 自動鏡頭跟隨：讓螢幕跟著玩家動
-    // ----------------------------------------------------
-    const cupheadTransform = this.world.getComponent(this.cuphead, 'TRANSFORM');
-    if (cupheadTransform) {
-      const playerX = cupheadTransform[0]; // 取得玩家最新世界座標 X
-      const playerY = cupheadTransform[1]; // 取得玩家最新世界座標 Y
-
-      this.mainCamera.setWcCenter(playerX, playerY);
-    }
-
-    // 原本的手動相機縮放保留
-    if (input.isKeyPressed('q')) {
-      this.mainCamera.incZoom(5 * dt); // 乘以 dt 縮放才會平滑
-    } else if (input.isKeyPressed('e')) {
-      this.mainCamera.incZoom(-5 * dt);
-    }
   }
 }

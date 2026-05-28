@@ -1,4 +1,6 @@
-// TRANSFORM 索引：x, y, w, h, rotation, prevX, prevY, prevW, prevH, prevRotation
+// TRANSFORM 索引：
+//     x,     y,     rotation,     scaleX,     scaleY, 
+// prevX, prevY, prevRotation, prevScaleX, prevScaleY
 const TransformComponent = {
   type: 'TRANSFORM',
   stride: 10,
