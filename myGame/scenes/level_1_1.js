@@ -14,7 +14,7 @@ export class Level_1_1 extends BaseScene {
 
     // 註冊資源
     engine.resourceManager.load({
-      cupheadTexture: 'myGame/assets/cuphead/SpriteAtlasTexture_Cuphead-0.png',
+      cupheadTexture: 'myGame/assets/cuphead/spritesheet.png',
       cupheadSpritesheet: 'myGame/assets/cuphead/spritesheet.json',
       cupheadAnims: 'myGame/assets/cuphead/cupheadAnims.json',
     });
@@ -67,7 +67,7 @@ export class Level_1_1 extends BaseScene {
     // 創建相機
     const mainCameraId = engine.cameraManager.add({
       wcCenter: [0, 0],
-      wcWidth: 1500,
+      wcWidth: 1700,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });
@@ -86,15 +86,15 @@ export class Level_1_1 extends BaseScene {
     this.cuphead = this.world.createEntity();
     // x, y, rotation, scaleX, scaleY
     this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1]);
-    // u0, v0, du, dv, width, height, pivotX, pivotY, trimX, trimY, materialId, cameraId, zIndex
+    // u0, v0, du, dv, width, height, pivotX, pivotY, trimOffsetX, trimOffsetY, materialId, cameraId, zIndex
     this.world.addComponent(this.cuphead, 'SPRITE', [
       cupheadSprite.u0,
       cupheadSprite.v0,
       cupheadSprite.du,
       cupheadSprite.dv,
-      97,
-      153,
-      0.5,
+      0,
+      0,
+      0,
       0,
       0,
       0,
@@ -103,7 +103,7 @@ export class Level_1_1 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
-    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.idle');
+    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.run');
     this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
   }
 

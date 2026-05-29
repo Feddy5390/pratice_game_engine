@@ -1,8 +1,8 @@
 // SPRITE 索引：
-// u0, v0, du, dv, 
-// width, height, 
-// pivotX, pivotY, 
-// trimOffsetX, trimOffsetY, 
+// u0, v0, du, dv,
+// width, height,
+// pivotX, pivotY,
+// trimOffsetX, trimOffsetY,
 // materialId, cameraId, zIndex
 
 // material => { shader, textures }

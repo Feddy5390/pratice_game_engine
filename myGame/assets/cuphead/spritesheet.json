@@ -2,219 +2,263 @@
   "frames": {
     "cuphead_idle_0001.png": {
       "frame": {
-        "x": 0,
-        "y": 0,
-        "w": 97,
-        "h": 153,
-        "ox": 0,
-        "oy": 0
+        "x": 1,
+        "y": 1,
+        "w": 100,
+        "h": 159,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 206,
+        "trimOffsetY": 177
       }
     },
     "cuphead_idle_0002.png": {
       "frame": {
         "x": 103,
-        "y": 0,
-        "w": 99,
-        "h": 152,
-        "ox": 2,
-        "oy": -3
+        "y": 1,
+        "w": 101,
+        "h": 156,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 205,
+        "trimOffsetY": 180
       }
     },
     "cuphead_idle_0003.png": {
       "frame": {
-        "x": 217,
-        "y": 0,
-        "w": 97,
-        "h": 156,
-        "ox": 0,
-        "oy": 0
+        "x": 206,
+        "y": 1,
+        "w": 102,
+        "h": 153,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 205,
+        "trimOffsetY": 184
       }
     },
     "cuphead_idle_0004.png": {
       "frame": {
-        "x": 324,
-        "y": 0,
-        "w": 100,
-        "h": 143,
-        "ox": 2,
-        "oy": -12
+        "x": 310,
+        "y": 1,
+        "w": 102,
+        "h": 148,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 204,
+        "trimOffsetY": 190
       }
     },
     "cuphead_idle_0005.png": {
       "frame": {
-        "x": 427,
-        "y": 6,
-        "w": 97,
-        "h": 138,
-        "ox": -1,
-        "oy": -19
+        "x": 414,
+        "y": 1,
+        "w": 101,
+        "h": 142,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 205,
+        "trimOffsetY": 197
       }
     },
     "cuphead_run_0001.png": {
       "frame": {
-        "x": 1453,
-        "y": 166,
-        "w": 134,
-        "h": 155,
-        "ox": 12,
-        "oy": -4
+        "x": 414,
+        "y": 145,
+        "w": 139,
+        "h": 159,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 183,
+        "trimOffsetY": 185
       }
     },
     "cuphead_run_0002.png": {
       "frame": {
-        "x": 1586,
-        "y": 164,
-        "w": 122,
-        "h": 147,
-        "ox": 4,
-        "oy": -10
+        "x": 1,
+        "y": 306,
+        "w": 126,
+        "h": 151,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 192,
+        "trimOffsetY": 188
       }
     },
     "cuphead_run_0003.png": {
       "frame": {
-        "x": 1709,
-        "y": 160,
-        "w": 112,
-        "h": 157,
-        "ox": -3,
-        "oy": -2
+        "x": 129,
+        "y": 306,
+        "w": 117,
+        "h": 161,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 199,
+        "trimOffsetY": 182
       }
     },
     "cuphead_run_0004.png": {
       "frame": {
-        "x": 1822,
-        "y": 151,
-        "w": 108,
-        "h": 160,
-        "ox": -4,
-        "oy": 1
+        "x": 248,
+        "y": 306,
+        "w": 113,
+        "h": 165,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 199,
+        "trimOffsetY": 179
       }
     },
     "cuphead_run_0005.png": {
       "frame": {
-        "x": 1932,
-        "y": 147,
-        "w": 109,
-        "h": 168,
-        "ox": -4,
-        "oy": 10
+        "x": 363,
+        "y": 306,
+        "w": 114,
+        "h": 172,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 199,
+        "trimOffsetY": 171
       }
     },
     "cuphead_run_0006.png": {
       "frame": {
-        "x": 0,
-        "y": 297,
-        "w": 112,
-        "h": 140,
-        "ox": 0,
-        "oy": -12
+        "x": 479,
+        "y": 306,
+        "w": 116,
+        "h": 148,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 196,
+        "trimOffsetY": 190
       }
     },
     "cuphead_run_0007.png": {
       "frame": {
-        "x": 113,
-        "y": 295,
-        "w": 123,
-        "h": 143,
-        "ox": 8,
-        "oy": -9
+        "x": 479,
+        "y": 456,
+        "w": 126,
+        "h": 148,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 186,
+        "trimOffsetY": 190
       }
     },
     "cuphead_run_0008.png": {
       "frame": {
-        "x": 236,
-        "y": 287,
-        "w": 127,
-        "h": 146,
-        "ox": 13,
-        "oy": -7
+        "x": 555,
+        "y": 1,
+        "w": 133,
+        "h": 151,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 180,
+        "trimOffsetY": 188
       }
     },
     "cuphead_run_0009.png": {
       "frame": {
-        "x": 363,
-        "y": 304,
-        "w": 123,
-        "h": 149,
-        "ox": 9,
-        "oy": -3
+        "x": 597,
+        "y": 154,
+        "w": 126,
+        "h": 154,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 189,
+        "trimOffsetY": 185
       }
     },
     "cuphead_run_0010.png": {
       "frame": {
-        "x": 488,
+        "x": 607,
         "y": 310,
-        "w": 113,
-        "h": 146,
-        "ox": 0,
-        "oy": -8
+        "w": 118,
+        "h": 150,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 196,
+        "trimOffsetY": 188
       }
     },
     "cuphead_run_0011.png": {
       "frame": {
-        "x": 601,
-        "y": 309,
-        "w": 112,
-        "h": 148,
-        "ox": 1,
-        "oy": -7
+        "x": 1,
+        "y": 462,
+        "w": 117,
+        "h": 153,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 197,
+        "trimOffsetY": 188
       }
     },
     "cuphead_run_0012.png": {
       "frame": {
-        "x": 714,
-        "y": 298,
-        "w": 113,
-        "h": 150,
-        "ox": 0,
-        "oy": -2
+        "x": 607,
+        "y": 462,
+        "w": 119,
+        "h": 155,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 198,
+        "trimOffsetY": 183
       }
     },
     "cuphead_run_0013.png": {
       "frame": {
-        "x": 828,
-        "y": 291,
-        "w": 119,
-        "h": 145,
-        "ox": 4,
-        "oy": -9
+        "x": 1,
+        "y": 619,
+        "w": 124,
+        "h": 149,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 195,
+        "trimOffsetY": 191
       }
     },
     "cuphead_run_0014.png": {
       "frame": {
-        "x": 949,
-        "y": 307,
-        "w": 117,
-        "h": 142,
-        "ox": 2,
-        "oy": -8
+        "x": 127,
+        "y": 619,
+        "w": 121,
+        "h": 146,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 195,
+        "trimOffsetY": 192
       }
     },
     "cuphead_run_0015.png": {
       "frame": {
-        "x": 1068,
-        "y": 328,
-        "w": 125,
-        "h": 143,
-        "ox": 10,
-        "oy": -5
+        "x": 250,
+        "y": 619,
+        "w": 132,
+        "h": 149,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 184,
+        "trimOffsetY": 189
       }
     },
     "cuphead_run_0016.png": {
       "frame": {
-        "x": 1194,
-        "y": 336,
-        "w": 136,
-        "h": 150,
-        "ox": 19,
-        "oy": -3
+        "x": 384,
+        "y": 619,
+        "w": 141,
+        "h": 157,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 184
       }
     }
   },
   "meta": {
-    "size": {
-      "w": 2048,
-      "h": 2048
-    }
+    "app": "http://www.codeandweb.com/texturepacker",
+    "version": "1.0",
+    "image": "spritesheet.png",
+    "format": "RGBA8888",
+    "size": { "w": 727, "h": 777 },
+    "scale": "1"
   }
 }

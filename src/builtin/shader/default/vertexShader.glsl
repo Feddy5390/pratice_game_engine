@@ -15,15 +15,9 @@ layout(std140) uniform CameraBlock {
 out vec2 v_uv;
 
 void main(void) {
-    // 算出以 Pivot 為原點的比例
-    vec2 local = a_position - a_pivot;
-
-    // 放大到實際小圖的像素大小
-    local *= a_size;
-
-    // 加入動畫偏移修正（單位：像素）
-    // 縮放完成後，直接把 Unity 算出來的偏移量加進去，把角色「校正」回它原本在動畫裡該有的位置
-    local -= a_trimOffset;
+    vec2 local = a_position * a_size; // 單位矩形放大到正常尺寸
+    local += a_trimOffset; // 根據左下將矩形偏移到正確的位置
+    local -= a_pivot; // 參考點移到原點
 
     // 圍繞著新原點進行旋轉（此時使用的是校正後的幾何位置）
     float s = sin(a_rotation);
@@ -36,4 +30,3 @@ void main(void) {
 
     v_uv = a_uvRect.xy + a_position * a_uvRect.zw;
 }
-

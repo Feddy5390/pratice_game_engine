@@ -7,18 +7,16 @@ export default class Atlas {
     const { w: atlasWidth, h: atlasHeight } = atlasJson.meta.size;
 
     for (const [imageName, data] of Object.entries(atlasJson.frames)) {
-      const { x, y, w, h, ox, oy } = data.frame;
+      const { x, y, w, h, pivotX, pivotY, trimOffsetX, trimOffsetY } = data.frame;
       const uv = this._calculateUV(atlasWidth, atlasHeight, x, y, w, h);
       this._sprites.set(imageName, {
         ...uv,
-
-        // trimmed size
         width: w,
         height: h,
-
-        // trim offset
-        trimOffsetX: ox ?? 0,
-        trimOffsetY: oy ?? 0,
+        pivotX,
+        pivotY,
+        trimOffsetX,
+        trimOffsetY,
       });
     }
   }

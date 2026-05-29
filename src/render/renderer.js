@@ -127,8 +127,7 @@ export default class Renderer {
               stride: this._stride * 4,
               offset: 9 * 4,
               divisor: 1,
-            })
-            .add({
+            }).add({
               location: 6,
               size: 2,
               type: gl.FLOAT,
