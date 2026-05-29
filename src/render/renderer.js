@@ -127,7 +127,8 @@ export default class Renderer {
               stride: this._stride * 4,
               offset: 9 * 4,
               divisor: 1,
-            }).add({
+            })
+            .add({
               location: 6,
               size: 2,
               type: gl.FLOAT,
@@ -243,13 +244,23 @@ export default class Renderer {
         const pw = Math.round(w * dpr * screenScale);
         const ph = Math.round(h * dpr * screenScale);
         const py_webgl = gl.canvas.height - (py_top + ph); // WebGL 的 Y = 畫布總高 - (距離頂部的距離 + 自身高度)
-        gl.viewport(px, py_webgl, pw, ph);
-        gl.scissor(px, py_webgl, pw, ph);
-        gl.enable(gl.SCISSOR_TEST);
-        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // 先設定好「要清空成什麼顏色」（狀態設定，要在 clear 之前）
         if (camera.background) {
           gl.clearColor(...camera.background);
         }
+
+        // 設定視口與裁剪區域
+        gl.viewport(px, py_webgl, pw, ph);
+        gl.scissor(px, py_webgl, pw, ph);
+
+        // 開啟裁剪測試（這樣 clear 就只會影響 scissor 指定的局部區域）
+        gl.enable(gl.SCISSOR_TEST);
+
+        // 執行清空
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // 順手關閉裁剪測試，避免影響後續不相關的渲染繪製
         gl.disable(gl.SCISSOR_TEST);
 
         // 更新相機 ubo

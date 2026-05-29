@@ -1,5 +1,5 @@
 // TRANSFORM 索引：
-//     x,     y,     rotation,     scaleX,     scaleY, 
+//     x,     y,     rotation,     scaleX,     scaleY,
 // prevX, prevY, prevRotation, prevScaleX, prevScaleY
 const TransformComponent = {
   type: 'TRANSFORM',
