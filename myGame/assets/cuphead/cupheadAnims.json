@@ -2,62 +2,103 @@
   "idle": {
     "frames": [
       {
-        "image": "cuphead_idle_0001.png",
-        "duration": 0.04
+        "image": "cuphead_idle_0001",
+        "cumulativeDuration": 0.041666668
       },
       {
-        "image": "cuphead_idle_0002.png",
-        "duration": 0.08
+        "image": "cuphead_idle_0002",
+        "cumulativeDuration": 0.083333336
       },
       {
-        "image": "cuphead_idle_0003.png",
-        "duration": 0.025
+        "image": "cuphead_idle_0003",
+        "cumulativeDuration": 0.125
       },
       {
-        "image": "cuphead_idle_0004.png",
-        "duration": 0.053
+        "image": "cuphead_idle_0004",
+        "cumulativeDuration": 0.16666667
       },
       {
-        "image": "cuphead_idle_0005.png",
-        "duration": 0.125
+        "image": "cuphead_idle_0005",
+        "cumulativeDuration": 0.29166666
       },
       {
-        "image": "cuphead_idle_0004.png",
-        "duration": 0.053
+        "image": "cuphead_idle_0004",
+        "cumulativeDuration": 0.33333334
       },
       {
-        "image": "cuphead_idle_0003.png",
-        "duration": 0.025
+        "image": "cuphead_idle_0003",
+        "cumulativeDuration": 0.375
       },
       {
-        "image": "cuphead_idle_0002.png",
-        "duration": 0.053
+        "image": "cuphead_idle_0002",
+        "cumulativeDuration": 0.41666666
       },
       {
-        "image": "cuphead_idle_0001.png",
-        "duration": 0.1
+        "image": "cuphead_idle_0001",
+        "cumulativeDuration": 0.500000008
+      }
+    ],
+    "loop": true
+  },
+  "duck": {
+    "frames": [
+      {
+        "image": "cuphead_duck_idle_0001",
+        "cumulativeDuration": 0.041666668
+      },
+      {
+        "image": "cuphead_duck_idle_0002",
+        "cumulativeDuration": 0.083333336
+      },
+      {
+        "image": "cuphead_duck_idle_0003",
+        "cumulativeDuration": 0.125
+      },
+      {
+        "image": "cuphead_duck_idle_0004",
+        "cumulativeDuration": 0.16666667
+      },
+      {
+        "image": "cuphead_duck_idle_0005",
+        "cumulativeDuration": 0.29166666
+      },
+      {
+        "image": "cuphead_duck_idle_0004",
+        "cumulativeDuration": 0.33333334
+      },
+      {
+        "image": "cuphead_duck_idle_0003",
+        "cumulativeDuration": 0.375
+      },
+      {
+        "image": "cuphead_duck_idle_0002",
+        "cumulativeDuration": 0.41666666
+      },
+      {
+        "image": "cuphead_duck_idle_0001",
+        "cumulativeDuration": 0.500000008
       }
     ],
     "loop": true
   },
   "run": {
     "frames": [
-      { "image": "cuphead_run_0001.png", "duration": 0.05 },
-      { "image": "cuphead_run_0002.png", "duration": 0.05 },
-      { "image": "cuphead_run_0003.png", "duration": 0.05 },
-      { "image": "cuphead_run_0004.png", "duration": 0.05 },
-      { "image": "cuphead_run_0005.png", "duration": 0.05 },
-      { "image": "cuphead_run_0006.png", "duration": 0.05 },
-      { "image": "cuphead_run_0007.png", "duration": 0.05 },
-      { "image": "cuphead_run_0008.png", "duration": 0.05 },
-      { "image": "cuphead_run_0009.png", "duration": 0.05 },
-      { "image": "cuphead_run_0010.png", "duration": 0.05 },
-      { "image": "cuphead_run_0011.png", "duration": 0.05 },
-      { "image": "cuphead_run_0012.png", "duration": 0.05 },
-      { "image": "cuphead_run_0013.png", "duration": 0.05 },
-      { "image": "cuphead_run_0014.png", "duration": 0.05 },
-      { "image": "cuphead_run_0015.png", "duration": 0.05 },
-      { "image": "cuphead_run_0016.png", "duration": 0.05 }
+      { "image": "cuphead_run_0001", "cumulativeDuration": 0.041666668 },
+      { "image": "cuphead_run_0002", "cumulativeDuration": 0.083333336 },
+      { "image": "cuphead_run_0003", "cumulativeDuration": 0.125 },
+      { "image": "cuphead_run_0004", "cumulativeDuration": 0.16666667 },
+      { "image": "cuphead_run_0005", "cumulativeDuration": 0.20833333 },
+      { "image": "cuphead_run_0006", "cumulativeDuration": 0.25 },
+      { "image": "cuphead_run_0007", "cumulativeDuration": 0.29166666 },
+      { "image": "cuphead_run_0008", "cumulativeDuration": 0.33333334 },
+      { "image": "cuphead_run_0009", "cumulativeDuration": 0.375 },
+      { "image": "cuphead_run_0010", "cumulativeDuration": 0.41666666 },
+      { "image": "cuphead_run_0011", "cumulativeDuration": 0.45833334 },
+      { "image": "cuphead_run_0012", "cumulativeDuration": 0.5 },
+      { "image": "cuphead_run_0013", "cumulativeDuration": 0.5416667 },
+      { "image": "cuphead_run_0014", "cumulativeDuration": 0.5833333 },
+      { "image": "cuphead_run_0015", "cumulativeDuration": 0.625 },
+      { "image": "cuphead_run_0016", "cumulativeDuration": 0.66666668 }
     ],
     "loop": true
   }

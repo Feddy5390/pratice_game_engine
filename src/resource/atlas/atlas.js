@@ -6,10 +6,10 @@ export default class Atlas {
     this.texture = texture;
     const { w: atlasWidth, h: atlasHeight } = atlasJson.meta.size;
 
-    for (const [imageName, data] of Object.entries(atlasJson.frames)) {
-      const { x, y, w, h, pivotX, pivotY, trimOffsetX, trimOffsetY } = data.frame;
+    for (const { filename, frame } of atlasJson.frames) {
+      const { x, y, w, h, pivotX, pivotY, trimOffsetX, trimOffsetY } = frame;
       const uv = this._calculateUV(atlasWidth, atlasHeight, x, y, w, h);
-      this._sprites.set(imageName, {
+      this._sprites.set(filename, {
         ...uv,
         width: w,
         height: h,

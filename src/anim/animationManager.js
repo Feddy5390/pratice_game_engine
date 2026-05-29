@@ -33,12 +33,10 @@ export default class AnimationManager {
       for (const [action, data] of Object.entries(clipJson)) {
         const anim = { id: this._nextId++, frames: [], loop: false };
 
-        let cumulativeDuration = 0;
         for (const f of data.frames) {
-          cumulativeDuration += f.duration;
           anim.frames.push({
             sprite: atlas.getSprite(f.image),
-            cumulativeDuration,
+            cumulativeDuration: f.cumulativeDuration,
           });
         }
         anim.loop = data.loop;

@@ -1,9 +1,75 @@
 {
-  "frames": {
-    "cuphead_idle_0001.png": {
+  "frames": [
+    {
+      "filename": "cuphead_duck_idle_0001",
       "frame": {
-        "x": 1,
-        "y": 1,
+        "x": 0,
+        "y": 0,
+        "w": 166,
+        "h": 72,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 264
+      }
+    },
+    {
+      "filename": "cuphead_duck_idle_0002",
+      "frame": {
+        "x": 166,
+        "y": 0,
+        "w": 166,
+        "h": 72,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 262
+      }
+    },
+    {
+      "filename": "cuphead_duck_idle_0003",
+      "frame": {
+        "x": 332,
+        "y": 0,
+        "w": 166,
+        "h": 78,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 257
+      }
+    },
+    {
+      "filename": "cuphead_duck_idle_0004",
+      "frame": {
+        "x": 498,
+        "y": 0,
+        "w": 165,
+        "h": 80,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 254
+      }
+    },
+    {
+      "filename": "cuphead_duck_idle_0005",
+      "frame": {
+        "x": 0,
+        "y": 80,
+        "w": 165,
+        "h": 83,
+        "pivotX": 256,
+        "pivotY": 194,
+        "trimOffsetX": 177,
+        "trimOffsetY": 250
+      }
+    },
+    {
+      "filename": "cuphead_idle_0001",
+      "frame": {
+        "x": 141,
+        "y": 535,
         "w": 100,
         "h": 159,
         "pivotX": 256,
@@ -12,10 +78,11 @@
         "trimOffsetY": 177
       }
     },
-    "cuphead_idle_0002.png": {
+    {
+      "filename": "cuphead_idle_0002",
       "frame": {
-        "x": 103,
-        "y": 1,
+        "x": 597,
+        "y": 379,
         "w": 101,
         "h": 156,
         "pivotX": 256,
@@ -24,22 +91,40 @@
         "trimOffsetY": 180
       }
     },
-    "cuphead_idle_0003.png": {
+    {
+      "filename": "cuphead_idle_0003",
       "frame": {
-        "x": 206,
-        "y": 1,
+        "x": 133,
+        "y": 379,
         "w": 102,
         "h": 153,
         "pivotX": 256,
         "pivotY": 194,
         "trimOffsetX": 205,
         "trimOffsetY": 184
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 102,
+        "h": 153
+      },
+      "sourceSize": {
+        "w": 102,
+        "h": 153
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
       }
     },
-    "cuphead_idle_0004.png": {
+    {
+      "filename": "cuphead_idle_0004",
       "frame": {
-        "x": 310,
-        "y": 1,
+        "x": 387,
+        "y": 80,
         "w": 102,
         "h": 148,
         "pivotX": 256,
@@ -48,10 +133,11 @@
         "trimOffsetY": 190
       }
     },
-    "cuphead_idle_0005.png": {
+    {
+      "filename": "cuphead_idle_0005",
       "frame": {
-        "x": 414,
-        "y": 1,
+        "x": 165,
+        "y": 80,
         "w": 101,
         "h": 142,
         "pivotX": 256,
@@ -60,10 +146,11 @@
         "trimOffsetY": 197
       }
     },
-    "cuphead_run_0001.png": {
+    {
+      "filename": "cuphead_run_0001",
       "frame": {
-        "x": 414,
-        "y": 145,
+        "x": 241,
+        "y": 535,
         "w": 139,
         "h": 159,
         "pivotX": 256,
@@ -72,10 +159,11 @@
         "trimOffsetY": 185
       }
     },
-    "cuphead_run_0002.png": {
+    {
+      "filename": "cuphead_run_0002",
       "frame": {
-        "x": 1,
-        "y": 306,
+        "x": 500,
+        "y": 228,
         "w": 126,
         "h": 151,
         "pivotX": 256,
@@ -84,10 +172,11 @@
         "trimOffsetY": 188
       }
     },
-    "cuphead_run_0003.png": {
+    {
+      "filename": "cuphead_run_0003",
       "frame": {
-        "x": 129,
-        "y": 306,
+        "x": 380,
+        "y": 535,
         "w": 117,
         "h": 161,
         "pivotX": 256,
@@ -96,10 +185,11 @@
         "trimOffsetY": 182
       }
     },
-    "cuphead_run_0004.png": {
+    {
+      "filename": "cuphead_run_0004",
       "frame": {
-        "x": 248,
-        "y": 306,
+        "x": 497,
+        "y": 535,
         "w": 113,
         "h": 165,
         "pivotX": 256,
@@ -108,10 +198,11 @@
         "trimOffsetY": 179
       }
     },
-    "cuphead_run_0005.png": {
+    {
+      "filename": "cuphead_run_0005",
       "frame": {
-        "x": 363,
-        "y": 306,
+        "x": 610,
+        "y": 535,
         "w": 114,
         "h": 172,
         "pivotX": 256,
@@ -120,10 +211,11 @@
         "trimOffsetY": 171
       }
     },
-    "cuphead_run_0006.png": {
+    {
+      "filename": "cuphead_run_0006",
       "frame": {
-        "x": 479,
-        "y": 306,
+        "x": 489,
+        "y": 80,
         "w": 116,
         "h": 148,
         "pivotX": 256,
@@ -132,10 +224,11 @@
         "trimOffsetY": 190
       }
     },
-    "cuphead_run_0007.png": {
+    {
+      "filename": "cuphead_run_0007",
       "frame": {
-        "x": 479,
-        "y": 456,
+        "x": 0,
+        "y": 228,
         "w": 126,
         "h": 148,
         "pivotX": 256,
@@ -144,10 +237,11 @@
         "trimOffsetY": 190
       }
     },
-    "cuphead_run_0008.png": {
+    {
+      "filename": "cuphead_run_0008",
       "frame": {
-        "x": 555,
-        "y": 1,
+        "x": 0,
+        "y": 379,
         "w": 133,
         "h": 151,
         "pivotX": 256,
@@ -156,10 +250,11 @@
         "trimOffsetY": 188
       }
     },
-    "cuphead_run_0009.png": {
+    {
+      "filename": "cuphead_run_0009",
       "frame": {
-        "x": 597,
-        "y": 154,
+        "x": 352,
+        "y": 379,
         "w": 126,
         "h": 154,
         "pivotX": 256,
@@ -168,10 +263,11 @@
         "trimOffsetY": 185
       }
     },
-    "cuphead_run_0010.png": {
+    {
+      "filename": "cuphead_run_0010",
       "frame": {
-        "x": 607,
-        "y": 310,
+        "x": 382,
+        "y": 228,
         "w": 118,
         "h": 150,
         "pivotX": 256,
@@ -180,10 +276,11 @@
         "trimOffsetY": 188
       }
     },
-    "cuphead_run_0011.png": {
+    {
+      "filename": "cuphead_run_0011",
       "frame": {
-        "x": 1,
-        "y": 462,
+        "x": 235,
+        "y": 379,
         "w": 117,
         "h": 153,
         "pivotX": 256,
@@ -192,10 +289,11 @@
         "trimOffsetY": 188
       }
     },
-    "cuphead_run_0012.png": {
+    {
+      "filename": "cuphead_run_0012",
       "frame": {
-        "x": 607,
-        "y": 462,
+        "x": 478,
+        "y": 379,
         "w": 119,
         "h": 155,
         "pivotX": 256,
@@ -204,10 +302,11 @@
         "trimOffsetY": 183
       }
     },
-    "cuphead_run_0013.png": {
+    {
+      "filename": "cuphead_run_0013",
       "frame": {
-        "x": 1,
-        "y": 619,
+        "x": 126,
+        "y": 228,
         "w": 124,
         "h": 149,
         "pivotX": 256,
@@ -216,10 +315,11 @@
         "trimOffsetY": 191
       }
     },
-    "cuphead_run_0014.png": {
+    {
+      "filename": "cuphead_run_0014",
       "frame": {
-        "x": 127,
-        "y": 619,
+        "x": 266,
+        "y": 80,
         "w": 121,
         "h": 146,
         "pivotX": 256,
@@ -228,10 +328,11 @@
         "trimOffsetY": 192
       }
     },
-    "cuphead_run_0015.png": {
+    {
+      "filename": "cuphead_run_0015",
       "frame": {
         "x": 250,
-        "y": 619,
+        "y": 228,
         "w": 132,
         "h": 149,
         "pivotX": 256,
@@ -240,10 +341,11 @@
         "trimOffsetY": 189
       }
     },
-    "cuphead_run_0016.png": {
+    {
+      "filename": "cuphead_run_0016",
       "frame": {
-        "x": 384,
-        "y": 619,
+        "x": 0,
+        "y": 535,
         "w": 141,
         "h": 157,
         "pivotX": 256,
@@ -252,13 +354,11 @@
         "trimOffsetY": 184
       }
     }
-  },
+  ],
   "meta": {
-    "app": "http://www.codeandweb.com/texturepacker",
-    "version": "1.0",
-    "image": "spritesheet.png",
-    "format": "RGBA8888",
-    "size": { "w": 727, "h": 777 },
-    "scale": "1"
+    "size": {
+      "w": 724,
+      "h": 724
+    }
   }
 }

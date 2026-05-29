@@ -75,7 +75,7 @@ export class Level_1_1 extends BaseScene {
 
     // 取得 atlas
     const cupheadAtlas = engine.atlasManager.get('cupheadAtlas');
-    const cupheadSprite = cupheadAtlas.getSprite('cuphead_idle_0001.png');
+    const cupheadSprite = cupheadAtlas.getSprite('cuphead_idle_0001');
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
@@ -103,7 +103,7 @@ export class Level_1_1 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
-    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.run');
+    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.duck');
     this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
   }
 
@@ -121,23 +121,25 @@ export class Level_1_1 extends BaseScene {
 
     // 2. 判斷水平移動與動畫
     if (input.isKeyPressed('right')) {
-      const { id: cupheadRunAnimId } = engine.animationManager.get('cuphead.run');
-      targetAnimId = cupheadRunAnimId;
+      const { id } = engine.animationManager.get('cuphead.run');
+      targetAnimId = id;
       vx = 600;
     } else if (input.isKeyPressed('left')) {
-      const { id: cupheadRunAnimId } = engine.animationManager.get('cuphead.run');
-      targetAnimId = cupheadRunAnimId;
+      const { id }  = engine.animationManager.get('cuphead.run');
+      targetAnimId = id;
       vx = -600; // 修正往左的速度，與往右對稱（原本 -50 太慢）
     } else {
-      const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.idle');
-      targetAnimId = cupheadIdleAnimId;
+      const { id } = engine.animationManager.get('cuphead.idle');
+      targetAnimId = id;
     }
 
     // 判斷垂直移動
     if (input.isKeyPressed('up')) {
-      vy = 600; // 配合世界座標方向調整，通常向上是正
+      // vy = 600; // 配合世界座標方向調整，通常向上是正
     } else if (input.isKeyPressed('down')) {
-      vy = -600;
+      const { id }  = engine.animationManager.get('cuphead.duck');
+      targetAnimId = id;
+      // vy = -600;
     }
 
     // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
