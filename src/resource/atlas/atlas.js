@@ -13,10 +13,8 @@ export default class Atlas {
         ...uv,
         width: w,
         height: h,
-        pivotX,
-        pivotY,
-        trimOffsetX,
-        trimOffsetY,
+        pivotInTrimX: trimOffsetX - pivotX,
+        pivotInTrimY: trimOffsetY - pivotY,
       });
     }
   }

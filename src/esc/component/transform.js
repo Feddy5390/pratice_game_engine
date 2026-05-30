@@ -1,12 +1,12 @@
 // TRANSFORM 索引：
-//     x,     y,     rotation,     scaleX,     scaleY,
+//     x,     y,     rotation,     scaleX,     scaleY, a_flipX, a_flipY
 // prevX, prevY, prevRotation, prevScaleX, prevScaleY
 const TransformComponent = {
   type: 'TRANSFORM',
-  stride: 10,
+  stride: 12,
 
   createStore(maxEntities) {
-    return new Float32Array(maxEntities * 10);
+    return new Float32Array(maxEntities * 12);
   },
 };
 

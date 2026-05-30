@@ -65,7 +65,7 @@ export default class GameLoop {
       this._cameraManager._update(interpolation);
 
       // 遍歷所有實體，收集相同 Shader、Texture、camera 的實體，一次draw
-      this._renderer.draw(interpolation);
+      this._renderer._draw(interpolation);
     };
 
     requestAnimationFrame(tick);

@@ -78,6 +78,7 @@ export default class Renderer {
           ]),
           usage: gl.STATIC_DRAW,
           layout: new VertexLayout().add({
+            // a_position
             location: 0,
             size: 2,
             type: gl.FLOAT,
@@ -89,6 +90,7 @@ export default class Renderer {
           buffer: this._instanceBuffer,
           layout: new VertexLayout()
             .add({
+              // a_instanceOffset
               location: 1,
               size: 2,
               type: gl.FLOAT,
@@ -97,6 +99,7 @@ export default class Renderer {
               divisor: 1,
             })
             .add({
+              // a_size
               location: 2,
               size: 2,
               type: gl.FLOAT,
@@ -105,6 +108,7 @@ export default class Renderer {
               divisor: 1,
             })
             .add({
+              // a_uvRect
               location: 3,
               size: 4,
               type: gl.FLOAT,
@@ -113,6 +117,7 @@ export default class Renderer {
               divisor: 1,
             })
             .add({
+              // a_rotation
               location: 4,
               size: 1,
               type: gl.FLOAT,
@@ -121,6 +126,7 @@ export default class Renderer {
               divisor: 1,
             })
             .add({
+              // a_pivotInTrim
               location: 5,
               size: 2,
               type: gl.FLOAT,
@@ -129,6 +135,7 @@ export default class Renderer {
               divisor: 1,
             })
             .add({
+              // a_flip
               location: 6,
               size: 2,
               type: gl.FLOAT,
@@ -154,7 +161,7 @@ export default class Renderer {
     return a + diff * t;
   }
 
-  changeWorld(scene) {
+  _changeWorld(scene) {
     const { world } = scene;
     this._world = world;
     this._entities = world._renderQueue;
@@ -162,7 +169,7 @@ export default class Renderer {
     this._sprite = world.components.SPRITE;
   }
 
-  draw(interpolation) {
+  _draw(interpolation) {
     const gl = this._gl;
     const dpr = this._dpr;
     const screenScale = this._cameraManager._screenScale;
@@ -180,8 +187,8 @@ export default class Renderer {
     let i = 0;
     while (i < numEntity) {
       const fo = entities[i] * spriteStride;
-      const materialId = spriteStore[fo + 10];
-      const cameraId = spriteStore[fo + 11];
+      const materialId = spriteStore[fo + 8];
+      const cameraId = spriteStore[fo + 9];
 
       let count = 0;
       let floatOffset = 0;
@@ -194,8 +201,8 @@ export default class Renderer {
 
         const targetEntityId = entities[j];
         const so = targetEntityId * spriteStride;
-        const targetMaterialId = spriteStore[so + 10];
-        const targetCameraId = spriteStore[so + 11];
+        const targetMaterialId = spriteStore[so + 8];
+        const targetCameraId = spriteStore[so + 9];
 
         // 相機跟材質都相同才編入同一個 Batch
         if (cameraId != targetCameraId || materialId != targetMaterialId) {
@@ -208,11 +215,11 @@ export default class Renderer {
         const rotation = transformStore[to + 2];
         const scaleX = transformStore[to + 3];
         const scaleY = transformStore[to + 4];
-        const prevX = transformStore[to + 5];
-        const prevY = transformStore[to + 6];
-        const prevRotation = transformStore[to + 7];
+        const prevX = transformStore[to + 7];
+        const prevY = transformStore[to + 8];
+        const prevRotation = transformStore[to + 9];
 
-        // instanceData 索引：x, y, w, h, u0, v0, du, dv, rotation, pivotX, pivotY, trimOffsetX, trimOffsetY
+        // instanceData 索引：x, y, w, h, u0, v0, du, dv, rotation, pivotInTrimX, pivotInTrimY, flipX, flipY
         instanceData[floatOffset++] = prevX + (x - prevX) * interpolation; // x
         instanceData[floatOffset++] = prevY + (y - prevY) * interpolation; // y
         instanceData[floatOffset++] = spriteStore[so + 4] * scaleX; // w
@@ -223,10 +230,10 @@ export default class Renderer {
         instanceData[floatOffset++] = spriteStore[so + 3]; // dv
         instanceData[floatOffset++] =
           this._lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180); // rotation
-        instanceData[floatOffset++] = spriteStore[so + 6]; // pivotX
-        instanceData[floatOffset++] = spriteStore[so + 7]; // pivotY
-        instanceData[floatOffset++] = spriteStore[so + 8]; // trimOffsetX
-        instanceData[floatOffset++] = spriteStore[so + 9]; // trimOffsetY
+        instanceData[floatOffset++] = spriteStore[so + 6]; // pivotInTrimX
+        instanceData[floatOffset++] = spriteStore[so + 7]; // pivotInTrimY
+        instanceData[floatOffset++] = transformStore[to + 5]; // flipX
+        instanceData[floatOffset++] = transformStore[to + 6]; // flipY
 
         count++;
         j++;

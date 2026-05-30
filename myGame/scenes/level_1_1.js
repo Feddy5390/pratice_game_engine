@@ -84,16 +84,14 @@ export class Level_1_1 extends BaseScene {
 
     // 創建實體
     this.cuphead = this.world.createEntity();
-    // x, y, rotation, scaleX, scaleY
-    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1]);
-    // u0, v0, du, dv, width, height, pivotX, pivotY, trimOffsetX, trimOffsetY, materialId, cameraId, zIndex
+    // x, y, rotation, scaleX, scaleY, a_flipX, a_flipY
+    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    // u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
     this.world.addComponent(this.cuphead, 'SPRITE', [
       cupheadSprite.u0,
       cupheadSprite.v0,
       cupheadSprite.du,
       cupheadSprite.dv,
-      0,
-      0,
       0,
       0,
       0,
@@ -114,20 +112,24 @@ export class Level_1_1 extends BaseScene {
     // 1. 取得玩家目前的動畫狀態，避免每影格重複 addComponent 導致動畫卡死
     const currentAnim = this.world.getComponent(this.cuphead, 'ANIMATION');
     const currentAnimId = currentAnim ? currentAnim[0] : null;
+    const cupheadTransform = this.world.getComponent(this.cuphead, 'TRANSFORM');
 
     let vx = 0;
     let vy = 0;
     let targetAnimId = null;
+    let flipX = cupheadTransform[5];
 
     // 2. 判斷水平移動與動畫
     if (input.isKeyPressed('right')) {
       const { id } = engine.animationManager.get('cuphead.run');
       targetAnimId = id;
       vx = 600;
+      flipX = 1;
     } else if (input.isKeyPressed('left')) {
-      const { id }  = engine.animationManager.get('cuphead.run');
+      const { id } = engine.animationManager.get('cuphead.run');
       targetAnimId = id;
       vx = -600; // 修正往左的速度，與往右對稱（原本 -50 太慢）
+      flipX = -1;
     } else {
       const { id } = engine.animationManager.get('cuphead.idle');
       targetAnimId = id;
@@ -137,7 +139,7 @@ export class Level_1_1 extends BaseScene {
     if (input.isKeyPressed('up')) {
       // vy = 600; // 配合世界座標方向調整，通常向上是正
     } else if (input.isKeyPressed('down')) {
-      const { id }  = engine.animationManager.get('cuphead.duck');
+      const { id } = engine.animationManager.get('cuphead.duck');
       targetAnimId = id;
       // vy = -600;
     }
@@ -153,10 +155,16 @@ export class Level_1_1 extends BaseScene {
     // ----------------------------------------------------
     // 4. 自動鏡頭跟隨：讓螢幕跟著玩家動
     // ----------------------------------------------------
-    const cupheadTransform = this.world.getComponent(this.cuphead, 'TRANSFORM');
+
     if (cupheadTransform) {
       const playerX = cupheadTransform[0]; // 取得玩家最新世界座標 X
       const playerY = cupheadTransform[1]; // 取得玩家最新世界座標 Y
+
+      cupheadTransform[5] = flipX; // 這裡的 flipX 是你上面判斷左右按鍵得到的 1 或 -1
+      // cupheadTransform[6] = flipY; // 如果有垂直翻轉需求才開
+
+      // 3. 把修改後的陣列重新同步回 ECS 的 Store 中
+      this.world.setComponent(this.cuphead, 'TRANSFORM', cupheadTransform);
 
       this.mainCamera.setWcCenter(playerX, playerY);
     }

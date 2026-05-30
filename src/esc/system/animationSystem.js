@@ -37,7 +37,7 @@ export default class AnimationSystem {
       const rawIndex = clip.frames.findIndex((f) => loopedTime < f.cumulativeDuration);
       const frameIndex = rawIndex === -1 ? clip.frames.length - 1 : rawIndex;
 
-      const { u0, v0, du, dv, width, height, pivotX, pivotY, trimOffsetX, trimOffsetY } =
+      const { u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY } =
         clip.frames[frameIndex].sprite;
       spriteStore[so] = u0;
       spriteStore[so + 1] = v0;
@@ -45,10 +45,8 @@ export default class AnimationSystem {
       spriteStore[so + 3] = dv;
       spriteStore[so + 4] = width;
       spriteStore[so + 5] = height;
-      spriteStore[so + 6] = pivotX;
-      spriteStore[so + 7] = pivotY;
-      spriteStore[so + 8] = trimOffsetX;
-      spriteStore[so + 9] = trimOffsetY;
+      spriteStore[so + 6] = pivotInTrimX;
+      spriteStore[so + 7] = pivotInTrimY;
 
       animationStore[ao + 1] = time;
       animationStore[ao + 2] = frameIndex;

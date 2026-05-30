@@ -1,17 +1,16 @@
 // SPRITE 索引：
 // u0, v0, du, dv,
 // width, height,
-// pivotX, pivotY,
-// trimOffsetX, trimOffsetY,
-// materialId, cameraId, zIndex
-
-// material => { shader, textures }
+// pivotInTrimX, pivotInTrimY
+// materialId,
+// cameraId,
+// zIndex,
 const SpriteComponent = {
   type: 'SPRITE',
-  stride: 13,
+  stride: 11,
 
   createStore(maxEntities) {
-    return new Float32Array(maxEntities * 13);
+    return new Float32Array(maxEntities * 11);
   },
 };
 

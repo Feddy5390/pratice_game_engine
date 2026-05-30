@@ -99,7 +99,7 @@ export default class SceneManager {
     await nextScene.create();
 
     console.log('[場景切換] render pipeline change world...');
-    this._renderer.changeWorld(nextScene);
+    this._renderer._changeWorld(nextScene);
 
     this._engine._resize();
 

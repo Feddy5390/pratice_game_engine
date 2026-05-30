@@ -102,22 +102,6 @@
         "pivotY": 194,
         "trimOffsetX": 205,
         "trimOffsetY": 184
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 102,
-        "h": 153
-      },
-      "sourceSize": {
-        "w": 102,
-        "h": 153
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
       }
     },
     {

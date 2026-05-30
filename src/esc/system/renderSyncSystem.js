@@ -35,13 +35,13 @@ export default class RenderSyncSystem {
       const tb = b * transformStride;
 
       // camera
-      const camera = spriteStore[sa + 11] - spriteStore[sb + 11];
+      const camera = spriteStore[sa + 9] - spriteStore[sb + 9];
       if (camera !== 0) {
         return camera;
       }
 
       // zIndex
-      const z = spriteStore[sa + 12] - spriteStore[sb + 12];
+      const z = spriteStore[sa + 10] - spriteStore[sb + 10];
       if (z !== 0) {
         return z;
       }
@@ -53,7 +53,7 @@ export default class RenderSyncSystem {
       }
 
       // material
-      return spriteStore[sa + 10] - spriteStore[sb + 10];
+      return spriteStore[sa + 8] - spriteStore[sb + 8];
     });
   }
 }
