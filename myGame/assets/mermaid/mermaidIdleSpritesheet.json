@@ -1,0 +1,426 @@
+{
+  "frames": [
+    {
+      "filename": "mermaid_idle_0001",
+      "frame": {
+        "x": 1819,
+        "y": 2283,
+        "w": 486,
+        "h": 746,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 429,
+        "trimOffsetY": 326
+      }
+    },
+    {
+      "filename": "mermaid_idle_0002",
+      "frame": {
+        "x": 1785,
+        "y": 1520,
+        "w": 477,
+        "h": 734,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 434,
+        "trimOffsetY": 323
+      }
+    },
+    {
+      "filename": "mermaid_idle_0003",
+      "frame": {
+        "x": 439,
+        "y": 758,
+        "w": 471,
+        "h": 719,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 436,
+        "trimOffsetY": 324
+      }
+    },
+    {
+      "filename": "mermaid_idle_0004",
+      "frame": {
+        "x": 1813,
+        "y": 758,
+        "w": 465,
+        "h": 727,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 440,
+        "trimOffsetY": 321
+      }
+    },
+    {
+      "filename": "mermaid_idle_0005",
+      "frame": {
+        "x": 910,
+        "y": 758,
+        "w": 459,
+        "h": 732,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 441,
+        "trimOffsetY": 320
+      }
+    },
+    {
+      "filename": "mermaid_idle_0006",
+      "frame": {
+        "x": 3067,
+        "y": 0,
+        "w": 452,
+        "h": 735,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 446,
+        "trimOffsetY": 319
+      }
+    },
+    {
+      "filename": "mermaid_idle_0007",
+      "frame": {
+        "x": 1741,
+        "y": 0,
+        "w": 453,
+        "h": 732,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 447,
+        "trimOffsetY": 319
+      }
+    },
+    {
+      "filename": "mermaid_idle_0008",
+      "frame": {
+        "x": 2194,
+        "y": 0,
+        "w": 446,
+        "h": 739,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 454,
+        "trimOffsetY": 319
+      }
+    },
+    {
+      "filename": "mermaid_idle_0009",
+      "frame": {
+        "x": 1374,
+        "y": 2283,
+        "w": 445,
+        "h": 781,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 458,
+        "trimOffsetY": 278
+      }
+    },
+    {
+      "filename": "mermaid_idle_0010",
+      "frame": {
+        "x": 3519,
+        "y": 0,
+        "w": 439,
+        "h": 749,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 463,
+        "trimOffsetY": 312
+      }
+    },
+    {
+      "filename": "mermaid_idle_0011",
+      "frame": {
+        "x": 862,
+        "y": 0,
+        "w": 438,
+        "h": 742,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 463,
+        "trimOffsetY": 310
+      }
+    },
+    {
+      "filename": "mermaid_idle_0012",
+      "frame": {
+        "x": 3159,
+        "y": 758,
+        "w": 439,
+        "h": 762,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 465,
+        "trimOffsetY": 305
+      }
+    },
+    {
+      "filename": "mermaid_idle_0013",
+      "frame": {
+        "x": 2278,
+        "y": 758,
+        "w": 440,
+        "h": 756,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 471,
+        "trimOffsetY": 307
+      }
+    },
+    {
+      "filename": "mermaid_idle_0014",
+      "frame": {
+        "x": 440,
+        "y": 1520,
+        "w": 440,
+        "h": 763,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 469,
+        "trimOffsetY": 299
+      }
+    },
+    {
+      "filename": "mermaid_idle_0015",
+      "frame": {
+        "x": 2718,
+        "y": 758,
+        "w": 441,
+        "h": 755,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 469,
+        "trimOffsetY": 288
+      }
+    },
+    {
+      "filename": "mermaid_idle_0016",
+      "frame": {
+        "x": 0,
+        "y": 1520,
+        "w": 440,
+        "h": 761,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 476,
+        "trimOffsetY": 296
+      }
+    },
+    {
+      "filename": "mermaid_idle_0017",
+      "frame": {
+        "x": 2262,
+        "y": 1520,
+        "w": 457,
+        "h": 756,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 473,
+        "trimOffsetY": 293
+      }
+    },
+    {
+      "filename": "mermaid_idle_0018",
+      "frame": {
+        "x": 1369,
+        "y": 758,
+        "w": 444,
+        "h": 747,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 479,
+        "trimOffsetY": 292
+      }
+    },
+    {
+      "filename": "mermaid_idle_0019",
+      "frame": {
+        "x": 0,
+        "y": 758,
+        "w": 439,
+        "h": 750,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 476,
+        "trimOffsetY": 295
+      }
+    },
+    {
+      "filename": "mermaid_idle_0020",
+      "frame": {
+        "x": 2640,
+        "y": 0,
+        "w": 427,
+        "h": 758,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 480,
+        "trimOffsetY": 294
+      }
+    },
+    {
+      "filename": "mermaid_idle_0021",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 427,
+        "h": 750,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 476,
+        "trimOffsetY": 300
+      }
+    },
+    {
+      "filename": "mermaid_idle_0022",
+      "frame": {
+        "x": 427,
+        "y": 0,
+        "w": 435,
+        "h": 743,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 466,
+        "trimOffsetY": 306
+      }
+    },
+    {
+      "filename": "mermaid_idle_0023",
+      "frame": {
+        "x": 1300,
+        "y": 0,
+        "w": 441,
+        "h": 742,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 459,
+        "trimOffsetY": 314
+      }
+    },
+    {
+      "filename": "mermaid_idle_0024",
+      "frame": {
+        "x": 1338,
+        "y": 1520,
+        "w": 447,
+        "h": 762,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 452,
+        "trimOffsetY": 311
+      }
+    },
+    {
+      "filename": "mermaid_idle_0025",
+      "frame": {
+        "x": 0,
+        "y": 2283,
+        "w": 452,
+        "h": 766,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 451,
+        "trimOffsetY": 309
+      }
+    },
+    {
+      "filename": "mermaid_idle_0026",
+      "frame": {
+        "x": 2719,
+        "y": 1520,
+        "w": 454,
+        "h": 759,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 449,
+        "trimOffsetY": 312
+      }
+    },
+    {
+      "filename": "mermaid_idle_0027",
+      "frame": {
+        "x": 918,
+        "y": 2283,
+        "w": 456,
+        "h": 766,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 445,
+        "trimOffsetY": 312
+      }
+    },
+    {
+      "filename": "mermaid_idle_0028",
+      "frame": {
+        "x": 880,
+        "y": 1520,
+        "w": 458,
+        "h": 748,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 440,
+        "trimOffsetY": 311
+      }
+    },
+    {
+      "filename": "mermaid_idle_0029",
+      "frame": {
+        "x": 2305,
+        "y": 2283,
+        "w": 465,
+        "h": 804,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 433,
+        "trimOffsetY": 269
+      }
+    },
+    {
+      "filename": "mermaid_idle_0030",
+      "frame": {
+        "x": 452,
+        "y": 2283,
+        "w": 466,
+        "h": 755,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 433,
+        "trimOffsetY": 316
+      }
+    },
+    {
+      "filename": "mermaid_idle_0031",
+      "frame": {
+        "x": 3173,
+        "y": 1520,
+        "w": 466,
+        "h": 750,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 431,
+        "trimOffsetY": 323
+      }
+    },
+    {
+      "filename": "mermaid_idle_0032",
+      "frame": {
+        "x": 2770,
+        "y": 2283,
+        "w": 957,
+        "h": 1172,
+        "pivotX": 691,
+        "pivotY": 588,
+        "trimOffsetX": 425,
+        "trimOffsetY": 4
+      }
+    }
+  ],
+  "meta": {
+    "size": {
+      "w": 3958,
+      "h": 3455
+    }
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Animation to JSON Converter (GUID Mode)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .textarea-group {
+            display: flex;
+            gap: 20px;
+        }
+        .field-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            font-weight: bold;
+            color: #495057;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            resize: vertical;
+        }
+        textarea:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .info-text {
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: -5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Unity 動畫文字轉 JSON 工具 (保留 GUID)</h2>
+    <p class="info-text">提示：此工具會直接將 GUID 作為 image 欄位輸出，並自動合併連續相同的影格。</p>
+
+    <div class="container">
+        <div class="textarea-group">
+            <div class="field-box">
+                <label for="inputYaml">貼上 Unity 動畫文字 (YAML):</label>
+                <textarea id="inputYaml" placeholder="  - time: 0&#10;    value: {fileID: 21300000, guid: 79b65593...}"></textarea>
+            </div>
+            
+            <div class="field-box">
+                <label for="outputJson">輸出結果 (JSON):</label>
+                <textarea id="outputJson" readonly placeholder="轉換後的 JSON 會顯示在這裡..."></textarea>
+            </div>
+        </div>
+
+        <button onclick="processConversion()">開始轉換</button>
+    </div>
+
+    <script>
+        function processConversion() {
+            const yamlText = document.getElementById('inputYaml').value;
+            const outputTextarea = document.getElementById('outputJson');
+
+            if (!yamlText.trim()) {
+                alert('請先輸入資料！');
+                return;
+            }
+
+            // 1. 解析 time 與 guid
+            const regex = /time:\s*([\d.]+)\s*[\s\S]*?guid:\s*([a-f0-9]{32})/g;
+            let match;
+            const rawFrames = [];
+
+            while ((match = regex.exec(yamlText)) !== null) {
+                rawFrames.push({
+                    time: parseFloat(match[1]),
+                    guid: match[2]
+                });
+            }
+
+            if (rawFrames.length === 0) {
+                outputTextarea.value = "錯誤：找不到任何有效的 time 與 guid 影格資料。";
+                return;
+            }
+
+            // 2. 合併連續相同的圖片並計算累計持續時間
+            const processedFrames = [];
+
+            for (let i = 0; i < rawFrames.length; i++) {
+                const currentFrame = rawFrames[i];
+                const currentGuid = currentFrame.guid; // 直接使用原始 guid
+                
+                // 往下找直到圖片的 GUID 發生改變為止
+                let nextDifferentIndex = i + 1;
+                while (nextDifferentIndex < rawFrames.length && rawFrames[nextDifferentIndex].guid === currentGuid) {
+                    nextDifferentIndex++;
+                }
+
+                // 計算持續時間（下一張新圖片的時間點）
+                let cumulativeDuration;
+                if (nextDifferentIndex < rawFrames.length) {
+                    cumulativeDuration = rawFrames[nextDifferentIndex].time;
+                } else {
+                    // 如果到了結尾，拿倒數第二個的間隔當成最後一格的長度推算
+                    const lastInterval = i > 0 ? (currentFrame.time - rawFrames[i - 1].time) : 0.041666668;
+                    cumulativeDuration = currentFrame.time + lastInterval;
+                }
+
+                processedFrames.push({
+                    image: currentGuid, // 這裡直接帶入 GUID 欄位
+                    cumulativeDuration: Number(cumulativeDuration.toFixed(8)) // 修正浮點數誤差
+                });
+
+                // 跳過已經被合併的重複影格
+                i = nextDifferentIndex - 1;
+            }
+
+            // 3. 包裝成最終格式並輸出
+            const finalResult = {
+                "intro": {
+                    "frames": processedFrames
+                }
+            };
+
+            outputTextarea.value = JSON.stringify(finalResult, null, 2);
+        }
+    </script>
+</body>
+</html>

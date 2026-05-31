@@ -1,0 +1,335 @@
+{
+  "frames": [
+    {
+      "filename": "mermaid_intro_0001",
+      "frame": {
+        "x": 1618,
+        "y": 1651,
+        "w": 560,
+        "h": 581,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 361,
+        "trimOffsetY": 414
+      }
+    },
+    {
+      "filename": "mermaid_intro_0002",
+      "frame": {
+        "x": 1072,
+        "y": 1651,
+        "w": 546,
+        "h": 560,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 366,
+        "trimOffsetY": 412
+      }
+    },
+    {
+      "filename": "mermaid_intro_0003",
+      "frame": {
+        "x": 0,
+        "y": 1651,
+        "w": 530,
+        "h": 553,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 373,
+        "trimOffsetY": 407
+      }
+    },
+    {
+      "filename": "mermaid_intro_0004",
+      "frame": {
+        "x": 530,
+        "y": 1651,
+        "w": 542,
+        "h": 580,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 368,
+        "trimOffsetY": 409
+      }
+    },
+    {
+      "filename": "mermaid_intro_0005",
+      "frame": {
+        "x": 3453,
+        "y": 836,
+        "w": 492,
+        "h": 644,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 380,
+        "trimOffsetY": 376
+      }
+    },
+    {
+      "filename": "mermaid_intro_0006",
+      "frame": {
+        "x": 2996,
+        "y": 836,
+        "w": 457,
+        "h": 678,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 382,
+        "trimOffsetY": 346
+      }
+    },
+    {
+      "filename": "mermaid_intro_0007",
+      "frame": {
+        "x": 2098,
+        "y": 836,
+        "w": 448,
+        "h": 719,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 392,
+        "trimOffsetY": 314
+      }
+    },
+    {
+      "filename": "mermaid_intro_0008",
+      "frame": {
+        "x": 783,
+        "y": 836,
+        "w": 432,
+        "h": 744,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 407,
+        "trimOffsetY": 285
+      }
+    },
+    {
+      "filename": "mermaid_intro_0009",
+      "frame": {
+        "x": 0,
+        "y": 836,
+        "w": 383,
+        "h": 755,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 464,
+        "trimOffsetY": 230
+      }
+    },
+    {
+      "filename": "mermaid_intro_0010",
+      "frame": {
+        "x": 3663,
+        "y": 0,
+        "w": 358,
+        "h": 782,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 478,
+        "trimOffsetY": 212
+      }
+    },
+    {
+      "filename": "mermaid_intro_0011",
+      "frame": {
+        "x": 2310,
+        "y": 0,
+        "w": 335,
+        "h": 836,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 192
+      }
+    },
+    {
+      "filename": "mermaid_intro_0012",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 322,
+        "h": 799,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 512,
+        "trimOffsetY": 196
+      }
+    },
+    {
+      "filename": "mermaid_intro_0013",
+      "frame": {
+        "x": 980,
+        "y": 0,
+        "w": 331,
+        "h": 804,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 506,
+        "trimOffsetY": 206
+      }
+    },
+    {
+      "filename": "mermaid_intro_0014",
+      "frame": {
+        "x": 2980,
+        "y": 0,
+        "w": 338,
+        "h": 804,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 497,
+        "trimOffsetY": 222
+      }
+    },
+    {
+      "filename": "mermaid_intro_0015",
+      "frame": {
+        "x": 2645,
+        "y": 0,
+        "w": 335,
+        "h": 813,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 501,
+        "trimOffsetY": 213
+      }
+    },
+    {
+      "filename": "mermaid_intro_0016a",
+      "frame": {
+        "x": 2546,
+        "y": 836,
+        "w": 450,
+        "h": 815,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 211
+      }
+    },
+    {
+      "filename": "mermaid_intro_0016b",
+      "frame": {
+        "x": 1642,
+        "y": 0,
+        "w": 334,
+        "h": 817,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 502,
+        "trimOffsetY": 210
+      }
+    },
+    {
+      "filename": "mermaid_intro_0016c",
+      "frame": {
+        "x": 322,
+        "y": 0,
+        "w": 329,
+        "h": 764,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 211
+      }
+    },
+    {
+      "filename": "mermaid_intro_0017",
+      "frame": {
+        "x": 651,
+        "y": 0,
+        "w": 329,
+        "h": 764,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 503,
+        "trimOffsetY": 211
+      }
+    },
+    {
+      "filename": "mermaid_intro_0018",
+      "frame": {
+        "x": 1311,
+        "y": 0,
+        "w": 331,
+        "h": 816,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 211
+      }
+    },
+    {
+      "filename": "mermaid_intro_0019",
+      "frame": {
+        "x": 1976,
+        "y": 0,
+        "w": 334,
+        "h": 818,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 501,
+        "trimOffsetY": 208
+      }
+    },
+    {
+      "filename": "mermaid_intro_0020",
+      "frame": {
+        "x": 3318,
+        "y": 0,
+        "w": 345,
+        "h": 771,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 497,
+        "trimOffsetY": 214
+      }
+    },
+    {
+      "filename": "mermaid_intro_0021",
+      "frame": {
+        "x": 383,
+        "y": 836,
+        "w": 400,
+        "h": 752,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 452,
+        "trimOffsetY": 225
+      }
+    },
+    {
+      "filename": "mermaid_intro_0022",
+      "frame": {
+        "x": 1215,
+        "y": 836,
+        "w": 441,
+        "h": 761,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 424,
+        "trimOffsetY": 230
+      }
+    },
+    {
+      "filename": "mermaid_intro_0023",
+      "frame": {
+        "x": 1656,
+        "y": 836,
+        "w": 442,
+        "h": 736,
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 428,
+        "trimOffsetY": 235
+      }
+    }
+  ],
+  "meta": {
+    "size": {
+      "w": 4021,
+      "h": 2232
+    }
+  }
+}

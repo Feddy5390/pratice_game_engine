@@ -1,0 +1,235 @@
+{
+  "intro": {
+    "frames": [
+      {
+        "image": "mermaid_intro_0001",
+        "cumulativeDuration": 0.04166667
+      },
+      {
+        "image": "mermaid_intro_0002",
+        "cumulativeDuration": 0.08333334
+      },
+      {
+        "image": "mermaid_intro_0003",
+        "cumulativeDuration": 0.125
+      },
+      {
+        "image": "mermaid_intro_0004",
+        "cumulativeDuration": 0.16666667
+      },
+      {
+        "image": "mermaid_intro_0001",
+        "cumulativeDuration": 0.20833334
+      },
+      {
+        "image": "mermaid_intro_0002",
+        "cumulativeDuration": 0.25
+      },
+      {
+        "image": "mermaid_intro_0005",
+        "cumulativeDuration": 0.29166666
+      },
+      {
+        "image": "mermaid_intro_0006",
+        "cumulativeDuration": 0.33333334
+      },
+      {
+        "image": "mermaid_intro_0007",
+        "cumulativeDuration": 0.375
+      },
+      {
+        "image": "mermaid_intro_0008",
+        "cumulativeDuration": 0.41666666
+      },
+      {
+        "image": "mermaid_intro_0009",
+        "cumulativeDuration": 0.45833334
+      },
+      {
+        "image": "mermaid_intro_0010",
+        "cumulativeDuration": 0.5
+      },
+      {
+        "image": "mermaid_intro_0011",
+        "cumulativeDuration": 0.5416667
+      },
+      {
+        "image": "mermaid_intro_0012",
+        "cumulativeDuration": 0.5833333
+      },
+      {
+        "image": "mermaid_intro_0013",
+        "cumulativeDuration": 0.625
+      },
+      {
+        "image": "mermaid_intro_0014",
+        "cumulativeDuration": 0.6666667
+      },
+      {
+        "image": "mermaid_intro_0015",
+        "cumulativeDuration": 0.7083333
+      },
+      {
+        "image": "mermaid_intro_0016a",
+        "cumulativeDuration": 0.7916667
+      },
+      {
+        "image": "mermaid_intro_0016b",
+        "cumulativeDuration": 0.8333333
+      },
+      {
+        "image": "mermaid_intro_0016c",
+        "cumulativeDuration": 0.9166667
+      },
+      {
+        "image": "mermaid_intro_0017",
+        "cumulativeDuration": 0.9583333
+      },
+      {
+        "image": "mermaid_intro_0016a",
+        "cumulativeDuration": 1
+      },
+      {
+        "image": "mermaid_intro_0016b",
+        "cumulativeDuration": 1.0416666
+      },
+      {
+        "image": "mermaid_intro_0016c",
+        "cumulativeDuration": 1.125
+      },
+      {
+        "image": "mermaid_intro_0017",
+        "cumulativeDuration": 1.1666666
+      },
+      {
+        "image": "mermaid_intro_0016a",
+        "cumulativeDuration": 1.25
+      },
+      {
+        "image": "mermaid_intro_0018",
+        "cumulativeDuration": 1.3333334
+      },
+      {
+        "image": "mermaid_intro_0019",
+        "cumulativeDuration": 1.4166666
+      },
+      {
+        "image": "mermaid_intro_0016a",
+        "cumulativeDuration": 1.5
+      },
+      {
+        "image": "mermaid_intro_0020",
+        "cumulativeDuration": 1.5416666
+      },
+      {
+        "image": "mermaid_intro_0021",
+        "cumulativeDuration": 1.5833334
+      },
+      {
+        "image": "mermaid_intro_0022",
+        "cumulativeDuration": 1.625
+      },
+      {
+        "image": "mermaid_intro_0023",
+        "cumulativeDuration": 1.6666666
+      },
+      {
+        "image": "mermaid_idle_0009",
+        "cumulativeDuration": 1.7083334
+      },
+      {
+        "image": "mermaid_idle_0010",
+        "cumulativeDuration": 1.75
+      },
+      {
+        "image": "mermaid_idle_0011",
+        "cumulativeDuration": 1.7916666
+      },
+      {
+        "image": "mermaid_idle_0012",
+        "cumulativeDuration": 1.8333334
+      },
+      {
+        "image": "mermaid_idle_0013",
+        "cumulativeDuration": 1.875
+      },
+      {
+        "image": "mermaid_idle_0014",
+        "cumulativeDuration": 1.9166666
+      },
+      {
+        "image": "mermaid_idle_0015",
+        "cumulativeDuration": 1.9583334
+      },
+      {
+        "image": "mermaid_idle_0016",
+        "cumulativeDuration": 2
+      },
+      {
+        "image": "mermaid_idle_0017",
+        "cumulativeDuration": 2.0416667
+      },
+      {
+        "image": "mermaid_idle_0018",
+        "cumulativeDuration": 2.0833333
+      },
+      {
+        "image": "mermaid_idle_0019",
+        "cumulativeDuration": 2.125
+      },
+      {
+        "image": "mermaid_idle_0020",
+        "cumulativeDuration": 2.1666667
+      },
+      {
+        "image": "mermaid_idle_0021",
+        "cumulativeDuration": 2.2083333
+      },
+      {
+        "image": "mermaid_idle_0022",
+        "cumulativeDuration": 2.25
+      },
+      {
+        "image": "mermaid_idle_0023",
+        "cumulativeDuration": 2.2916667
+      },
+      {
+        "image": "mermaid_idle_0024",
+        "cumulativeDuration": 2.3333333
+      },
+      {
+        "image": "mermaid_idle_0025",
+        "cumulativeDuration": 2.375
+      },
+      {
+        "image": "mermaid_idle_0026",
+        "cumulativeDuration": 2.4166667
+      },
+      {
+        "image": "mermaid_idle_0027",
+        "cumulativeDuration": 2.4583333
+      },
+      {
+        "image": "mermaid_idle_0028",
+        "cumulativeDuration": 2.5
+      },
+      {
+        "image": "mermaid_idle_0029",
+        "cumulativeDuration": 2.5416667
+      },
+      {
+        "image": "mermaid_idle_0030",
+        "cumulativeDuration": 2.5833333
+      },
+      {
+        "image": "mermaid_idle_0031",
+        "cumulativeDuration": 2.625
+      },
+      {
+        "image": "mermaid_idle_0032",
+        "cumulativeDuration": 2.6666667
+      }
+    ],
+    "loop": false
+  }
+}
