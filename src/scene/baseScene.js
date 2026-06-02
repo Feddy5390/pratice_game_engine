@@ -39,6 +39,12 @@ export default class BaseScene {
     engine.materialManager.clear();
 
     console.log(`[場景清除] texture clear...`);
-    engine.textureManager.clear();
+    engine._textureManager.clear();
+
+    console.log(`[場景清除] animation clear...`);
+    engine.animationManager.clear();
+
+    console.log(`[場景清除] Atlas clear...`);
+    engine.atlasManager.clear();
   }
 }

@@ -9,15 +9,15 @@ export default class ResourceManager {
 
   async _load() {
     const promises = [];
-    for (var [key, src] of this._pending) {
-      console.log(`[資源加載] ${key} - ${src}`);
-      const promise = this._loader(key, src);
+
+    for (var [resourceName, src] of this._pending) {
+      console.log(`[資源加載] ${resourceName} - ${src}`);
+      const promise = this._loader(resourceName, src);
       promises.push(promise);
     }
 
     await Promise.all(promises);
 
-    // 清空待載入清單，避免重複載入
     this._pending.clear();
   }
 
@@ -34,7 +34,7 @@ export default class ResourceManager {
     });
   }
 
-  async _loader(key, src) {
+  async _loader(resourceName, src) {
     try {
       src = `${this._rootDir}/${src}`;
       const response = await fetch(src);
@@ -58,23 +58,23 @@ export default class ResourceManager {
         data = await response.blob();
       }
 
-      this._resources.set(key, data);
+      this._resources.set(resourceName, data);
     } catch (error) {
       throw new Error(`資源載入失敗: ${src}`);
     }
   }
 
-  get(name) {
-    return this._resources.get(name);
+  get(resourceName) {
+    return this._resources.get(resourceName);
   }
 
-  load(resource) {
-    for (const [name, path] of Object.entries(resource)) {
-      if (this._resources.has(name)) {
+  load(resources) {
+    for (const [resourceName, path] of Object.entries(resources)) {
+      if (this._resources.has(resourceName)) {
         return;
       }
 
-      this._pending.set(name, path);
+      this._pending.set(resourceName, path);
     }
   }
 

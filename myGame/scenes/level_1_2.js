@@ -3,7 +3,9 @@ import MovementSystem from '../scripts/movement.js';
 
 export class Level_1_2 extends BaseScene {
   mainCamera;
-  cuphead;
+  mermaid;
+  loop = 0;
+  state = 'introLoop';
 
   constructor(engine) {
     super(engine, 101);
@@ -17,20 +19,23 @@ export class Level_1_2 extends BaseScene {
       mermaidIdleTexture: 'myGame/assets/mermaid/mermaidIdleTexture.png',
       mermaidIntroTexture: 'myGame/assets/mermaid/mermaidIntroTexture.png',
       mermaidIdleSpritesheet: 'myGame/assets/mermaid/mermaidIdleSpritesheet.json',
-      mermaidIntroSpritesheet: 'myGame/assets/cuphead/mermaidIntroSpritesheet.json',
+      mermaidIntroSpritesheet: 'myGame/assets/mermaid/mermaidIntroSpritesheet.json',
       mermaidAnims: 'myGame/assets/mermaid/mermaidAnims.json',
     });
 
     // 註冊圖集
-    engine.atlasManager.load('cupheadAtlas', {
-      json: 'cupheadSpritesheet',
-      image: 'cupheadTexture',
+    engine.atlasManager.load({
+      imageName: 'mermaidIntroTexture',
+      jsonName: 'mermaidIntroSpritesheet',
+    });
+    engine.atlasManager.load({
+      imageName: 'mermaidIdleTexture',
+      jsonName: 'mermaidIdleSpritesheet',
     });
 
     // 註冊動畫
-    engine.animationManager.load('cuphead', {
-      atlas: 'cupheadAtlas',
-      clip: 'cupheadAnims',
+    engine.animationManager.load('mermaid', {
+      jsonName: 'mermaidAnims',
     });
 
     // 加入 component
@@ -76,106 +81,128 @@ export class Level_1_2 extends BaseScene {
     this.mainCamera = engine.cameraManager.get(mainCameraId);
 
     // 取得 atlas
-    const cupheadAtlas = engine.atlasManager.get('cupheadAtlas');
-    const cupheadSprite = cupheadAtlas.getSprite('cuphead_idle_0001');
+    const mermaidAtlas1 = engine.atlasManager.getSprite('mermaid_idle_0009');
+    const mermaidAtlas2 = engine.atlasManager.getSprite('mermaid_intro_0023');
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
-    const material = engine.materialManager.get(materialId);
-    material.setTexture('u_atlas', cupheadAtlas.texture);
 
     // 創建實體
-    this.cuphead = this.world.createEntity();
+    this.mermaid = this.world.createEntity();
     // x, y, rotation, scaleX, scaleY, a_flipX, a_flipY
-    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
-    // u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
-    this.world.addComponent(this.cuphead, 'SPRITE', [
-      cupheadSprite.u0,
-      cupheadSprite.v0,
-      cupheadSprite.du,
-      cupheadSprite.dv,
-      0,
-      0,
-      0,
-      0,
+    this.world.addComponent(this.mermaid, 'TRANSFORM', [0, 50, 0, 1, 1, 1, 1]);
+    // textureId, u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
+    this.world.addComponent(this.mermaid, 'SPRITE', [
+      mermaidAtlas1.textureId,
+      mermaidAtlas1.u0,
+      mermaidAtlas1.v0,
+      mermaidAtlas1.du,
+      mermaidAtlas1.dv,
+      mermaidAtlas1.width,
+      mermaidAtlas1.height,
+      mermaidAtlas1.pivotInTrimX,
+      mermaidAtlas1.pivotInTrimY,
       materialId,
       mainCameraId,
       1,
     ]);
-    this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
-    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.duck');
-    this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
+    this.world.addComponent(this.mermaid, 'VELOCITY', [0, 0]);
+    // const anim = engine.animationManager.get('mermaid.intro');
+    // this.world.addComponent(this.mermaid, 'ANIMATION', [anim.id, 0, 0, 0]);
+
+    // test
+    const test = this.world.createEntity();
+    this.world.addComponent(test, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    this.world.addComponent(test, 'SPRITE', [
+      mermaidAtlas2.textureId,
+      mermaidAtlas2.u0,
+      mermaidAtlas2.v0,
+      mermaidAtlas2.du,
+      mermaidAtlas2.dv,
+      mermaidAtlas2.width,
+      mermaidAtlas2.height,
+      mermaidAtlas2.pivotInTrimX,
+      mermaidAtlas2.pivotInTrimY,
+      materialId,
+      mainCameraId,
+      1,
+    ]);
   }
 
   update(dt) {
     const engine = this.engine;
     const { input } = engine;
-
-    // 1. 取得玩家目前的動畫狀態，避免每影格重複 addComponent 導致動畫卡死
-    const currentAnim = this.world.getComponent(this.cuphead, 'ANIMATION');
-    const currentAnimId = currentAnim ? currentAnim[0] : null;
-    const cupheadTransform = this.world.getComponent(this.cuphead, 'TRANSFORM');
+    const cupheadTransform = this.world.getComponent(this.mermaid, 'TRANSFORM');
 
     let vx = 0;
     let vy = 0;
-    let targetAnimId = null;
-    let flipX = cupheadTransform[5];
 
     // 2. 判斷水平移動與動畫
     if (input.isKeyPressed('right')) {
-      const { id } = engine.animationManager.get('cuphead.run');
-      targetAnimId = id;
-      vx = 600;
-      flipX = 1;
+      cupheadTransform[0] -= 1;
     } else if (input.isKeyPressed('left')) {
-      const { id } = engine.animationManager.get('cuphead.run');
-      targetAnimId = id;
-      vx = -600; // 修正往左的速度，與往右對稱（原本 -50 太慢）
-      flipX = -1;
-    } else {
-      const { id } = engine.animationManager.get('cuphead.idle');
-      targetAnimId = id;
+      cupheadTransform[0] += 1;
     }
 
     // 判斷垂直移動
     if (input.isKeyPressed('up')) {
-      // vy = 600; // 配合世界座標方向調整，通常向上是正
+      cupheadTransform[1] += 1;
     } else if (input.isKeyPressed('down')) {
-      const { id } = engine.animationManager.get('cuphead.duck');
-      targetAnimId = id;
-      // vy = -600;
+      cupheadTransform[1] -= 1;
     }
 
-    // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
-    if (targetAnimId !== null && targetAnimId !== currentAnimId) {
-      this.world.addComponent(this.cuphead, 'ANIMATION', [targetAnimId, 0, 0, 0]);
-    }
+    console.log(cupheadTransform[1])
 
-    // 更新速度
-    this.world.setComponent(this.cuphead, 'VELOCITY', [vx, vy]);
-
-    // ----------------------------------------------------
-    // 4. 自動鏡頭跟隨：讓螢幕跟著玩家動
-    // ----------------------------------------------------
-
-    if (cupheadTransform) {
-      const playerX = cupheadTransform[0]; // 取得玩家最新世界座標 X
-      const playerY = cupheadTransform[1]; // 取得玩家最新世界座標 Y
-
-      cupheadTransform[5] = flipX; // 這裡的 flipX 是你上面判斷左右按鍵得到的 1 或 -1
-      // cupheadTransform[6] = flipY; // 如果有垂直翻轉需求才開
-
-      // 3. 把修改後的陣列重新同步回 ECS 的 Store 中
-      this.world.setComponent(this.cuphead, 'TRANSFORM', cupheadTransform);
-
-      this.mainCamera.setWcCenter(playerX, playerY);
-    }
-
-    // 原本的手動相機縮放保留
-    if (input.isKeyPressed('q')) {
-      this.mainCamera.incZoom(5 * dt); // 乘以 dt 縮放才會平滑
-    } else if (input.isKeyPressed('e')) {
-      this.mainCamera.incZoom(-5 * dt);
-    }
+    this.world.setComponent(this.mermaid, 'TRANSFORM', cupheadTransform);
   }
+
+  // update(dt) {
+  //   const engine = this.engine;
+  //   const world = this.world;
+  //   const { input } = engine;
+
+  //   const currentAnim = world.getComponent(this.mermaid, 'ANIMATION');
+  //   const currentAnimId = currentAnim ? currentAnim[0] : null;
+  //   const cupheadTransform = world.getComponent(this.mermaid, 'TRANSFORM');
+
+  //   let vx = 0;
+  //   let vy = 0;
+  //   let targetAnimId = null;
+  //   let anim = null;
+  //   switch (this.state) {
+  //     case 'introLoop':
+  //       // vy = -250;
+  //       if (currentAnim[3] == 1) {
+  //         anim = engine.animationManager.get('mermaid.introLoop');
+  //         targetAnimId = anim.id;
+
+  //         this.loop++;
+  //         if (this.loop == 12) {
+  //           this.state = 'intro';
+  //           this.loop = 0;
+  //         }
+  //       }
+
+  //       break;
+
+  //     case 'intro':
+  //       if (this.loop == 1) {
+  //         return;
+  //       }
+  //       anim = engine.animationManager.get('mermaid.intro');
+  //       targetAnimId = anim.id;
+  //       this.loop++;
+  //       break;
+  //   }
+
+  //   // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
+  //   if (targetAnimId !== null) {
+  //     this.world.addComponent(this.mermaid, 'ANIMATION', [targetAnimId, 0, 0, 0]);
+  //   }
+
+  //   // console.log(vy)
+
+  //   // 更新速度
+  //   this.world.setComponent(this.mermaid, 'VELOCITY', [vx, vy]);
+  // }
 }

@@ -81,7 +81,7 @@ export default class Camera {
     const halfW = this._wcWidth / 2;
     const halfH = wcHeight / 2;
 
-    mat4.ortho(this._projectionMatrix, -halfW, halfW, halfH, -halfH, this._near, this._far);
+    mat4.ortho(this._projectionMatrix, -halfW, halfW, -halfH, halfH, this._near, this._far);
   }
 
   _updateVPMatrix() {

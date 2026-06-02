@@ -6,11 +6,11 @@ export default class Renderer {
   _dpr;
 
   _shaderManager;
-  _textureManager;
   _cameraManager;
   _meshManager;
   _uboManager;
   _materialManager;
+  _textureManager;
 
   _world;
   _entities; // 所有實體
@@ -26,24 +26,15 @@ export default class Renderer {
   _transform;
   _sprite;
 
-  _init(
-    gl,
-    shaderManager,
-    textureManager,
-    cameraManager,
-    meshManager,
-    uboManager,
-    materialManager,
-    dpr,
-  ) {
+  _init(gl, shaderManager, cameraManager, meshManager, uboManager, materialManager, textureManager, dpr) {
     this._gl = gl;
     this._dpr = dpr;
     this._shaderManager = shaderManager;
-    this._textureManager = textureManager;
     this._cameraManager = cameraManager;
     this._meshManager = meshManager;
     this._uboManager = uboManager;
     this._materialManager = materialManager;
+    this._textureManager = textureManager;
     this._instanceData = new Float32Array(this._maxBatchDraw * this._stride);
 
     this._shaderManager.add(
@@ -187,8 +178,9 @@ export default class Renderer {
     let i = 0;
     while (i < numEntity) {
       const fo = entities[i] * spriteStride;
-      const materialId = spriteStore[fo + 8];
-      const cameraId = spriteStore[fo + 9];
+      const textureId = spriteStore[fo];
+      const materialId = spriteStore[fo + 9];
+      const cameraId = spriteStore[fo + 10];
 
       let count = 0;
       let floatOffset = 0;
@@ -201,11 +193,16 @@ export default class Renderer {
 
         const targetEntityId = entities[j];
         const so = targetEntityId * spriteStride;
-        const targetMaterialId = spriteStore[so + 8];
-        const targetCameraId = spriteStore[so + 9];
+        const targetTextureId = spriteStore[so];
+        const targetMaterialId = spriteStore[so + 9];
+        const targetCameraId = spriteStore[so + 10];
 
         // 相機跟材質都相同才編入同一個 Batch
-        if (cameraId != targetCameraId || materialId != targetMaterialId) {
+        if (
+          textureId != targetTextureId ||
+          materialId != targetMaterialId ||
+          cameraId != targetCameraId
+        ) {
           break;
         }
 
@@ -222,16 +219,16 @@ export default class Renderer {
         // instanceData 索引：x, y, w, h, u0, v0, du, dv, rotation, pivotInTrimX, pivotInTrimY, flipX, flipY
         instanceData[floatOffset++] = prevX + (x - prevX) * interpolation; // x
         instanceData[floatOffset++] = prevY + (y - prevY) * interpolation; // y
-        instanceData[floatOffset++] = spriteStore[so + 4] * scaleX; // w
-        instanceData[floatOffset++] = spriteStore[so + 5] * scaleY; // h
-        instanceData[floatOffset++] = spriteStore[so]; // u0
-        instanceData[floatOffset++] = spriteStore[so + 1]; // v0
-        instanceData[floatOffset++] = spriteStore[so + 2]; // du
-        instanceData[floatOffset++] = spriteStore[so + 3]; // dv
+        instanceData[floatOffset++] = spriteStore[so + 5] * scaleX; // w
+        instanceData[floatOffset++] = spriteStore[so + 6] * scaleY; // h
+        instanceData[floatOffset++] = spriteStore[so + 1]; // u0
+        instanceData[floatOffset++] = spriteStore[so + 2]; // v0
+        instanceData[floatOffset++] = spriteStore[so + 3]; // du
+        instanceData[floatOffset++] = spriteStore[so + 4]; // dv
         instanceData[floatOffset++] =
           this._lerpAngle(prevRotation, rotation, interpolation) * (Math.PI / 180); // rotation
-        instanceData[floatOffset++] = spriteStore[so + 6]; // pivotInTrimX
-        instanceData[floatOffset++] = spriteStore[so + 7]; // pivotInTrimY
+        instanceData[floatOffset++] = spriteStore[so + 7]; // pivotInTrimX
+        instanceData[floatOffset++] = spriteStore[so + 8]; // pivotInTrimY
         instanceData[floatOffset++] = transformStore[to + 5]; // flipX
         instanceData[floatOffset++] = transformStore[to + 6]; // flipY
 
@@ -242,6 +239,7 @@ export default class Renderer {
       // ===================== 開始繪製此 Batch =====================
       const camera = this._cameraManager.get(cameraId);
       const material = this._materialManager.get(materialId);
+      const texture = this._textureManager.get(textureId);
 
       // 設定 viewport
       if (cameraId != lastCameraId) {
@@ -276,6 +274,8 @@ export default class Renderer {
         lastCameraId = cameraId;
       }
 
+      // console.log(instanceData);debugger
+
       // Buffer 數據上傳到 GPU
       this._instanceBuffer.update({ srcData: instanceData, length: floatOffset });
 
@@ -283,6 +283,7 @@ export default class Renderer {
       this._mesh.bind();
 
       // 綁定紋理與設定 Uniform
+      material.setTexture('u_atlas', texture);
       material.bind();
 
       // 執行實例化繪製

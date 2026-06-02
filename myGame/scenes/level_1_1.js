@@ -20,15 +20,14 @@ export class Level_1_1 extends BaseScene {
     });
 
     // 註冊圖集
-    engine.atlasManager.load('cupheadAtlas', {
-      json: 'cupheadSpritesheet',
-      image: 'cupheadTexture',
+    engine.atlasManager.load({
+      imageName: 'cupheadTexture',
+      jsonName: 'cupheadSpritesheet',
     });
 
     // 註冊動畫
     engine.animationManager.load('cuphead', {
-      atlas: 'cupheadAtlas',
-      clip: 'cupheadAnims',
+      jsonName: 'cupheadAnims',
     });
 
     // 加入 component
@@ -73,14 +72,9 @@ export class Level_1_1 extends BaseScene {
     });
     this.mainCamera = engine.cameraManager.get(mainCameraId);
 
-    // 取得 atlas
-    const cupheadAtlas = engine.atlasManager.get('cupheadAtlas');
-    const cupheadSprite = cupheadAtlas.getSprite('cuphead_idle_0001');
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
-    const material = engine.materialManager.get(materialId);
-    material.setTexture('u_atlas', cupheadAtlas.texture);
 
     // 創建實體
     this.cuphead = this.world.createEntity();
@@ -88,10 +82,11 @@ export class Level_1_1 extends BaseScene {
     this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
     // u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
     this.world.addComponent(this.cuphead, 'SPRITE', [
-      cupheadSprite.u0,
-      cupheadSprite.v0,
-      cupheadSprite.du,
-      cupheadSprite.dv,
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       0,
       0,
@@ -101,8 +96,6 @@ export class Level_1_1 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
-    const { id: cupheadIdleAnimId } = engine.animationManager.get('cuphead.duck');
-    this.world.addComponent(this.cuphead, 'ANIMATION', [cupheadIdleAnimId, 0, 0, 0]);
   }
 
   update(dt) {
