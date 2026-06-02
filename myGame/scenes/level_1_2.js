@@ -132,7 +132,7 @@ export class Level_1_2 extends BaseScene {
 
   cameraUpdate(dt) {
     const engine = this.engine;
-    const moveSpeed = 20;
+    const moveSpeed = 40;
     const { input } = engine;
     // 原本的手動相機縮放保留
     if (input.isKeyPressed('q')) {
@@ -140,6 +140,7 @@ export class Level_1_2 extends BaseScene {
     } else if (input.isKeyPressed('e')) {
       this.mainCamera.incZoom(-800 * dt);
     }
+    console.log(1);
 
     // 移動
     if (input.isKeyPressed('w')) {
@@ -216,7 +217,7 @@ export class Level_1_2 extends BaseScene {
 
       case 'intro':
         if (currentAnim[3] != 1) {
-          return;
+          break;
         }
 
         anim = engine.animationManager.get('mermaid.intro');
@@ -229,10 +230,10 @@ export class Level_1_2 extends BaseScene {
         break;
       case 'idle':
         if (currentAnim[3] != 1) {
-          return;
+          break;
         }
         if (this.loop > 0) {
-          return;
+          break;
         }
         anim = engine.animationManager.get('mermaid.idle');
         targetAnimId = anim.id;
@@ -248,5 +249,7 @@ export class Level_1_2 extends BaseScene {
 
     // 更新速度
     this.world.setComponent(this.mermaid, 'VELOCITY', [vx, vy]);
+
+    this.cameraUpdate(dt);
   }
 }

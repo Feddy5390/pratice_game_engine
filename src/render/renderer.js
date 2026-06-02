@@ -336,7 +336,7 @@ export default class Renderer {
     }
 
     // 輔助線
-    // this._debugRenderer();
+    this._debugRenderer();
   }
 
   _debugRenderer() {
