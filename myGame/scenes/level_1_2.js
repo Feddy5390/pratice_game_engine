@@ -91,7 +91,7 @@ export class Level_1_2 extends BaseScene {
     // 創建實體
     this.mermaid = this.world.createEntity();
     // x, y, rotation, scaleX, scaleY, a_flipX, a_flipY
-    this.world.addComponent(this.mermaid, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    this.world.addComponent(this.mermaid, 'TRANSFORM', [0, -500, 0, 1, 1, 1, 1]);
     // textureId, u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
     this.world.addComponent(this.mermaid, 'SPRITE', [
       mermaidAtlas1.textureId,
@@ -108,7 +108,7 @@ export class Level_1_2 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.mermaid, 'VELOCITY', [0, 0]);
-    const anim = engine.animationManager.get('mermaid.idle');
+    const anim = engine.animationManager.get('mermaid.introLoop');
     this.world.addComponent(this.mermaid, 'ANIMATION', [anim.id, 0, 0, 0]);
 
     // test
@@ -184,51 +184,69 @@ export class Level_1_2 extends BaseScene {
   //   this.cameraUpdate(dt);
   // }
 
-  // update(dt) {
-  //   const engine = this.engine;
-  //   const world = this.world;
-  //   const { input } = engine;
+  update(dt) {
+    const engine = this.engine;
+    const world = this.world;
+    const { input } = engine;
 
-  //   const currentAnim = world.getComponent(this.mermaid, 'ANIMATION');
-  //   const currentAnimId = currentAnim ? currentAnim[0] : null;
-  //   const cupheadTransform = world.getComponent(this.mermaid, 'TRANSFORM');
+    const currentAnim = world.getComponent(this.mermaid, 'ANIMATION');
+    const currentAnimId = currentAnim ? currentAnim[0] : null;
+    const cupheadTransform = world.getComponent(this.mermaid, 'TRANSFORM');
 
-  //   let vx = 0;
-  //   let vy = 0;
-  //   let targetAnimId = null;
-  //   let anim = null;
-  //   switch (this.state) {
-  //     case 'introLoop':
-  //       vy = 250;
-  //       if (currentAnim[3] == 1) {
-  //         anim = engine.animationManager.get('mermaid.introLoop');
-  //         targetAnimId = anim.id;
+    let vx = 0;
+    let vy = 0;
+    let targetAnimId = null;
+    let anim = null;
+    let time = 0;
+    switch (this.state) {
+      case 'introLoop':
+        vy = 250;
+        if (currentAnim[3] == 1) {
+          anim = engine.animationManager.get('mermaid.introLoop');
+          targetAnimId = anim.id;
 
-  //         this.loop++;
-  //         if (this.loop == 12) {
-  //           this.state = 'intro';
-  //           this.loop = 0;
-  //         }
-  //       }
+          this.loop++;
+          if (this.loop == 12) {
+            this.state = 'intro';
+            this.loop = 0;
+          }
+        }
 
-  //       break;
+        break;
 
-  //     case 'intro':
-  //       if (this.loop == 1) {
-  //         return;
-  //       }
-  //       anim = engine.animationManager.get('mermaid.intro');
-  //       targetAnimId = anim.id;
-  //       this.loop++;
-  //       break;
-  //   }
+      case 'intro':
+        if (currentAnim[3] != 1) {
+          return;
+        }
 
-  //   // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
-  //   if (targetAnimId !== null) {
-  //     this.world.addComponent(this.mermaid, 'ANIMATION', [targetAnimId, 0, 0, 0]);
-  //   }
+        anim = engine.animationManager.get('mermaid.intro');
+        targetAnimId = anim.id;
+        this.loop++;
+        if (this.loop == 1) {
+          this.state = 'idle';
+          this.loop = 0;
+        }
+        break;
+      case 'idle':
+        if (currentAnim[3] != 1) {
+          return;
+        }
+        if (this.loop > 0) {
+          return;
+        }
+        anim = engine.animationManager.get('mermaid.idle');
+        targetAnimId = anim.id;
+        time = 0.33333334;
+        this.loop++;
+        break;
+    }
 
-  //   // 更新速度
-  //   this.world.setComponent(this.mermaid, 'VELOCITY', [vx, vy]);
-  // }
+    // 3. 只有當動畫真的改變時，才更新 ANIMATION Component
+    if (targetAnimId !== null) {
+      this.world.addComponent(this.mermaid, 'ANIMATION', [targetAnimId, time, 0, 0]);
+    }
+
+    // 更新速度
+    this.world.setComponent(this.mermaid, 'VELOCITY', [vx, vy]);
+  }
 }
