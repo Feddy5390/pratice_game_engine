@@ -26,7 +26,21 @@ export default class Renderer {
   _transform;
   _sprite;
 
-  _init(gl, shaderManager, cameraManager, meshManager, uboManager, materialManager, textureManager, dpr) {
+  // debugge
+  _debugData;
+  _debugMesh;
+  _debugBuffer;
+
+  _init(
+    gl,
+    shaderManager,
+    cameraManager,
+    meshManager,
+    uboManager,
+    materialManager,
+    textureManager,
+    dpr
+  ) {
     this._gl = gl;
     this._dpr = dpr;
     this._shaderManager = shaderManager;
@@ -141,6 +155,35 @@ export default class Renderer {
       indexUsage: gl.STATIC_DRAW,
     });
     this._mesh = this._meshManager.get(meshId);
+
+    // debugger
+    this._debugData = new Float32Array(8);
+    this._shaderManager.add(
+      'debugLine',
+      'src/builtin/shader/debug/vertexShader.glsl',
+      'src/builtin/shader/debug/fragShader.glsl',
+    );
+
+    this._debugBuffer = new GPUBuffer(gl, 8 * 4, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+
+    const debugMeshId = this._meshManager.create({
+      drawMode: gl.LINES,
+      buffers: [
+        {
+          buffer: this._debugBuffer,
+          layout: new VertexLayout().add({
+            // a_instanceOffset
+            location: 0,
+            size: 2,
+            type: gl.FLOAT,
+            stride: 0,
+            offset: 0,
+            divisor: 0,
+          }),
+        },
+      ],
+    });
+    this._debugMesh = this._meshManager.get(debugMeshId);
   }
 
   _lerpAngle(a, b, t) {
@@ -274,8 +317,6 @@ export default class Renderer {
         lastCameraId = cameraId;
       }
 
-      // console.log(instanceData);debugger
-
       // Buffer 數據上傳到 GPU
       this._instanceBuffer.update({ srcData: instanceData, length: floatOffset });
 
@@ -293,5 +334,36 @@ export default class Renderer {
       // 跳到下一個 batch 起點
       i = j;
     }
+
+    // 輔助線
+    // this._debugRenderer();
+  }
+
+  _debugRenderer() {
+    const gl = this._gl;
+
+    const debugData = this._debugData;
+    const debugMaterial = this._materialManager.get(1);
+
+    let i = 0;
+    debugData[i++] = 750;
+    debugData[i++] = 0;
+    debugData[i++] = -750;
+    debugData[i++] = 0;
+    debugData[i++] = 0;
+    debugData[i++] = 450;
+    debugData[i++] = 0;
+    debugData[i++] = -450;
+
+    // Buffer 數據上傳到 GPU
+    this._debugBuffer.update({ srcData: debugData, length: 0 });
+
+    // 綁定 VAO
+    this._debugMesh.bind();
+
+    // 綁定紋理與設定 Uniform
+    debugMaterial.bind();
+
+    gl.drawArrays(gl.LINES, 0, 4);
   }
 }

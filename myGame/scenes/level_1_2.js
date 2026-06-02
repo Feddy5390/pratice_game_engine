@@ -73,8 +73,8 @@ export class Level_1_2 extends BaseScene {
 
     // 創建相機
     const mainCameraId = engine.cameraManager.add({
-      wcCenter: [0, 0],
-      wcWidth: 1700,
+      wcCenter: [300, 550],
+      wcWidth: 1500,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });
@@ -86,11 +86,12 @@ export class Level_1_2 extends BaseScene {
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
+    engine.materialManager.create('debugLine');
 
     // 創建實體
     this.mermaid = this.world.createEntity();
     // x, y, rotation, scaleX, scaleY, a_flipX, a_flipY
-    this.world.addComponent(this.mermaid, 'TRANSFORM', [0, 50, 0, 1, 1, 1, 1]);
+    this.world.addComponent(this.mermaid, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
     // textureId, u0, v0, du, dv, width, height, pivotInTrimX, pivotInTrimY, materialId, cameraId, zIndex
     this.world.addComponent(this.mermaid, 'SPRITE', [
       mermaidAtlas1.textureId,
@@ -107,54 +108,81 @@ export class Level_1_2 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.mermaid, 'VELOCITY', [0, 0]);
-    // const anim = engine.animationManager.get('mermaid.intro');
-    // this.world.addComponent(this.mermaid, 'ANIMATION', [anim.id, 0, 0, 0]);
+    const anim = engine.animationManager.get('mermaid.idle');
+    this.world.addComponent(this.mermaid, 'ANIMATION', [anim.id, 0, 0, 0]);
 
     // test
-    const test = this.world.createEntity();
-    this.world.addComponent(test, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
-    this.world.addComponent(test, 'SPRITE', [
-      mermaidAtlas2.textureId,
-      mermaidAtlas2.u0,
-      mermaidAtlas2.v0,
-      mermaidAtlas2.du,
-      mermaidAtlas2.dv,
-      mermaidAtlas2.width,
-      mermaidAtlas2.height,
-      mermaidAtlas2.pivotInTrimX,
-      mermaidAtlas2.pivotInTrimY,
-      materialId,
-      mainCameraId,
-      1,
-    ]);
+    // const test = this.world.createEntity();
+    // this.world.addComponent(test, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    // this.world.addComponent(test, 'SPRITE', [
+    //   mermaidAtlas2.textureId,
+    //   mermaidAtlas2.u0,
+    //   mermaidAtlas2.v0,
+    //   mermaidAtlas2.du,
+    //   mermaidAtlas2.dv,
+    //   mermaidAtlas2.width,
+    //   mermaidAtlas2.height,
+    //   mermaidAtlas2.pivotInTrimX,
+    //   mermaidAtlas2.pivotInTrimY,
+    //   materialId,
+    //   mainCameraId,
+    //   1,
+    // ]);
   }
 
-  update(dt) {
+  cameraUpdate(dt) {
     const engine = this.engine;
+    const moveSpeed = 20;
     const { input } = engine;
-    const cupheadTransform = this.world.getComponent(this.mermaid, 'TRANSFORM');
-
-    let vx = 0;
-    let vy = 0;
-
-    // 2. 判斷水平移動與動畫
-    if (input.isKeyPressed('right')) {
-      cupheadTransform[0] -= 1;
-    } else if (input.isKeyPressed('left')) {
-      cupheadTransform[0] += 1;
+    // 原本的手動相機縮放保留
+    if (input.isKeyPressed('q')) {
+      this.mainCamera.incZoom(800 * dt); // 乘以 dt 縮放才會平滑
+    } else if (input.isKeyPressed('e')) {
+      this.mainCamera.incZoom(-800 * dt);
     }
 
-    // 判斷垂直移動
-    if (input.isKeyPressed('up')) {
-      cupheadTransform[1] += 1;
-    } else if (input.isKeyPressed('down')) {
-      cupheadTransform[1] -= 1;
+    // 移動
+    if (input.isKeyPressed('w')) {
+      this.mainCamera.move(0, moveSpeed);
     }
-
-    console.log(cupheadTransform[1])
-
-    this.world.setComponent(this.mermaid, 'TRANSFORM', cupheadTransform);
+    if (input.isKeyPressed('x')) {
+      this.mainCamera.move(0, -moveSpeed);
+    }
+    if (input.isKeyPressed('a')) {
+      this.mainCamera.move(-moveSpeed, 0);
+    }
+    if (input.isKeyPressed('d')) {
+      this.mainCamera.move(moveSpeed, 0);
+    }
   }
+
+  // update(dt) {
+  //   const engine = this.engine;
+  //   const { input } = engine;
+  //   const cupheadTransform = this.world.getComponent(this.mermaid, 'TRANSFORM');
+
+  //   let vx = 0;
+  //   let vy = 0;
+
+  //   // 2. 判斷水平移動與動畫
+  //   if (input.isKeyPressed('right')) {
+  //     cupheadTransform[0] += 1;
+  //   } else if (input.isKeyPressed('left')) {
+  //     cupheadTransform[0] -= 1;
+  //   }
+
+  //   // 判斷垂直移動
+  //   if (input.isKeyPressed('up')) {
+  //     cupheadTransform[1] += 1;
+  //   } else if (input.isKeyPressed('down')) {
+  //     cupheadTransform[1] -= 1;
+  //   }
+
+  //   // console.log(cupheadTransform)
+  //   this.world.setComponent(this.mermaid, 'TRANSFORM', cupheadTransform);
+
+  //   this.cameraUpdate(dt);
+  // }
 
   // update(dt) {
   //   const engine = this.engine;
@@ -171,7 +199,7 @@ export class Level_1_2 extends BaseScene {
   //   let anim = null;
   //   switch (this.state) {
   //     case 'introLoop':
-  //       // vy = -250;
+  //       vy = 250;
   //       if (currentAnim[3] == 1) {
   //         anim = engine.animationManager.get('mermaid.introLoop');
   //         targetAnimId = anim.id;
@@ -199,8 +227,6 @@ export class Level_1_2 extends BaseScene {
   //   if (targetAnimId !== null) {
   //     this.world.addComponent(this.mermaid, 'ANIMATION', [targetAnimId, 0, 0, 0]);
   //   }
-
-  //   // console.log(vy)
 
   //   // 更新速度
   //   this.world.setComponent(this.mermaid, 'VELOCITY', [vx, vy]);

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sprite Atlas UV & Dump 合併工具 (修正版)</title>
+    <title>Sprite Atlas UV & Dump 合併工具 (精確原始浮點數版)</title>
     <style>
       body {
         font-family:
@@ -75,7 +75,7 @@
     </style>
   </head>
   <body>
-    <h2>Sprite Atlas UV & Dump 數據整合工具 (修正版)</h2>
+    <h2>Sprite Atlas UV & Dump 數據整合工具 (精確原始浮點數版)</h2>
 
     <div class="container">
       <div class="input-box">
@@ -84,7 +84,7 @@
       </div>
 
       <div class="input-box">
-        <label for="dumpInput">2. 貼入 AssetStudio 單張 Dump (自動逐個累加更新)</label>
+        <label for="dumpInput">2. 貼入 AssetStudio 單張 Dump (自動套用原始 textureRect 浮點數)</label>
         <textarea
           id="dumpInput"
           placeholder="請在此貼入從 AssetStudio 複製的單張 Sprite 傾印文字...&#10;貼入後會自動解析並清空此框。"
@@ -126,7 +126,6 @@
 
           tpFrames.forEach((tp) => {
             const cleanName = tp.filename.replace(/\.[^/.]+$/, '');
-
             const newFrame = {
               filename: cleanName,
               frame: {
@@ -175,19 +174,23 @@
 
         if (frameMap.has(dumpData.name)) {
           const targetFrame = frameMap.get(dumpData.name);
-          const h = targetFrame.h;
 
-          if (dumpData.rectW !== undefined && dumpData.texRectX !== undefined) {
-            // 套用公式
-            targetFrame.pivotX = Math.round(dumpData.rectW * dumpData.pivotXRatio);
-            targetFrame.pivotY = Math.round(dumpData.rectH * dumpData.pivotYRatio);
-            targetFrame.trimOffsetX = Math.round(dumpData.texRectX);
-            console.log(dumpData);
-            targetFrame.trimOffsetY = Math.round(dumpData.rectH - dumpData.texRectY - h);
+          // 🌟 核心修正：直接使用 Dump 中 Rectf textureRect 的原始浮點數覆蓋 frame 的幾何數據
+          if (dumpData.texRectX !== undefined && dumpData.texRectW !== undefined) {
+            
+            // 覆蓋原本整數的 x, y, w, h，改用最原始的 Dump 浮點數值
+            targetFrame.w = dumpData.texRectW;
+            targetFrame.h = dumpData.texRectH;
 
-            showStatus(`🔥 成功更新/填入: ${dumpData.name}`, '#4fc3f7');
+            // 保持其他輔助欄位的更新
+            targetFrame.pivotX = 0;
+            targetFrame.pivotY = 0;
+            targetFrame.trimOffsetX = dumpData.texRectX;
+            targetFrame.trimOffsetY = dumpData.texRectY;
+
+            showStatus(`🔥 成功套用原始 textureRect 浮點數更新: ${dumpData.name}`, '#4fc3f7');
           } else {
-            showStatus('⚠️ 解析成功但核心幾何欄位不完整。', '#ffb74d');
+            showStatus('⚠️ 解析成功，但該 Dump 文字中找不到完整的 Rectf textureRect 區塊。', '#ffb74d');
           }
 
           renderOutput();
@@ -247,10 +250,8 @@
             } else if (currentSection === 'textureRect') {
               if (line.startsWith('float x =')) result.texRectX = parseFloat(line.split('=')[1]);
               if (line.startsWith('float y =')) result.texRectY = parseFloat(line.split('=')[1]);
-              if (line.startsWith('float width ='))
-                result.texRectW = parseFloat(line.split('=')[1]);
-              if (line.startsWith('float height ='))
-                result.texRectH = parseFloat(line.split('=')[1]);
+              if (line.startsWith('float width =')) result.texRectW = parseFloat(line.split('=')[1]);
+              if (line.startsWith('float height =')) result.texRectH = parseFloat(line.split('=')[1]);
             }
 
             sectionLinesLeft--;
@@ -275,6 +276,7 @@
         el.style.color = color;
       }
 
+      // 複製到剪貼簿
       function copyToClipboard() {
         const copyText = document.getElementById('outputJson');
         if (!copyText.value) return;
