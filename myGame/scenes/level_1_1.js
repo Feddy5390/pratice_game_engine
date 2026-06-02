@@ -75,6 +75,7 @@ export class Level_1_1 extends BaseScene {
 
     // 創建材質
     const materialId = engine.materialManager.create('default');
+    engine.materialManager.create('debugLine');
 
     // 創建實體
     this.cuphead = this.world.createEntity();
