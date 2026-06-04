@@ -35,7 +35,7 @@ export default class Engine {
   _textureManager;
   _uboManager;
   _gameLoop;
-  _renderer;
+  renderer;
 
   _initWebGL(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -48,6 +48,9 @@ export default class Engine {
     // 啟動透明度
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    // 關閉深度測試
+    gl.disable(gl.DEPTH_TEST);
   }
 
   _initModule() {
@@ -63,7 +66,7 @@ export default class Engine {
     this._textureManager = new TextureManager();
     this._uboManager = new UBOmanager();
     this._gameLoop = new GameLoop();
-    this._renderer = new Renderer();
+    this.renderer = new Renderer();
 
     this.resourceManager._init(this._rootDir);
     this.atlasManager._init(this.resourceManager, this._textureManager);
@@ -73,7 +76,7 @@ export default class Engine {
       this.resourceManager,
       this._textureManager,
       this.shaderManager,
-      this._renderer,
+      this.renderer,
       this.atlasManager,
       this.animationManager,
     );
@@ -83,16 +86,16 @@ export default class Engine {
     this.animationManager._init(this.resourceManager, this.atlasManager);
     this._textureManager._init(this.gl, this.resourceManager);
     this._uboManager._init(this.gl);
-    this._gameLoop._init(this.sceneManager, this.cameraManager, this._renderer, this.input);
-    this._renderer._init(
+    this._gameLoop._init(this.sceneManager, this.cameraManager, this.renderer, this.input);
+    this.renderer._init(
       this.gl,
+      this._dpr,
       this.shaderManager,
       this.cameraManager,
       this.meshManager,
       this._uboManager,
       this.materialManager,
       this._textureManager,
-      this._dpr,
     );
   }
 

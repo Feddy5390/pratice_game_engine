@@ -16,21 +16,21 @@ export default class Material {
   }
 
   bind() {
-    this._shader.use();
+    const shader = this._shader;
+
+    shader.use();
 
     // 綁定紋理
     let slot = 0;
     for (const [uniformName, texture] of this._textures) {
       texture.bind(slot);
-
-      this._shader.setUniform1i(uniformName, slot);
-
+      shader.setUniform1i(uniformName, slot);
       slot++;
     }
 
     // 設定 Uniform
     for (const [uniformName, value] of this._uniforms) {
-      this._shader.setUniform(uniformName, value);
+      shader.setUniform(uniformName, value);
     }
   }
 }

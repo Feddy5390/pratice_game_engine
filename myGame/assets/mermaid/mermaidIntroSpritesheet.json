@@ -7,10 +7,10 @@
         "y": 1651,
         "w": 560,
         "h": 581,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 361.0761,
-        "trimOffsetY": 181.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 361,
+        "trimOffsetY": 181
       }
     },
     {
@@ -20,10 +20,10 @@
         "y": 1651,
         "w": 546,
         "h": 560,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 366.0111,
-        "trimOffsetY": 204.02675
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 366,
+        "trimOffsetY": 204
       }
     },
     {
@@ -33,10 +33,10 @@
         "y": 1651,
         "w": 530,
         "h": 553,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 373.02676,
-        "trimOffsetY": 216.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 373,
+        "trimOffsetY": 216
       }
     },
     {
@@ -46,10 +46,10 @@
         "y": 1651,
         "w": 542,
         "h": 580,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 368.0761,
-        "trimOffsetY": 187.02675
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 368,
+        "trimOffsetY": 187
       }
     },
     {
@@ -59,10 +59,10 @@
         "y": 836,
         "w": 492,
         "h": 644,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 380.02676,
-        "trimOffsetY": 156.04291
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 380,
+        "trimOffsetY": 156
       }
     },
     {
@@ -72,10 +72,10 @@
         "y": 836,
         "w": 457,
         "h": 678,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 382.02676,
-        "trimOffsetY": 152.02675
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 382,
+        "trimOffsetY": 152
       }
     },
     {
@@ -85,10 +85,10 @@
         "y": 836,
         "w": 448,
         "h": 719,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 392.0429,
-        "trimOffsetY": 143.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 392,
+        "trimOffsetY": 144
       }
     },
     {
@@ -98,10 +98,10 @@
         "y": 836,
         "w": 432,
         "h": 744,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 407.02676,
-        "trimOffsetY": 147.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 407,
+        "trimOffsetY": 147
       }
     },
     {
@@ -111,10 +111,10 @@
         "y": 836,
         "w": 383,
         "h": 755,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 464.0111,
-        "trimOffsetY": 191.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 464,
+        "trimOffsetY": 191
       }
     },
     {
@@ -124,10 +124,10 @@
         "y": 0,
         "w": 358,
         "h": 782,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 478.05133,
-        "trimOffsetY": 182.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 478,
+        "trimOffsetY": 182
       }
     },
     {
@@ -137,10 +137,10 @@
         "y": 0,
         "w": 335,
         "h": 836,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 504.0761,
-        "trimOffsetY": 148.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 148
       }
     },
     {
@@ -150,10 +150,10 @@
         "y": 0,
         "w": 322,
         "h": 799,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 512.0761,
-        "trimOffsetY": 181.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 512,
+        "trimOffsetY": 181
       }
     },
     {
@@ -163,10 +163,10 @@
         "y": 0,
         "w": 331,
         "h": 804,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 506.0761,
-        "trimOffsetY": 166.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 506,
+        "trimOffsetY": 166
       }
     },
     {
@@ -176,10 +176,10 @@
         "y": 0,
         "w": 338,
         "h": 804,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 497.0761,
-        "trimOffsetY": 150.02675
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 497,
+        "trimOffsetY": 150
       }
     },
     {
@@ -189,10 +189,10 @@
         "y": 0,
         "w": 335,
         "h": 813,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 501.02676,
-        "trimOffsetY": 150.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 501,
+        "trimOffsetY": 150
       }
     },
     {
@@ -202,10 +202,10 @@
         "y": 836,
         "w": 450,
         "h": 815,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 504.02676,
-        "trimOffsetY": 150.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 150
       }
     },
     {
@@ -215,10 +215,10 @@
         "y": 0,
         "w": 334,
         "h": 817,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 502.0761,
-        "trimOffsetY": 149.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 502,
+        "trimOffsetY": 149
       }
     },
     {
@@ -228,10 +228,10 @@
         "y": 0,
         "w": 329,
         "h": 764,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 504.0761,
-        "trimOffsetY": 201.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 201
       }
     },
     {
@@ -241,10 +241,10 @@
         "y": 0,
         "w": 329,
         "h": 764,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 503.0761,
-        "trimOffsetY": 201.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 503,
+        "trimOffsetY": 201
       }
     },
     {
@@ -254,10 +254,10 @@
         "y": 0,
         "w": 331,
         "h": 816,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 504.0761,
-        "trimOffsetY": 149.02675
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 504,
+        "trimOffsetY": 149
       }
     },
     {
@@ -267,10 +267,10 @@
         "y": 0,
         "w": 334,
         "h": 818,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 501.02676,
-        "trimOffsetY": 150.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 501,
+        "trimOffsetY": 150
       }
     },
     {
@@ -280,10 +280,10 @@
         "y": 0,
         "w": 345,
         "h": 771,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 497.0761,
-        "trimOffsetY": 191.01291
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 497,
+        "trimOffsetY": 191
       }
     },
     {
@@ -293,10 +293,10 @@
         "y": 836,
         "w": 400,
         "h": 752,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 452.0429,
-        "trimOffsetY": 199.04291
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 452,
+        "trimOffsetY": 199
       }
     },
     {
@@ -306,10 +306,10 @@
         "y": 836,
         "w": 441,
         "h": 761,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 424.0335,
-        "trimOffsetY": 185.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 424,
+        "trimOffsetY": 185
       }
     },
     {
@@ -319,17 +319,14 @@
         "y": 836,
         "w": 442,
         "h": 736,
-        "pivotX": 657.83203,
-        "pivotY": 665.61597,
-        "trimOffsetX": 428.05414,
-        "trimOffsetY": 205.07613
+        "pivotX": 658,
+        "pivotY": 666,
+        "trimOffsetX": 428,
+        "trimOffsetY": 205
       }
     }
   ],
   "meta": {
-    "size": {
-      "w": 4021,
-      "h": 2232
-    }
+    "size": { "w": 4021, "h": 2232 }
   }
 }

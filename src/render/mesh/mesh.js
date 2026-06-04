@@ -1,45 +1,28 @@
-// VAO + layout + draw info
 export default class Mesh {
   _gl;
   _vao;
-  _buffers = []; // { buffer, managed }
-  _indexBufferInfo = null; // { buffer, managed }
   _drawMode;
   _indexCount = 0;
+  _drawType;
   _indexType;
 
-  constructor(gl, drawMode = gl.TRIANGLES) {
+  constructor(gl, drawType = 'instanced', drawMode = gl.TRIANGLES) {
     this._gl = gl;
     this._vao = gl.createVertexArray();
+    this._drawType = drawType;
     this._drawMode = drawMode;
   }
 
-  drawInfo() {
-    return {
-      drawMode: this._drawMode,
-      indexCount: this._indexCount,
-      indexType: this._indexType,
-    };
-  }
-
-  addBuffer(buffer, layout, managed = false) {
+  addBuffer(buffer, layout) {
     const gl = this._gl;
 
-    this._buffers.push({
-      buffer,
-      managed,
-    });
-
-    // =========================
     // 開始錄製 VAO
-    // =========================
-
     gl.bindVertexArray(this._vao);
 
-    // 綁定 buffer
+    // 綁定 GPUBuffer
     buffer.bind();
 
-    // 設定 attribute layout
+    // 設定 attribute 如何使用 GPUBuffer 數據
     for (const attrib of layout.attributes) {
       const { location, size, type, normalized, stride, offset, divisor } = attrib;
 
@@ -48,23 +31,22 @@ export default class Mesh {
       gl.vertexAttribDivisor(location, divisor);
     }
 
+    // 關閉錄製 VAO
     gl.bindVertexArray(null);
   }
 
-  setIndexBuffer(buffer, count, type, managed = false) {
+  setIndexBuffer(buffer, count, type) {
     const gl = this._gl;
-
-    this._indexBufferInfo = {
-      buffer,
-      managed,
-    };
 
     this._indexCount = count;
     this._indexType = type;
 
-    // 錄製 EBO 到 VAO
+    // 開始錄製 EBO 到 VAO
     gl.bindVertexArray(this._vao);
+
+    // 綁定 GPUBuffer
     buffer.bind();
+
     gl.bindVertexArray(null);
   }
 
@@ -72,19 +54,24 @@ export default class Mesh {
     this._gl.bindVertexArray(this._vao);
   }
 
+  draw(count) {
+    const gl = this._gl;
+
+    switch (this._drawType) {
+      case 'instanced':
+        gl.drawElementsInstanced(this._drawMode, this._indexCount, this._indexType, 0, count);
+        break;
+
+      case 'elements':
+        break;
+
+      case 'arrays':
+        break;
+    }
+  }
+
   clear() {
-    // 清除 managed buffers
-    for (const entry of this._buffers) {
-      if (entry.managed) {
-        entry.buffer.clear();
-      }
-    }
-
-    // 清除 managed index buffer
-    if (this._indexBufferInfo && this._indexBufferInfo.managed) {
-      this._indexBufferInfo.buffer.clear();
-    }
-
-    this._gl.deleteVertexArray(this._vao);
+    // todo
+    // this._gl.deleteVertexArray(this._vao);
   }
 }

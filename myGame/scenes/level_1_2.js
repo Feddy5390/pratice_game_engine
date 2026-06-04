@@ -74,7 +74,7 @@ export class Level_1_2 extends BaseScene {
     // 創建相機
     const mainCameraId = engine.cameraManager.add({
       wcCenter: [0, 0],
-      wcWidth: 3000,
+      wcWidth: 2500,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });

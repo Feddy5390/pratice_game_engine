@@ -84,7 +84,9 @@
       </div>
 
       <div class="input-box">
-        <label for="dumpInput">2. 貼入 AssetStudio 單張 Dump (自動套用原始 textureRect 與 m_Offset)</label>
+        <label for="dumpInput"
+          >2. 貼入 AssetStudio 單張 Dump (自動套用原始 textureRect 與 m_Offset)</label
+        >
         <textarea
           id="dumpInput"
           placeholder="請在此貼入從 AssetStudio 複製的單張 Sprite 傾印文字...&#10;貼入後會自動解析並清空此框。"
@@ -177,7 +179,6 @@
 
           // 🌟 核心修正：直接使用 Dump 中 Rectf textureRect 的原始浮點數覆蓋 frame 的幾何數據
           if (dumpData.texRectX !== undefined && dumpData.texRectW !== undefined) {
-            
             // 覆蓋原本整數的 w, h，改用最原始的 Dump 浮點數值
             targetFrame.w = dumpData.texRectW;
             targetFrame.h = dumpData.texRectH;
@@ -185,13 +186,16 @@
             // 🌟 修正：pivotX 和 pivotY 改為從 m_Offset 讀取的 x 和 y（若無此欄位則預設 0）
             targetFrame.pivotX = dumpData.offsetX !== undefined ? dumpData.offsetX : 0;
             targetFrame.pivotY = dumpData.offsetY !== undefined ? dumpData.offsetY : 0;
-            
+
             targetFrame.trimOffsetX = dumpData.texRectX;
             targetFrame.trimOffsetY = dumpData.texRectY;
 
             showStatus(`🔥 成功套用原始 textureRect 與 m_Offset 更新: ${dumpData.name}`, '#4fc3f7');
           } else {
-            showStatus('⚠️ 解析成功，但該 Dump 文字中找不到完整的 Rectf textureRect 區塊。', '#ffb74d');
+            showStatus(
+              '⚠️ 解析成功，但該 Dump 文字中找不到完整的 Rectf textureRect 區塊。',
+              '#ffb74d',
+            );
           }
 
           renderOutput();
@@ -261,8 +265,10 @@
             } else if (currentSection === 'textureRect') {
               if (line.startsWith('float x =')) result.texRectX = parseFloat(line.split('=')[1]);
               if (line.startsWith('float y =')) result.texRectY = parseFloat(line.split('=')[1]);
-              if (line.startsWith('float width =')) result.texRectW = parseFloat(line.split('=')[1]);
-              if (line.startsWith('float height =')) result.texRectH = parseFloat(line.split('=')[1]);
+              if (line.startsWith('float width ='))
+                result.texRectW = parseFloat(line.split('=')[1]);
+              if (line.startsWith('float height ='))
+                result.texRectH = parseFloat(line.split('=')[1]);
             }
 
             sectionLinesLeft--;

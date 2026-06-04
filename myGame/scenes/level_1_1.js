@@ -66,12 +66,11 @@ export class Level_1_1 extends BaseScene {
     // 創建相機
     const mainCameraId = engine.cameraManager.add({
       wcCenter: [0, 0],
-      wcWidth: 1700,
+      wcWidth: 2500,
       viewport: [0, 0, 1000, 600],
       // background: [0.9, 0.3, 0.95, 1],
     });
     this.mainCamera = engine.cameraManager.get(mainCameraId);
-
 
     // 創建材質
     const materialId = engine.materialManager.create('default');

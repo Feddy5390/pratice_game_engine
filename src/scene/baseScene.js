@@ -1,3 +1,4 @@
+import SpriteRenderPass from '../builtin/renderPass/spriteRenderPass.js';
 import World from '../esc/world.js';
 
 export default class BaseScene {
@@ -11,6 +12,14 @@ export default class BaseScene {
 
     this.engine = engine;
     this.world = new World(maxEntities);
+
+    this.engine.shaderManager.add(
+      'default',
+      'src/builtin/shader/default/vertexShader.glsl',
+      'src/builtin/shader/default/fragShader.glsl',
+    );
+
+    this.engine.renderer.addPass(SpriteRenderPass);
   }
 
   /**
