@@ -9,8 +9,9 @@ import UBOmanager from '../render/UBOmanager.js';
 import GameLoop from './gameLoop.js';
 import Renderer from '../render/renderer.js';
 import MaterialManager from '../render/material/materialManager.js';
-import AnimationManager from '../anim/animationManager.js';
+import AnimationManager from '../animation/animationManager.js';
 import AtlasManager from '../resource/atlasManager.js';
+import FSMmanager from '../fsm/fsmManager.js';
 
 export default class Engine {
   gl;
@@ -36,6 +37,7 @@ export default class Engine {
   _uboManager;
   _gameLoop;
   renderer;
+  FSMmanager;
 
   _initWebGL(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -67,6 +69,7 @@ export default class Engine {
     this._uboManager = new UBOmanager();
     this._gameLoop = new GameLoop();
     this.renderer = new Renderer();
+    this.FSMmanager = new FSMmanager();
 
     this.resourceManager._init(this._rootDir);
     this.atlasManager._init(this.resourceManager, this._textureManager);
@@ -79,6 +82,7 @@ export default class Engine {
       this.renderer,
       this.atlasManager,
       this.animationManager,
+      this.FSMmanager,
     );
     this.meshManager._init(this.gl);
     this.materialManager._init(this.shaderManager);
@@ -97,6 +101,7 @@ export default class Engine {
       this.materialManager,
       this._textureManager,
     );
+    this.FSMmanager._init(this);
   }
 
   _loadScene(scenes = []) {

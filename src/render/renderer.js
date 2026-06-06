@@ -108,10 +108,6 @@ export default class Renderer {
     this._cameraUBO.update(camera.vpMatrix);
   }
 
-  _updateGPUbuffer(GPUbuffer, data, floatOffset) {
-    GPUbuffer.update({ srcData: data, length: floatOffset });
-  }
-
   _execute(interpolation) {
     const gl = this._gl;
 
@@ -127,18 +123,17 @@ export default class Renderer {
       switch (cmdType) {
         case 'SET_CAMERA':
           this._setupCamera(camera);
+
           break;
         case 'DRAW':
           if (GPUbufferInfo) {
             const { GPUbuffer, data, floatOffset } = GPUbufferInfo;
-            this._updateGPUbuffer(GPUbuffer, data, floatOffset);
+            GPUbuffer.update({ srcData: data, length: floatOffset });
           }
-
           mesh.bind();
-
           material.bind();
-
           mesh.draw(count);
+
           break;
       }
     }

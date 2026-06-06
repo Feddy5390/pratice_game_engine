@@ -1,7 +1,9 @@
 import AnimationComponent from '../esc/component/animation.js';
+import FSMComponent from '../esc/component/fsm.js';
 import SpriteComponent from '../esc/component/sprite.js';
 import TransformComponent from '../esc/component/transform.js';
 import AnimationSystem from '../esc/system/animationSystem.js';
+import FSMSystem from '../esc/system/FSMSystem.js';
 import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
 import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
 import BaseScene from './baseScene.js';
@@ -25,6 +27,7 @@ export default class SceneManager {
     renderer,
     atlasManager,
     animationManager,
+    FSMmanager,
   ) {
     this._engine = engine;
     this._resourceManager = resourceManager;
@@ -33,6 +36,7 @@ export default class SceneManager {
     this._renderer = renderer;
     this._atlasManager = atlasManager;
     this._animationManager = animationManager;
+    this._FSMmanager = FSMmanager;
   }
 
   add(Class) {
@@ -43,14 +47,17 @@ export default class SceneManager {
     const scene = new Class(this._engine);
     scene.name = Class.name;
 
-    // 加入外部資源
+    // 加入外部資源(todo: 重新設計)
     scene.world.resources['animationClip'] = this._animationManager._clipId;
+    scene.world.resources['fsms'] = this._FSMmanager._fsms;
 
     // 加入預設系統、組件
     scene.world.registerComponent(TransformComponent);
     scene.world.registerComponent(SpriteComponent);
+    scene.world.registerComponent(FSMComponent);
     scene.world.registerComponent(AnimationComponent);
     scene.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
+    scene.world.addSystem(FSMSystem, 'update');
     scene.world.addSystem(AnimationSystem, 'afterUpdate');
     scene.world.addSystem(RenderSyncSystem, 'afterUpdate');
 

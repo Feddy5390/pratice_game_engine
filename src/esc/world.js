@@ -73,12 +73,10 @@ export default class World {
 
   getComponent(entityId, type) {
     const { store, stride } = this.components[type];
+
     const offset = entityId * stride;
-    const re = [];
-    for (let i = 0; i < stride; i++) {
-      re.push(store[offset + i]);
-    }
-    return re;
+
+    return store.subarray(offset, offset + stride);
   }
 
   addComponent(entityId, type, data) {

@@ -1,4 +1,4 @@
-import Anim from './anim.js';
+import Anim from './animationClip.js';
 
 export default class AnimationManager {
   _resourceManager;

@@ -1,6 +1,8 @@
-import { GPUBuffer, VertexLayout } from '../../index.js';
+import BaseRenderPass from '../../render/baseRenderPass.js';
+import GPUBuffer from '../../render/buffer/GPUBuffer.js';
+import VertexLayout from '../../render/vertexLayout.js';
 
-export default class SpriteRenderPass {
+export default class SpriteRenderPass extends BaseRenderPass {
   _maxInstancesPerDraw = 1000;
   _stride = 13;
 
@@ -13,6 +15,8 @@ export default class SpriteRenderPass {
   _materialManager;
 
   constructor({ gl, meshManager, cameraManager, textureManager, materialManager, maxEntities }) {
+    super();
+
     this._cameraManager = cameraManager;
     this._textureManager = textureManager;
     this._materialManager = materialManager;
