@@ -114,7 +114,8 @@ export default class SpriteRenderPass extends BaseRenderPass {
     const { world, commands } = context;
 
     const entities = world._renderQueue;
-    if (entities.length === 0) {
+    const numEntity = entities.length;
+    if (numEntity === 0) {
       return;
     }
 
@@ -124,7 +125,7 @@ export default class SpriteRenderPass extends BaseRenderPass {
     let lastCameraId = -1;
     let floatOffset = 0;
     let i = 0;
-    while (i < entities.length) {
+    while (i < numEntity) {
       const firstEntity = entities[i];
 
       const fo = firstEntity * spriteStride;
@@ -136,7 +137,7 @@ export default class SpriteRenderPass extends BaseRenderPass {
 
       let count = 0;
       let j = i;
-      while (j < entities.length) {
+      while (j < numEntity) {
         if (count >= this._maxInstancesPerDraw) {
           break;
         }

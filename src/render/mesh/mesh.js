@@ -1,16 +1,18 @@
 export default class Mesh {
   _gl;
   _vao;
+  _drawType;
   _drawMode;
   _indexCount = 0;
-  _drawType;
   _indexType;
+  _vertexCount;
 
-  constructor(gl, drawType = 'instanced', drawMode = gl.TRIANGLES) {
+  constructor(gl, drawType = 'instanced', drawMode = gl.TRIANGLES, vertexCount) {
     this._gl = gl;
     this._vao = gl.createVertexArray();
     this._drawType = drawType;
     this._drawMode = drawMode;
+    this._vertexCount = vertexCount ?? 0;
   }
 
   addBuffer(buffer, layout) {
@@ -59,7 +61,13 @@ export default class Mesh {
 
     switch (this._drawType) {
       case 'instanced':
-        gl.drawElementsInstanced(this._drawMode, this._indexCount, this._indexType, 0, count);
+        if (this._indexCount > 0) {
+          // 使用索引緩衝區
+          gl.drawElementsInstanced(this._drawMode, this._indexCount, this._indexType, 0, count);
+        } else {
+          // 直接用在緩衝區的頂點
+          gl.drawArraysInstanced(this._drawMode, 0, this._vertexCount, count);
+        }
         break;
 
       case 'elements':

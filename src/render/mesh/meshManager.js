@@ -14,10 +14,19 @@ export default class MeshManager {
     return this._meshes.get(id);
   }
 
-  create({ drawType, drawMode, buffers = [], indexData, indexBuffer, indexType, indexUsage }) {
+  create({
+    drawType,
+    drawMode,
+    buffers = [],
+    indexData,
+    indexBuffer,
+    indexType,
+    indexUsage,
+    vertexCount,
+  }) {
     const gl = this._gl;
 
-    const mesh = new Mesh(gl, drawType, drawMode);
+    const mesh = new Mesh(gl, drawType, drawMode, vertexCount);
 
     for (const info of buffers) {
       const { data, usage = gl.STATIC_DRAW, layout } = info;

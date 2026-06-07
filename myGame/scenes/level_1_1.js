@@ -7,7 +7,7 @@ export class Level_1_1 extends BaseScene {
   cuphead;
 
   constructor(engine) {
-    super(engine, 101);
+    super(engine, 101, true);
   }
 
   preload() {

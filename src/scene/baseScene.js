@@ -1,3 +1,4 @@
+import DebugRenderPass from '../builtin/renderPass/debugRenderPass.js';
 import SpriteRenderPass from '../builtin/renderPass/spriteRenderPass.js';
 import World from '../esc/world.js';
 
@@ -5,7 +6,7 @@ export default class BaseScene {
   engine;
   world;
 
-  constructor(engine, maxEntities = 100) {
+  constructor(engine, maxEntities = 100, debug = false) {
     if (!engine) {
       throw new Error('場景初始化參數缺少');
     }
@@ -18,8 +19,16 @@ export default class BaseScene {
       'src/builtin/shader/default/vertexShader.glsl',
       'src/builtin/shader/default/fragShader.glsl',
     );
-
     this.engine.renderer.addPass(SpriteRenderPass);
+
+    if (debug) {
+      this.engine.shaderManager.add(
+        'debug',
+        'src/builtin/shader/debug/vertexShader.glsl',
+        'src/builtin/shader/debug/fragShader.glsl',
+      );
+      this.engine.renderer.addPass(DebugRenderPass);
+    }
   }
 
   /**
