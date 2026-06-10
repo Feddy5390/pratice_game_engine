@@ -32,7 +32,7 @@ export default class GameLoop {
       this._lastTime = timestamp;
 
       // 限制最大補償時間，防止分頁標籤切換回來後瘋狂運算（跳幀補償）
-      const frameTime = Math.min(dt, 0.25);
+      const frameTime = Math.min(dt, 0.1);
       this._accumulator += frameTime;
 
       while (this._accumulator >= this._logicFPS) {

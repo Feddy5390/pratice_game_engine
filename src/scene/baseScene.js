@@ -1,5 +1,15 @@
 import DebugRenderPass from '../builtin/renderPass/debugRenderPass.js';
 import SpriteRenderPass from '../builtin/renderPass/spriteRenderPass.js';
+import AnimationComponent from '../esc/component/animation.js';
+import CollisionComponent from '../esc/component/collision.js';
+import FSMComponent from '../esc/component/fsm.js';
+import SpriteComponent from '../esc/component/sprite.js';
+import TransformComponent from '../esc/component/transform.js';
+import AnimationSystem from '../esc/system/animationSystem.js';
+import CollisionSystem from '../esc/system/collisionSystem.js';
+import FSMSystem from '../esc/system/FSMSystem.js';
+import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
+import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
 import World from '../esc/world.js';
 
 export default class BaseScene {
@@ -20,6 +30,22 @@ export default class BaseScene {
       'src/builtin/shader/default/fragShader.glsl',
     );
     this.engine.renderer.addPass(SpriteRenderPass);
+
+    // 加入外部資源(todo: 重新設計)
+    this.world.resources['animationClip'] = engine.animationManager._clipId;
+    this.world.resources['fsms'] = engine.FSMmanager._fsms;
+
+    // 加入預設系統、組件
+    this.world.registerComponent(TransformComponent);
+    this.world.registerComponent(SpriteComponent);
+    this.world.registerComponent(FSMComponent);
+    this.world.registerComponent(AnimationComponent);
+    this.world.registerComponent(CollisionComponent);
+    this.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
+    this.world.addSystem(FSMSystem, 'update');
+    this.world.addSystem(CollisionSystem, 'update');
+    this.world.addSystem(AnimationSystem, 'afterUpdate');
+    this.world.addSystem(RenderSyncSystem, 'afterUpdate');
 
     if (debug) {
       this.engine.shaderManager.add(

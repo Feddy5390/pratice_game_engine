@@ -4,7 +4,7 @@ import VertexLayout from '../../render/vertexLayout.js';
 
 export default class DebugRenderPass extends BaseRenderPass {
   _maxInstancesPerDraw = 1000;
-  _stride = 2;
+  _stride = 4;
 
   _instanceData;
   _instanceBuffer;
@@ -33,19 +33,39 @@ export default class DebugRenderPass extends BaseRenderPass {
 
     const meshId = meshManager.create({
       drawType: 'instanced',
-      drawMode: gl.POINTS,
-      vertexCount: 1,
+      drawMode: gl.LINE_LOOP,
+      vertexCount: 4,
       buffers: [
         {
-          buffer: this._instanceBuffer,
+          data: new Float32Array([-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5]),
+          usage: gl.STATIC_DRAW,
           layout: new VertexLayout().add({
             location: 0,
             size: 2,
             type: gl.FLOAT,
-            stride: this._stride * 4,
+            stride: 0,
             offset: 0,
-            divisor: 1,
           }),
+        },
+        {
+          buffer: this._instanceBuffer,
+          layout: new VertexLayout()
+            .add({
+              location: 1,
+              size: 2,
+              type: gl.FLOAT,
+              stride: this._stride * 4,
+              offset: 0,
+              divisor: 1,
+            })
+            .add({
+              location: 2,
+              size: 2,
+              type: gl.FLOAT,
+              stride: this._stride * 4,
+              offset: 2 * 4,
+              divisor: 1,
+            }),
         },
       ],
     });
@@ -56,9 +76,9 @@ export default class DebugRenderPass extends BaseRenderPass {
   }
 
   build(interpolation, context) {
-    const { world, commands } = context;
+    const { world, commands, cmdPool } = context;
 
-    const entities = world._renderQueue;
+    const entities = world.createQuery(['COLLISION']).entities;
     const numEntity = entities.length;
     if (numEntity === 0) {
       return;
@@ -66,6 +86,7 @@ export default class DebugRenderPass extends BaseRenderPass {
 
     const { store: transformStore, stride: transformStride } = world.components.TRANSFORM;
     const { store: spriteStore, stride: spriteStride } = world.components.SPRITE;
+    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
 
     let lastCameraId = -1;
     let floatOffset = 0;
@@ -90,36 +111,28 @@ export default class DebugRenderPass extends BaseRenderPass {
         }
 
         const to = entityId * transformStride;
-        const x = transformStore[to];
-        const y = transformStore[to + 1];
+        const co = entityId * collisionStride;
 
-        this._instanceData[floatOffset++] = x;
-        this._instanceData[floatOffset++] = y;
+        this._instanceData[floatOffset++] = transformStore[to] + collisionStore[co];
+        this._instanceData[floatOffset++] = transformStore[to + 1] + collisionStore[co + 1];
+        this._instanceData[floatOffset++] = collisionStore[co + 2];
+        this._instanceData[floatOffset++] = collisionStore[co + 3];
 
         count++;
         j++;
       }
 
-      // if (cameraId !== lastCameraId) {
-      //   commands.push({
-      //     cmdType: 'SET_CAMERA',
-      //     camera: this._cameraManager.get(cameraId),
-      //   });
+      const drawCmd = cmdPool.alloc();
+      drawCmd.cmdType = 'DRAW';
+      drawCmd.mesh = this._mesh;
+      drawCmd.material = this._material;
+      drawCmd.count = count;
+      drawCmd.GPUbufferInfo.GPUbuffer = this._instanceBuffer;
+      drawCmd.GPUbufferInfo.data = this._instanceData;
+      drawCmd.GPUbufferInfo.srcOffset = batchStart;
+      drawCmd.GPUbufferInfo.length = floatOffset - batchStart;
 
-      //   lastCameraId = cameraId;
-      // }
-
-      commands.push({
-        cmdType: 'DRAW',
-        mesh: this._mesh,
-        material: this._material,
-        count,
-        GPUbufferInfo: {
-          GPUbuffer: this._instanceBuffer,
-          data: this._instanceData,
-          floatOffset: batchStart,
-        },
-      });
+      commands.push(drawCmd);
 
       i = j;
     }

@@ -111,7 +111,7 @@ export default class SpriteRenderPass extends BaseRenderPass {
   }
 
   build(interpolation, context) {
-    const { world, commands } = context;
+    const { world, commands, cmdPool } = context;
 
     const entities = world._renderQueue;
     const numEntity = entities.length;
@@ -126,9 +126,9 @@ export default class SpriteRenderPass extends BaseRenderPass {
     let floatOffset = 0;
     let i = 0;
     while (i < numEntity) {
-      const firstEntity = entities[i];
+      const firstEntityId = entities[i];
 
-      const fo = firstEntity * spriteStride;
+      const fo = firstEntityId * spriteStride;
       const textureId = spriteStore[fo];
       const materialId = spriteStore[fo + 9];
       const cameraId = spriteStore[fo + 10];
@@ -181,29 +181,27 @@ export default class SpriteRenderPass extends BaseRenderPass {
       }
 
       if (cameraId !== lastCameraId) {
-        commands.push({
-          cmdType: 'SET_CAMERA',
-          camera: this._cameraManager.get(cameraId),
-        });
+        const cameraCmd = cmdPool.alloc();
+        cameraCmd.cmdType = 'SET_CAMERA';
+        cameraCmd.camera = this._cameraManager.get(cameraId);
+
+        commands.push(cameraCmd);
 
         lastCameraId = cameraId;
       }
 
-      const texture = this._textureManager.get(textureId);
-      const material = this._materialManager.get(materialId);
-      material.setTexture('u_atlas', texture);
+      const drawCmd = cmdPool.alloc();
+      drawCmd.cmdType = 'DRAW';
+      drawCmd.mesh = this._mesh;
+      drawCmd.texture = this._textureManager.get(textureId);
+      drawCmd.material = this._materialManager.get(materialId);
+      drawCmd.count = count;
+      drawCmd.GPUbufferInfo.GPUbuffer = this._instanceBuffer;
+      drawCmd.GPUbufferInfo.data = this._instanceData;
+      drawCmd.GPUbufferInfo.srcOffset = batchStart;
+      drawCmd.GPUbufferInfo.length = floatOffset - batchStart;
 
-      commands.push({
-        cmdType: 'DRAW',
-        mesh: this._mesh,
-        material,
-        count,
-        GPUbufferInfo: {
-          GPUbuffer: this._instanceBuffer,
-          data: this._instanceData,
-          floatOffset: batchStart,
-        },
-      });
+      commands.push(drawCmd);
 
       i = j;
     }

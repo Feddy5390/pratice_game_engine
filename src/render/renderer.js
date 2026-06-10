@@ -1,3 +1,5 @@
+import FramePool from '../utils/framePool.js';
+
 export default class Renderer {
   _gl;
   _dpr;
@@ -10,10 +12,13 @@ export default class Renderer {
   _textureManager;
 
   _world;
+  _context;
+
   _pending = [];
   _passes = [];
+
   _commands = [];
-  _context;
+  _cmdPool;
 
   _init(
     gl,
@@ -37,6 +42,23 @@ export default class Renderer {
 
     // mat4 = 4x4 matrix = 16 floats = 16 * 4 = 64 bytes
     this._cameraUBO = this._uboManager.create('CameraBlock', 64);
+
+    this._cmdPool = new FramePool(() => {
+      return {
+        cmdType: null,
+        camera: null,
+        mesh: null,
+        texture: null,
+        material: null,
+        count: 0,
+        GPUbufferInfo: {
+          GPUbuffer: null,
+          data: null,
+          srcOffset: null,
+          length: null,
+        },
+      };
+    });
   }
 
   _changeWorld(scene) {
@@ -62,6 +84,7 @@ export default class Renderer {
       gl: this._gl,
       world: this._world,
       commands: this._commands,
+      cmdPool: this._cmdPool,
     };
   }
 
@@ -111,6 +134,8 @@ export default class Renderer {
   _execute(interpolation) {
     const gl = this._gl;
 
+    this._cmdPool.beginFrame();
+
     this._commands.length = 0;
 
     for (const pass of this._passes) {
@@ -118,21 +143,24 @@ export default class Renderer {
     }
 
     for (const cmd of this._commands) {
-      const { cmdType, camera, mesh, material, count, GPUbufferInfo } = cmd;
+      const { cmdType, camera, mesh, texture, material, count, GPUbufferInfo } = cmd;
 
       switch (cmdType) {
-        case 'SET_CAMERA':
-          this._setupCamera(camera);
-
-          break;
         case 'DRAW':
           if (GPUbufferInfo) {
-            const { GPUbuffer, data, floatOffset } = GPUbufferInfo;
-            GPUbuffer.update({ srcData: data, length: floatOffset });
+            const { GPUbuffer, data, srcOffset, length } = GPUbufferInfo;
+            GPUbuffer.update({ srcData: data, srcOffset, length });
           }
           mesh.bind();
+          if (texture) {
+            material.setTexture('u_atlas', texture);
+          }
           material.bind();
           mesh.draw(count);
+
+          break;
+        case 'SET_CAMERA':
+          this._setupCamera(camera);
 
           break;
       }

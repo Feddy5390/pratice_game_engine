@@ -1,5 +1,5 @@
 export default class SavePreviousStatesSystem {
-  _query;
+  _entities;
   _transform;
 
   constructor(world) {
@@ -7,16 +7,15 @@ export default class SavePreviousStatesSystem {
       throw new Error('SavePreviousStatesSystem 尚未建立 component');
     }
 
-    this._query = world.createQuery(['TRANSFORM', 'SPRITE']);
+    this._entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
     this._transform = world.components.TRANSFORM;
   }
 
   update() {
-    const entities = this._query.entities;
+    const entities = this._entities;
     const { store, stride } = this._transform;
 
-    for (let i = 0, c = entities.length; i < c; i++) {
-      const entityId = entities[i];
+    for (const entityId of entities) {
       const o = entityId * stride;
 
       store[o + 7] = store[o]; // x

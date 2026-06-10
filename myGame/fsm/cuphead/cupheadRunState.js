@@ -15,6 +15,14 @@ export default class CupheadRunState extends BaseState {
     animationStore[ao + 1] = 0;
     animationStore[ao + 2] = 0;
     animationStore[ao + 3] = 0;
+
+    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
+    const co = entityId * collisionStride;
+
+    collisionStore[co] = 0;
+    collisionStore[co + 1] = 45;
+    collisionStore[co + 2] = 80;
+    collisionStore[co + 3] = 110;
   }
 
   update(entityId, world, dt) {
@@ -31,10 +39,10 @@ export default class CupheadRunState extends BaseState {
 
     let moveX = 0;
     if (input.isKeyPressed('right')) {
-      moveX = 600;
+      moveX = 650;
       transformStore[to + 5] = 1;
     } else if (input.isKeyPressed('left')) {
-      moveX = -600;
+      moveX = -650;
       transformStore[to + 5] = -1;
     }
 
