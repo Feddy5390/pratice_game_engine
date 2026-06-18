@@ -15,6 +15,7 @@ export default function checkSweptAABB(
   const overlapX = Math.min(aRightX, bRightX) - Math.max(aLeftX, bLeftX);
   const overlapY = Math.min(aTopY, bTopY) - Math.max(aBottomY, bBottomY);
   if (overlapX > 0 && overlapY > 0) {
+    console.log('ggg')
     return null;
   }
 
@@ -56,11 +57,12 @@ export default function checkSweptAABB(
 
   const tFirst = Math.max(tEnterX, tEnterY);
   const tLast = Math.min(tExitX, tExitY);
+  const EPSILON = 0.00001;
 
   if (
     tFirst > tLast || // X 和 Y 的時間區間沒有交集（擦身而過）
-    tFirst < 0 || // 碰撞發生在過去（這一格之前）
-    tFirst > 1 // 碰撞發生在未來（這一格結束後才撞到）
+    tFirst < - EPSILON || // 碰撞發生在過去（這一格之前）
+    tFirst > (1 + EPSILON) // 碰撞發生在未來（這一格結束後才撞到）
   ) {
     return null; // 沒有發生碰撞
   }
@@ -75,8 +77,6 @@ export default function checkSweptAABB(
     // 說明 Y 軸比較晚進入，表示是在 Y 軸方向發生碰撞（撞到上下兩側）
     normalY = relativeVY > 0 ? -1 : 1;
   }
-
-  console.log('碰撞')
 
   return {
     entityA: aEntityId,

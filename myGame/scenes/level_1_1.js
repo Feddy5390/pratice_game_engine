@@ -88,7 +88,7 @@ export class Level_1_1 extends BaseScene {
 
     // cuphead
     this.cuphead = this.world.createEntity();
-    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 10, 0, 1, 1, 1, 1]);
     this.world.addComponent(this.cuphead, 'SPRITE', [
       0,
       0,
@@ -120,8 +120,8 @@ export class Level_1_1 extends BaseScene {
 
     // tutor
     const tutorialCubeId = this.world.createEntity();
-    this.world.addComponent(tutorialCubeId, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
     const tutorialCubeTexture = engine.atlasManager.getSprite('tutorial_cube');
+    this.world.addComponent(tutorialCubeId, 'TRANSFORM', [0, (tutorialCubeTexture.height - 40) / 2 - 75, 0, 1, 1, 1, 1]);
     this.world.addComponent(tutorialCubeId, 'SPRITE', [
       tutorialCubeTexture.textureId,
       tutorialCubeTexture.u0,
@@ -146,6 +146,21 @@ export class Level_1_1 extends BaseScene {
       this.collisionLayer.PLAYER,
       COLLISION.BodyType.STATIC,
     ]);
+
+    // floor
+    // const floorId = this.world.createEntity();
+    // this.world.addComponent(floorId, 'TRANSFORM', [0, -500, 0, 1, 1, 1, 1]);
+    // this.world.addComponent(floorId, 'COLLISION', [
+    //   COLLISION.ShapeType.AABB,
+    //   0,
+    //   0,
+    //   3000,
+    //   1000,
+    //   this.collisionLayer.WALL,
+    //   this.collisionLayer.PLAYER,
+    //   COLLISION.BodyType.STATIC,
+    // ]);
+
   }
 
   update(dt) {

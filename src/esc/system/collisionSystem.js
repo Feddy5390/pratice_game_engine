@@ -56,9 +56,10 @@ export default class CollisionSystem {
         co = bEntityId * collisionStride;
         vo = bEntityId * velocityStride;
         const bShapeType = collisionStore[co];
-        const bLeftX = transformStore[to] + collisionStore[co + 1] + -0.5 * collisionStore[co + 3];
-        const bTopY =
-          transformStore[to + 1] + collisionStore[co + 2] + 0.5 * collisionStore[co + 4];
+        const bPrevX = transformStore[to + 7];
+        const bPrevY = transformStore[to + 8];
+        const bLeftX = bPrevX + collisionStore[co + 1] + -0.5 * collisionStore[co + 3];
+        const bTopY = bPrevY + collisionStore[co + 2] + 0.5 * collisionStore[co + 4];
         const bRightX = bLeftX + collisionStore[co + 3];
         const bBottomY = bTopY - collisionStore[co + 4];
         const bLayer = collisionStore[co + 5];
@@ -66,7 +67,7 @@ export default class CollisionSystem {
         const bVX = velocityStore[vo];
         const bVY = velocityStore[vo + 1];
 
-        if (aMask & bLayer && bMask & aLayer) {
+        if (aMask & bLayer) {
           if (aShapeType === COLLISION.ShapeType.AABB && bShapeType === COLLISION.ShapeType.AABB) {
             const relativeVX = (aVX - bVX) * dt;
             const relativeVY = (aVY - bVY) * dt;
