@@ -13,7 +13,8 @@ export default class World {
   _nextEntityId = 0;
   _recycledEntities = [];
   _queries = new Map();
-  _renderQueue = []; // renderer 最終需要繪製的 entityId
+  renderQueue = []; // renderer 最終需要繪製的 entityId
+  collisionPairs = []; // 當前碰撞結果
 
   constructor(maxEntities = 100) {
     this._maxEntities = maxEntities;
@@ -151,6 +152,6 @@ export default class World {
     }
 
     // render queue 清空
-    this._renderQueue.length = 0;
+    this.renderQueue.length = 0;
   }
 }

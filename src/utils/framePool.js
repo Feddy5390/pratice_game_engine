@@ -1,5 +1,4 @@
 // 此種物件池適用於固定的 object 格式
-
 export default class FramePool {
   _factory;
   _objects = [];
@@ -22,7 +21,6 @@ export default class FramePool {
     let obj = this._objects[this._cursor];
 
     if (!obj) {
-      console.log('gg');
       obj = this._factory();
       this._objects.push(obj);
     }

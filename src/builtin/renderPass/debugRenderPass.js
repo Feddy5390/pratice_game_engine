@@ -113,10 +113,10 @@ export default class DebugRenderPass extends BaseRenderPass {
         const to = entityId * transformStride;
         const co = entityId * collisionStride;
 
-        this._instanceData[floatOffset++] = transformStore[to] + collisionStore[co];
-        this._instanceData[floatOffset++] = transformStore[to + 1] + collisionStore[co + 1];
-        this._instanceData[floatOffset++] = collisionStore[co + 2];
+        this._instanceData[floatOffset++] = transformStore[to] + collisionStore[co + 1];
+        this._instanceData[floatOffset++] = transformStore[to + 1] + collisionStore[co + 2];
         this._instanceData[floatOffset++] = collisionStore[co + 3];
+        this._instanceData[floatOffset++] = collisionStore[co + 4];
 
         count++;
         j++;

@@ -1,4 +1,4 @@
-import { BaseState } from '../../../src/index.js';
+import { BaseState, COLLISION } from '../../../src/index.js';
 import { CUPHEAD_STATE } from './cupheadFSM.js';
 
 export default class CupheadRunState extends BaseState {
@@ -19,10 +19,11 @@ export default class CupheadRunState extends BaseState {
     const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
     const co = entityId * collisionStride;
 
-    collisionStore[co] = 0;
-    collisionStore[co + 1] = 45;
-    collisionStore[co + 2] = 80;
-    collisionStore[co + 3] = 110;
+    collisionStore[co] = COLLISION.ShapeType.AABB;
+    collisionStore[co + 1] = 0;
+    collisionStore[co + 2] = 45;
+    collisionStore[co + 3] = 80;
+    collisionStore[co + 4] = 110;
   }
 
   update(entityId, world, dt) {

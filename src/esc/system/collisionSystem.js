@@ -1,42 +1,99 @@
+import FramePool from '../../utils/framePool.js';
+import * as COLLISION from '../../collision/index.js';
+
 export default class CollisionSystem {
-  _world;
-  _collision;
-  _transform;
-  _entities;
+  world;
+  entities;
+  collisionPairs;
+  collisionPairPool;
 
   constructor(world) {
-    this._world = world;
-    this._collision = world.components.COLLISION;
-    this._transform = world.components.TRANSFORM;
-    this._entities = world.createQuery(['COLLISION']).entities;
+    this.world = world;
+    this.entities = world.createQuery(['COLLISION']).entities;
+    this.collisionPairs = world.collisionPairs;
+    this.collisionPairPool = new FramePool(() => {
+      return {
+        entityA: null,
+        entityB: null,
+        normalX: null,
+        normalY: null,
+        penetration: null,
+        time: 0,
+      };
+    }, 1000);
   }
 
   update(dt) {
-    const entities = this._entities;
+    const entities = this.entities;
     const numEntity = entities.length;
-    const { store: transformStore, stride: transformStride } = this._transform;
-    const { store: collisionStore, stride: collisionStride } = this._collision;
+    const { store: transformStore, stride: transformStride } = this.world.components.TRANSFORM;
+    const { store: collisionStore, stride: collisionStride } = this.world.components.COLLISION;
+    const { store: velocityStore, stride: velocityStride } = this.world.components.VELOCITY;
+
+    this.collisionPairs.length = 0;
+    this.collisionPairPool.beginFrame();
 
     for (let i = 0; i < numEntity; i++) {
-      let entityId = entities[i];
-      let to = entityId * transformStride;
-      let co = entityId * collisionStride;
-      const aLeft = transformStore[to] + collisionStore[co] + -0.5 * collisionStore[co + 2];
-      const aTop = transformStore[to + 1] + collisionStore[co + 1] + 0.5 * collisionStore[co + 3];
-      const aRight = aLeft + collisionStore[co + 2];
-      const aBottom = aTop - collisionStore[co + 3];
-      for (let j = i + 1; j < numEntity; j++) {
-        entityId = entities[j];
-        to = entityId * transformStride;
-        co = entityId * collisionStride;
-        const bLeft = transformStore[to] + collisionStore[co] + -0.5 * collisionStore[co + 2];
-        const bTop =
-          transformStore[to + 1] + collisionStore[co + 1] + 0.5 * collisionStore[co + 3];
-        const bRight = bLeft + collisionStore[co + 2];
-        const bBottom = bTop - collisionStore[co + 3];
+      const aEntityId = entities[i];
+      let to = aEntityId * transformStride;
+      let co = aEntityId * collisionStride;
+      let vo = aEntityId * velocityStride;
+      const aShapeType = collisionStore[co];
+      const aPrevX = transformStore[to + 7];
+      const aPrevY = transformStore[to + 8];
+      const aLeftX = aPrevX + collisionStore[co + 1] + -0.5 * collisionStore[co + 3];
+      const aTopY = aPrevY + collisionStore[co + 2] + 0.5 * collisionStore[co + 4];
+      const aRightX = aLeftX + collisionStore[co + 3];
+      const aBottomY = aTopY - collisionStore[co + 4];
+      const aLayer = collisionStore[co + 5];
+      const aMask = collisionStore[co + 6];
+      const aVX = velocityStore[vo];
+      const aVY = velocityStore[vo + 1];
 
-        if (aLeft < bRight && aRight > bLeft && aBottom < bTop && aTop > bBottom) {
-          console.log('碰到了');
+      for (let j = i + 1; j < numEntity; j++) {
+        const bEntityId = entities[j];
+        to = bEntityId * transformStride;
+        co = bEntityId * collisionStride;
+        vo = bEntityId * velocityStride;
+        const bShapeType = collisionStore[co];
+        const bLeftX = transformStore[to] + collisionStore[co + 1] + -0.5 * collisionStore[co + 3];
+        const bTopY =
+          transformStore[to + 1] + collisionStore[co + 2] + 0.5 * collisionStore[co + 4];
+        const bRightX = bLeftX + collisionStore[co + 3];
+        const bBottomY = bTopY - collisionStore[co + 4];
+        const bLayer = collisionStore[co + 5];
+        const bMask = collisionStore[co + 6];
+        const bVX = velocityStore[vo];
+        const bVY = velocityStore[vo + 1];
+
+        if (aMask & bLayer && bMask & aLayer) {
+          if (aShapeType === COLLISION.ShapeType.AABB && bShapeType === COLLISION.ShapeType.AABB) {
+            const relativeVX = (aVX - bVX) * dt;
+            const relativeVY = (aVY - bVY) * dt;
+            const pair = COLLISION.checkSweptAABB(
+              aEntityId,
+              bEntityId,
+              aLeftX,
+              aRightX,
+              aTopY,
+              aBottomY,
+              bLeftX,
+              bRightX,
+              bTopY,
+              bBottomY,
+              relativeVX,
+              relativeVY,
+            );
+
+            if (pair) {
+              to = aEntityId * transformStride;
+              vo = aEntityId * velocityStride;
+              transformStore[to] = aPrevX + aVX * dt * pair.time;
+              transformStore[to + 1] = aPrevY + aVY * dt * pair.time;
+              velocityStore[vo] = 0;
+              velocityStore[vo + 1] = 0;
+            }
+          }
         }
       }
     }

@@ -1,34 +1,25 @@
 export default class AnimationSystem {
-  _world;
-  _sprite;
-  _animation;
-  _entities;
-  _animationClip;
+  world;
+  entities;
+  animationClip;
 
   constructor(world) {
-    this._world = world;
-    if (!world.components.SPRITE | !world.components.ANIMATION) {
-      throw new Error('AnimationSystem 尚未建立 component');
-    }
-    this._sprite = world.components.SPRITE;
-    this._animation = world.components.ANIMATION;
-    this._entities = world.createQuery(['SPRITE', 'ANIMATION']).entities;
-    this._animationClip = world.resources['animationClip'];
+    this.world = world;
+    this.entities = world.createQuery(['SPRITE', 'ANIMATION']).entities;
+    this.animationClip = world.resources['animationClip'];
   }
 
   update(dt) {
-    const entities = this._entities;
-    const animationClip = this._animationClip;
-    const { store: spriteStore, stride: spriteStride } = this._sprite;
-    const { store: animationStore, stride: animationStride } = this._animation;
+    const { store: spriteStore, stride: spriteStride } = this.world.components.SPRITE;
+    const { store: animationStore, stride: animationStride } = this.world.components.ANIMATION;
 
-    for (const entityId of entities) {
+    for (const entityId of this.entities) {
       const ao = entityId * animationStride;
       const so = entityId * spriteStride;
 
       const clipId = animationStore[ao];
       const time = animationStore[ao + 1] + dt;
-      const clip = animationClip.get(clipId);
+      const clip = this.animationClip.get(clipId);
 
       const totalDuration = clip.frames.at(-1).cumulativeDuration;
       const finished = !clip.loop && time >= totalDuration;

@@ -1,13 +1,20 @@
-import { BaseScene } from '../../src/index.js';
+import { BaseScene, COLLISION } from '../../src/index.js';
 import { CUPHEAD_FSM, CUPHEAD_STATE } from '../fsm/cuphead/cupheadFSM.js';
 import MovementSystem from '../scripts/movement.js';
 
 export class Level_1_1 extends BaseScene {
   mainCamera;
   cuphead;
+  collisionLayer = {
+    PLAYER: 1 << 0,
+    ENEMY: 1 << 1,
+    WALL: 1 << 2,
+    ITEM: 1 << 3,
+    BULLET: 1 << 4,
+  };
 
   constructor(engine) {
-    super(engine, 101, false);
+    super(engine, 101, true);
   }
 
   preload() {
@@ -47,7 +54,7 @@ export class Level_1_1 extends BaseScene {
     });
 
     // 加入場景需要的系統
-    this.world.addSystem(MovementSystem);
+    this.world.addSystem(MovementSystem, 'beforeUpdate');
   }
 
   create() {
@@ -81,7 +88,6 @@ export class Level_1_1 extends BaseScene {
 
     // cuphead
     this.cuphead = this.world.createEntity();
-    const cupheadFSMId = engine.FSMmanager.register(CUPHEAD_FSM); // 註冊 FSM
     this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
     this.world.addComponent(this.cuphead, 'SPRITE', [
       0,
@@ -98,14 +104,24 @@ export class Level_1_1 extends BaseScene {
       1,
     ]);
     this.world.addComponent(this.cuphead, 'VELOCITY', [0, 0]);
+    const cupheadFSMId = engine.FSMmanager.register(CUPHEAD_FSM); // 註冊 FSM
     this.world.addComponent(this.cuphead, 'FSM', [cupheadFSMId, CUPHEAD_STATE.IDLE, -1, 0]);
     this.world.addComponent(this.cuphead, 'ANIMATION', [-1, 0, 0, 0]);
-    this.world.addComponent(this.cuphead, 'COLLISION', [0, 0, 0, 0]);
+    this.world.addComponent(this.cuphead, 'COLLISION', [
+      COLLISION.ShapeType.AABB,
+      0,
+      0,
+      0,
+      0,
+      this.collisionLayer.PLAYER,
+      this.collisionLayer.WALL,
+      COLLISION.BodyType.DYNAMIC,
+    ]);
 
     // tutor
     const tutorialCubeId = this.world.createEntity();
-    const tutorialCubeTexture = engine.atlasManager.getSprite('tutorial_cube');
     this.world.addComponent(tutorialCubeId, 'TRANSFORM', [0, 0, 0, 1, 1, 1, 1]);
+    const tutorialCubeTexture = engine.atlasManager.getSprite('tutorial_cube');
     this.world.addComponent(tutorialCubeId, 'SPRITE', [
       tutorialCubeTexture.textureId,
       tutorialCubeTexture.u0,
@@ -121,10 +137,14 @@ export class Level_1_1 extends BaseScene {
       1,
     ]);
     this.world.addComponent(tutorialCubeId, 'COLLISION', [
+      COLLISION.ShapeType.AABB,
       5,
       75,
       tutorialCubeTexture.width - 80,
       tutorialCubeTexture.height - 40,
+      this.collisionLayer.WALL,
+      this.collisionLayer.PLAYER,
+      COLLISION.BodyType.STATIC,
     ]);
   }
 

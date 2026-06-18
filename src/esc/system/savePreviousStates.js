@@ -1,21 +1,16 @@
 export default class SavePreviousStatesSystem {
-  _entities;
-  _transform;
+  world;
+  entities;
 
   constructor(world) {
-    if (!world.components.TRANSFORM) {
-      throw new Error('SavePreviousStatesSystem 尚未建立 component');
-    }
-
-    this._entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
-    this._transform = world.components.TRANSFORM;
+    this.world = world;
+    this.entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
   }
 
   update() {
-    const entities = this._entities;
-    const { store, stride } = this._transform;
+    const { store, stride } = this.world.components.TRANSFORM;
 
-    for (const entityId of entities) {
+    for (const entityId of this.entities) {
       const o = entityId * stride;
 
       store[o + 7] = store[o]; // x

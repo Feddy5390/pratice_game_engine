@@ -113,12 +113,11 @@ export default class SpriteRenderPass extends BaseRenderPass {
   build(interpolation, context) {
     const { world, commands, cmdPool } = context;
 
-    const entities = world._renderQueue;
+    const entities = world.renderQueue;
     const numEntity = entities.length;
     if (numEntity === 0) {
       return;
     }
-
     const { store: transformStore, stride: transformStride } = world.components.TRANSFORM;
     const { store: spriteStore, stride: spriteStride } = world.components.SPRITE;
 

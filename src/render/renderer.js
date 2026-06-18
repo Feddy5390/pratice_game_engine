@@ -58,7 +58,7 @@ export default class Renderer {
           length: null,
         },
       };
-    });
+    }, 1000);
   }
 
   _changeWorld(scene) {
@@ -135,7 +135,6 @@ export default class Renderer {
     const gl = this._gl;
 
     this._cmdPool.beginFrame();
-
     this._commands.length = 0;
 
     for (const pass of this._passes) {

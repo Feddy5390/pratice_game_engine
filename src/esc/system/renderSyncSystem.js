@@ -1,32 +1,25 @@
 export default class RenderSyncSystem {
-  _world;
-  _transform;
-  _sprite;
-  _entities;
+  world;
+  entities;
 
   constructor(world) {
-    this._world = world;
-    if (!world.components.SPRITE) {
-      throw new Error('RenderSyncSystem 尚未建立 component');
-    }
-    this._transform = world.components.TRANSFORM;
-    this._sprite = world.components.SPRITE;
-    this._entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
+    this.world = world;
+    this.entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
   }
 
   update() {
     // copy entities
-    const entities = this._entities;
-    const entityCount = this._entities.length;
-    const renderQueue = this._world._renderQueue;
+    const entities = this.entities;
+    const entityCount = entities.length;
+    const renderQueue = this.world.renderQueue;
     renderQueue.length = entityCount;
     for (let i = 0; i < entityCount; i++) {
       renderQueue[i] = entities[i];
     }
 
     // sort camera > zIndex > y > material
-    const { store: transformStore, stride: transformStride } = this._transform;
-    const { store: spriteStore, stride: spriteStride } = this._sprite;
+    const { store: transformStore, stride: transformStride } = this.world.components.TRANSFORM;
+    const { store: spriteStore, stride: spriteStride } = this.world.components.SPRITE;
 
     renderQueue.sort((a, b) => {
       const sa = a * spriteStride;
