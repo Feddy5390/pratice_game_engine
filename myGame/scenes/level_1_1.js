@@ -119,48 +119,55 @@ export class Level_1_1 extends BaseScene {
     ]);
 
     // tutor
-    const tutorialCubeId = this.world.createEntity();
-    const tutorialCubeTexture = engine.atlasManager.getSprite('tutorial_cube');
-    this.world.addComponent(tutorialCubeId, 'TRANSFORM', [0, (tutorialCubeTexture.height - 40) / 2 - 75, 0, 1, 1, 1, 1]);
-    this.world.addComponent(tutorialCubeId, 'SPRITE', [
-      tutorialCubeTexture.textureId,
-      tutorialCubeTexture.u0,
-      tutorialCubeTexture.v0,
-      tutorialCubeTexture.du,
-      tutorialCubeTexture.dv,
-      tutorialCubeTexture.width,
-      tutorialCubeTexture.height,
-      tutorialCubeTexture.pivotInTrimX,
-      tutorialCubeTexture.pivotInTrimY,
-      materialId,
-      mainCameraId,
-      1,
-    ]);
-    this.world.addComponent(tutorialCubeId, 'COLLISION', [
-      COLLISION.ShapeType.AABB,
-      5,
-      75,
-      tutorialCubeTexture.width - 80,
-      tutorialCubeTexture.height - 40,
-      this.collisionLayer.WALL,
-      this.collisionLayer.PLAYER,
-      COLLISION.BodyType.STATIC,
-    ]);
-
-    // floor
-    // const floorId = this.world.createEntity();
-    // this.world.addComponent(floorId, 'TRANSFORM', [0, -500, 0, 1, 1, 1, 1]);
-    // this.world.addComponent(floorId, 'COLLISION', [
+    // const tutorialCubeId = this.world.createEntity();
+    // const tutorialCubeTexture = engine.atlasManager.getSprite('tutorial_cube');
+    // this.world.addComponent(tutorialCubeId, 'TRANSFORM', [
+    //   0,
+    //   (tutorialCubeTexture.height - 40) / 2 - 75,
+    //   0,
+    //   1,
+    //   1,
+    //   1,
+    //   1,
+    // ]);
+    // this.world.addComponent(tutorialCubeId, 'SPRITE', [
+    //   tutorialCubeTexture.textureId,
+    //   tutorialCubeTexture.u0,
+    //   tutorialCubeTexture.v0,
+    //   tutorialCubeTexture.du,
+    //   tutorialCubeTexture.dv,
+    //   tutorialCubeTexture.width,
+    //   tutorialCubeTexture.height,
+    //   tutorialCubeTexture.pivotInTrimX,
+    //   tutorialCubeTexture.pivotInTrimY,
+    //   materialId,
+    //   mainCameraId,
+    //   1,
+    // ]);
+    // this.world.addComponent(tutorialCubeId, 'COLLISION', [
     //   COLLISION.ShapeType.AABB,
-    //   0,
-    //   0,
-    //   3000,
-    //   1000,
+    //   5,
+    //   75,
+    //   tutorialCubeTexture.width - 80,
+    //   tutorialCubeTexture.height - 40,
     //   this.collisionLayer.WALL,
     //   this.collisionLayer.PLAYER,
     //   COLLISION.BodyType.STATIC,
     // ]);
 
+    // floor
+    const floorId = this.world.createEntity();
+    this.world.addComponent(floorId, 'TRANSFORM', [0, 100, 0, 1, 1, 1, 1]);
+    this.world.addComponent(floorId, 'COLLISION', [
+      COLLISION.ShapeType.AABB,
+      0,
+      0,
+      500,
+      200,
+      this.collisionLayer.WALL,
+      this.collisionLayer.PLAYER,
+      COLLISION.BodyType.STATIC,
+    ]);
   }
 
   update(dt) {

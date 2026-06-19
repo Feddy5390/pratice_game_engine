@@ -87,12 +87,7 @@ export default class CollisionSystem {
             );
 
             if (pair) {
-              to = aEntityId * transformStride;
-              vo = aEntityId * velocityStride;
-              transformStore[to] = aPrevX + aVX * dt * pair.time;
-              transformStore[to + 1] = aPrevY + aVY * dt * pair.time;
-              velocityStore[vo] = 0;
-              velocityStore[vo + 1] = 0;
+              this.collisionPairs.push(pair);
             }
           }
         }

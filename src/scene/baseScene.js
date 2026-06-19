@@ -8,6 +8,7 @@ import TransformComponent from '../esc/component/transform.js';
 import AnimationSystem from '../esc/system/animationSystem.js';
 import CollisionSystem from '../esc/system/collisionSystem.js';
 import FSMSystem from '../esc/system/FSMSystem.js';
+import PhysicsSystem from '../esc/system/physicsSystem.js';
 import RenderSyncSystem from '../esc/system/renderSyncSystem.js';
 import SavePreviousStatesSystem from '../esc/system/savePreviousStates.js';
 import World from '../esc/world.js';
@@ -44,6 +45,7 @@ export default class BaseScene {
     this.world.addSystem(SavePreviousStatesSystem, 'beforeUpdate');
     this.world.addSystem(FSMSystem, 'update');
     this.world.addSystem(CollisionSystem, 'update');
+    this.world.addSystem(PhysicsSystem, 'update');
     this.world.addSystem(AnimationSystem, 'afterUpdate');
     this.world.addSystem(RenderSyncSystem, 'afterUpdate');
 

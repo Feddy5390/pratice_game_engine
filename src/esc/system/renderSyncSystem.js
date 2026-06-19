@@ -4,7 +4,7 @@ export default class RenderSyncSystem {
 
   constructor(world) {
     this.world = world;
-    this.entities = world.createQuery(['TRANSFORM', 'SPRITE']).entities;
+    this.entities = world.createQuery(['TRANSFORM']).entities;
   }
 
   update() {
