@@ -157,7 +157,7 @@ export class Level_1_1 extends BaseScene {
 
     // floor
     const floorId = this.world.createEntity();
-    this.world.addComponent(floorId, 'TRANSFORM', [0, 100, 0, 1, 1, 1, 1]);
+    this.world.addComponent(floorId, 'TRANSFORM', [0, -100, 0, 1, 1, 1, 1]);
     this.world.addComponent(floorId, 'COLLISION', [
       COLLISION.ShapeType.AABB,
       0,

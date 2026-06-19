@@ -88,7 +88,6 @@ export default class DebugRenderPass extends BaseRenderPass {
     const { store: spriteStore, stride: spriteStride } = world.components.SPRITE;
     const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
 
-    let lastCameraId = -1;
     let floatOffset = 0;
     let i = 0;
     while (i < numEntity) {
