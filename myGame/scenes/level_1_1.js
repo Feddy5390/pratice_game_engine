@@ -88,7 +88,7 @@ export class Level_1_1 extends BaseScene {
 
     // cuphead
     this.cuphead = this.world.createEntity();
-    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 10, 0, 1, 1, 1, 1]);
+    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 500, 0, 1, 1, 1, 1]);
     this.world.addComponent(this.cuphead, 'SPRITE', [
       0,
       0,
@@ -162,7 +162,7 @@ export class Level_1_1 extends BaseScene {
       COLLISION.ShapeType.AABB,
       0,
       0,
-      500,
+      5000,
       200,
       this.collisionLayer.WALL,
       this.collisionLayer.PLAYER,

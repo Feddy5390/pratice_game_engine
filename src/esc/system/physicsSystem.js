@@ -1,28 +1,32 @@
+import * as COLLISION from '../../collision/index.js';
+
 export default class PhysicsSystem {
   world;
+  entities;
   collisionPairs;
+  maxFallingSpeed = 1000;
 
   constructor(world) {
     this.world = world;
+    this.entities = world.createQuery(['TRANSFORM']).entities;
     this.collisionPairs = world.collisionPairs;
   }
 
   update(dt) {
-    const { store: transformStore, stride: transformStride } = this.world.components.TRANSFORM;
+    const { store: collisionStore, stride: collisionStride } = this.world.components.COLLISION;
     const { store: velocityStore, stride: velocityStride } = this.world.components.VELOCITY;
 
-    for (const pair of this.collisionPairs) {
-      const to = pair.entityA * transformStride;
-      const vo = pair.entityA * velocityStride;
-      const aPrevX = transformStore[to + 7];
-      const aPrevY = transformStore[to + 8];
-      const aVX = velocityStore[vo];
-      const aVY = velocityStore[vo + 1];
-
-      transformStore[to] = aPrevX + aVX * dt * pair.time;
-      transformStore[to + 1] = aPrevY + aVY * dt * pair.time;
-      velocityStore[vo] = 0;
-      velocityStore[vo + 1] = 0;
+    // 物理加速度
+    for (const entityId of this.entities) {
+      const co = entityId * collisionStride;
+      const bodyType = collisionStore[co + 7];
+      if (bodyType === COLLISION.BodyType.DYNAMIC) {
+        const vo = entityId * velocityStride;
+        velocityStore[vo + 1] += -2500 * dt
+        if (velocityStore[vo + 1] > this.maxFallingSpeed) {
+          velocityStore[vo + 1] = this.maxFallingSpeed;
+        }
+      }
     }
   }
 }

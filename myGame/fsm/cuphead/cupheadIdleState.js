@@ -29,18 +29,8 @@ export default class CupheadIdleState extends BaseState {
   update(entityId, world, dt) {
     const { input } = this.engine;
 
-    const { store: velocityStore, stride: velocityStride } = world.components.VELOCITY;
-    const vo = entityId * velocityStride;
-
     if (input.isKeyPressed('down')) {
-      // return CUPHEAD_STATE.DUCK;
-      velocityStore[vo + 1] = -200;
-      return;
-    } else if (input.isKeyPressed('up')) {
-      velocityStore[vo + 1] = 200;
-      return;
-    } else {
-      velocityStore[vo + 1] = 0;
+      return CUPHEAD_STATE.DUCK;
     }
 
     if (input.isKeyPressed('right') || input.isKeyPressed('left')) {
