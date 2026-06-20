@@ -21,12 +21,11 @@ export default class ResolutionSystem {
       const aPrevY = transformStore[to + 8];
       const aVX = velocityStore[vo];
       const aVY = velocityStore[vo + 1];
-      
-      if (pair.normalX > 0) {
+
+      if (pair.normalX !== 0) {
         transformStore[to] = aPrevX + aVX * dt * pair.time;
         velocityStore[vo] = 0;
-      }
-      if (pair.normalY > 0) {
+      } else if (pair.normalY !== 0) {
         transformStore[to + 1] = aPrevY + aVY * dt * pair.time;
         velocityStore[vo + 1] = 0;
       }

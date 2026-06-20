@@ -4,7 +4,6 @@ export default class PhysicsSystem {
   world;
   entities;
   collisionPairs;
-  maxFallingSpeed = 1000;
 
   constructor(world) {
     this.world = world;
@@ -22,10 +21,7 @@ export default class PhysicsSystem {
       const bodyType = collisionStore[co + 7];
       if (bodyType === COLLISION.BodyType.DYNAMIC) {
         const vo = entityId * velocityStride;
-        velocityStore[vo + 1] += -2500 * dt
-        if (velocityStore[vo + 1] > this.maxFallingSpeed) {
-          velocityStore[vo + 1] = this.maxFallingSpeed;
-        }
+        velocityStore[vo + 1] -= 3250 * dt;
       }
     }
   }

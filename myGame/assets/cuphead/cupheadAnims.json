@@ -101,5 +101,42 @@
       { "image": "cuphead_run_0016", "cumulativeDuration": 0.66666668 }
     ],
     "loop": true
+  },
+  "jump": {
+    "frames": [
+      {
+        "image": "cuphead_jump_0001",
+        "cumulativeDuration": 0.03333333
+      },
+      {
+        "image": "cuphead_jump_0002",
+        "cumulativeDuration": 0.06666667
+      },
+      {
+        "image": "cuphead_jump_0003",
+        "cumulativeDuration": 0.1
+      },
+      {
+        "image": "cuphead_jump_0004",
+        "cumulativeDuration": 0.13333334
+      },
+      {
+        "image": "cuphead_jump_0005",
+        "cumulativeDuration": 0.16666667
+      },
+      {
+        "image": "cuphead_jump_0006",
+        "cumulativeDuration": 0.2
+      },
+      {
+        "image": "cuphead_jump_0007",
+        "cumulativeDuration": 0.23333333
+      },
+      {
+        "image": "cuphead_jump_0008",
+        "cumulativeDuration": 0.26666666
+      }
+    ],
+    "loop": true
   }
 }

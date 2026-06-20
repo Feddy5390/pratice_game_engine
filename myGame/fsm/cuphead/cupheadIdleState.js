@@ -15,15 +15,6 @@ export default class CupheadIdleState extends BaseState {
     animationStore[ao + 1] = 0;
     animationStore[ao + 2] = 0;
     animationStore[ao + 3] = 0;
-
-    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
-    const co = entityId * collisionStride;
-
-    collisionStore[co] = COLLISION.ShapeType.AABB;
-    collisionStore[co + 1] = 0;
-    collisionStore[co + 2] = 45;
-    collisionStore[co + 3] = 80;
-    collisionStore[co + 4] = 110;
   }
 
   update(entityId, world, dt) {
@@ -31,6 +22,8 @@ export default class CupheadIdleState extends BaseState {
 
     if (input.isKeyPressed('down')) {
       return CUPHEAD_STATE.DUCK;
+    } else if (input.isKeyPressed('space')) {
+      return CUPHEAD_STATE.JUMP;
     }
 
     if (input.isKeyPressed('right') || input.isKeyPressed('left')) {

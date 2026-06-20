@@ -5,12 +5,12 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 166,
-        "h": 72,
+        "w": 165.91689,
+        "h": 71.9064,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 176
+        "pivotY": 194.56,
+        "trimOffsetX": 177.02675,
+        "trimOffsetY": 176.06685
       }
     },
     {
@@ -18,12 +18,12 @@
       "frame": {
         "x": 166,
         "y": 0,
-        "w": 166,
-        "h": 72,
+        "w": 165.91222,
+        "h": 71.897125,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 178
+        "pivotY": 194.56,
+        "trimOffsetX": 177.06102,
+        "trimOffsetY": 178.07613
       }
     },
     {
@@ -31,12 +31,12 @@
       "frame": {
         "x": 332,
         "y": 0,
-        "w": 166,
-        "h": 78,
+        "w": 165.89711,
+        "h": 77.897125,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 177
+        "pivotY": 194.56,
+        "trimOffsetX": 177.07613,
+        "trimOffsetY": 177.07613
       }
     },
     {
@@ -44,302 +44,409 @@
       "frame": {
         "x": 498,
         "y": 0,
-        "w": 165,
-        "h": 80,
+        "w": 164.9644,
+        "h": 79.92137,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 178
+        "pivotY": 194.56,
+        "trimOffsetX": 177.02675,
+        "trimOffsetY": 178.07613
       }
     },
     {
       "filename": "cuphead_duck_idle_0005",
       "frame": {
-        "x": 0,
-        "y": 80,
-        "w": 165,
-        "h": 83,
+        "x": 81,
+        "y": 81,
+        "w": 164.94649,
+        "h": 82.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 179
+        "pivotY": 194.56,
+        "trimOffsetX": 177.02675,
+        "trimOffsetY": 179.07613
       }
     },
     {
       "filename": "cuphead_idle_0001",
       "frame": {
-        "x": 141,
-        "y": 535,
-        "w": 100,
-        "h": 159,
+        "x": 361,
+        "y": 495,
+        "w": 99.89714,
+        "h": 158.89711,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 206,
-        "trimOffsetY": 176
+        "pivotY": 194.56,
+        "trimOffsetX": 206.02675,
+        "trimOffsetY": 176.07613
       }
     },
     {
       "filename": "cuphead_idle_0002",
       "frame": {
-        "x": 597,
-        "y": 379,
-        "w": 101,
-        "h": 156,
+        "x": 119,
+        "y": 495,
+        "w": 100.84776,
+        "h": 155.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 205,
-        "trimOffsetY": 176
+        "pivotY": 194.56,
+        "trimOffsetX": 205.07613,
+        "trimOffsetY": 176.07613
       }
     },
     {
       "filename": "cuphead_idle_0003",
       "frame": {
-        "x": 133,
-        "y": 379,
-        "w": 102,
-        "h": 153,
+        "x": 377,
+        "y": 341,
+        "w": 101.94649,
+        "h": 152.88097,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 205,
-        "trimOffsetY": 175
+        "pivotY": 194.56,
+        "trimOffsetX": 205.02675,
+        "trimOffsetY": 175.07613
       }
     },
     {
       "filename": "cuphead_idle_0004",
       "frame": {
-        "x": 387,
-        "y": 80,
-        "w": 102,
-        "h": 148,
+        "x": 222,
+        "y": 192,
+        "w": 101.89711,
+        "h": 147.91098,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 204,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 204.07613,
+        "trimOffsetY": 174.01291
       }
     },
     {
       "filename": "cuphead_idle_0005",
       "frame": {
-        "x": 165,
-        "y": 80,
-        "w": 101,
-        "h": 142,
+        "x": 0,
+        "y": 192,
+        "w": 100.94649,
+        "h": 141.89711,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 205,
-        "trimOffsetY": 173
+        "pivotY": 194.56,
+        "trimOffsetX": 205.02675,
+        "trimOffsetY": 173.07613
+      }
+    },
+    {
+      "filename": "cuphead_jump_0001",
+      "frame": {
+        "x": 0,
+        "y": 81,
+        "w": 80.89711,
+        "h": 81.84776,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 222.07613,
+        "trimOffsetY": 206.07613
+      }
+    },
+    {
+      "filename": "cuphead_jump_0002",
+      "frame": {
+        "x": 673,
+        "y": 81,
+        "w": 80.92192,
+        "h": 110.89714,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 223.05132,
+        "trimOffsetY": 200.02675
+      }
+    },
+    {
+      "filename": "cuphead_jump_0003",
+      "frame": {
+        "x": 500,
+        "y": 81,
+        "w": 81.84776,
+        "h": 108.912384,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 215.07613,
+        "trimOffsetY": 201.03629
+      }
+    },
+    {
+      "filename": "cuphead_jump_0004",
+      "frame": {
+        "x": 326,
+        "y": 81,
+        "w": 83.89711,
+        "h": 104.912704,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 216.07613,
+        "trimOffsetY": 203.05412
+      }
+    },
+    {
+      "filename": "cuphead_jump_0005",
+      "frame": {
+        "x": 663,
+        "y": 0,
+        "w": 85.86569,
+        "h": 80.84776,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 219.0582,
+        "trimOffsetY": 209.07613
+      }
+    },
+    {
+      "filename": "cuphead_jump_0006",
+      "frame": {
+        "x": 246,
+        "y": 81,
+        "w": 79.84776,
+        "h": 101.84776,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 219.07613,
+        "trimOffsetY": 189.07613
+      }
+    },
+    {
+      "filename": "cuphead_jump_0007",
+      "frame": {
+        "x": 582,
+        "y": 81,
+        "w": 90.94649,
+        "h": 109.934494,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 218.02675,
+        "trimOffsetY": 186.02675
+      }
+    },
+    {
+      "filename": "cuphead_jump_0008",
+      "frame": {
+        "x": 410,
+        "y": 81,
+        "w": 89.92192,
+        "h": 107.84776,
+        "pivotX": 256,
+        "pivotY": 194.56,
+        "trimOffsetX": 221.02675,
+        "trimOffsetY": 184.07613
       }
     },
     {
       "filename": "cuphead_run_0001",
       "frame": {
-        "x": 241,
-        "y": 535,
-        "w": 139,
-        "h": 159,
+        "x": 461,
+        "y": 495,
+        "w": 138.84776,
+        "h": 158.88759,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 183,
-        "trimOffsetY": 168
+        "pivotY": 194.56,
+        "trimOffsetX": 183.07613,
+        "trimOffsetY": 168.07613
       }
     },
     {
       "filename": "cuphead_run_0002",
       "frame": {
-        "x": 500,
-        "y": 228,
-        "w": 126,
-        "h": 151,
+        "x": 118,
+        "y": 341,
+        "w": 125.93033,
+        "h": 150.88097,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 192,
-        "trimOffsetY": 173
+        "pivotY": 194.56,
+        "trimOffsetX": 192.04291,
+        "trimOffsetY": 173.07613
       }
     },
     {
       "filename": "cuphead_run_0003",
       "frame": {
-        "x": 380,
-        "y": 535,
-        "w": 117,
-        "h": 161,
+        "x": 600,
+        "y": 495,
+        "w": 116.87619,
+        "h": 160.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 199,
-        "trimOffsetY": 169
+        "pivotY": 194.56,
+        "trimOffsetX": 199.0477,
+        "trimOffsetY": 169.07613
       }
     },
     {
       "filename": "cuphead_run_0004",
       "frame": {
-        "x": 497,
-        "y": 535,
-        "w": 113,
-        "h": 165,
+        "x": 0,
+        "y": 656,
+        "w": 112.85216,
+        "h": 164.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 199,
-        "trimOffsetY": 168
+        "pivotY": 194.56,
+        "trimOffsetX": 199.07173,
+        "trimOffsetY": 168.07613
       }
     },
     {
       "filename": "cuphead_run_0005",
       "frame": {
-        "x": 610,
-        "y": 535,
-        "w": 114,
-        "h": 172,
+        "x": 113,
+        "y": 656,
+        "w": 113.89714,
+        "h": 171.92192,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 199,
-        "trimOffsetY": 169
+        "pivotY": 194.56,
+        "trimOffsetX": 199.02675,
+        "trimOffsetY": 169.02675
       }
     },
     {
       "filename": "cuphead_run_0006",
       "frame": {
-        "x": 489,
-        "y": 80,
-        "w": 116,
-        "h": 148,
+        "x": 324,
+        "y": 192,
+        "w": 115.88098,
+        "h": 147.89711,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 196,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 196.04291,
+        "trimOffsetY": 174.07613
       }
     },
     {
       "filename": "cuphead_run_0007",
       "frame": {
-        "x": 0,
-        "y": 228,
-        "w": 126,
-        "h": 148,
+        "x": 440,
+        "y": 192,
+        "w": 125.923904,
+        "h": 147.87257,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 186,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 186.05132,
+        "trimOffsetY": 174.05132
       }
     },
     {
       "filename": "cuphead_run_0008",
       "frame": {
-        "x": 0,
-        "y": 379,
-        "w": 133,
-        "h": 151,
+        "x": 244,
+        "y": 341,
+        "w": 132.93033,
+        "h": 150.89711,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 180,
-        "trimOffsetY": 173
+        "pivotY": 194.56,
+        "trimOffsetX": 180.04291,
+        "trimOffsetY": 173.07613
       }
     },
     {
       "filename": "cuphead_run_0009",
       "frame": {
-        "x": 352,
-        "y": 379,
-        "w": 126,
-        "h": 154,
+        "x": 596,
+        "y": 341,
+        "w": 125.89714,
+        "h": 153.94649,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 189,
-        "trimOffsetY": 173
+        "pivotY": 194.56,
+        "trimOffsetX": 189.02675,
+        "trimOffsetY": 173.02675
       }
     },
     {
       "filename": "cuphead_run_0010",
       "frame": {
-        "x": 382,
-        "y": 228,
-        "w": 118,
-        "h": 150,
+        "x": 0,
+        "y": 341,
+        "w": 117.89714,
+        "h": 149.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 196,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 196.02675,
+        "trimOffsetY": 174.07613
       }
     },
     {
       "filename": "cuphead_run_0011",
       "frame": {
-        "x": 235,
-        "y": 379,
-        "w": 117,
-        "h": 153,
+        "x": 479,
+        "y": 341,
+        "w": 116.94649,
+        "h": 152.84776,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 197,
-        "trimOffsetY": 171
+        "pivotY": 194.56,
+        "trimOffsetX": 197.02675,
+        "trimOffsetY": 171.07613
       }
     },
     {
       "filename": "cuphead_run_0012",
       "frame": {
-        "x": 478,
-        "y": 379,
-        "w": 119,
-        "h": 155,
+        "x": 0,
+        "y": 495,
+        "w": 118.94649,
+        "h": 154.87257,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 198,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 198.02675,
+        "trimOffsetY": 174.05132
       }
     },
     {
       "filename": "cuphead_run_0013",
       "frame": {
-        "x": 126,
-        "y": 228,
-        "w": 124,
-        "h": 149,
+        "x": 566,
+        "y": 192,
+        "w": 123.90347,
+        "h": 148.88097,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 195,
-        "trimOffsetY": 172
+        "pivotY": 194.56,
+        "trimOffsetX": 195.02042,
+        "trimOffsetY": 172.07613
       }
     },
     {
       "filename": "cuphead_run_0014",
       "frame": {
-        "x": 266,
-        "y": 80,
-        "w": 121,
-        "h": 146,
+        "x": 101,
+        "y": 192,
+        "w": 120.88098,
+        "h": 145.93553,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 195,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 195.04291,
+        "trimOffsetY": 174.0377
       }
     },
     {
       "filename": "cuphead_run_0015",
       "frame": {
-        "x": 250,
-        "y": 228,
-        "w": 132,
-        "h": 149,
+        "x": 690,
+        "y": 192,
+        "w": 131.8876,
+        "h": 148.86751,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 184,
-        "trimOffsetY": 174
+        "pivotY": 194.56,
+        "trimOffsetX": 184.03629,
+        "trimOffsetY": 174.07613
       }
     },
     {
       "filename": "cuphead_run_0016",
       "frame": {
-        "x": 0,
-        "y": 535,
-        "w": 141,
-        "h": 157,
+        "x": 220,
+        "y": 495,
+        "w": 140.94649,
+        "h": 156.89714,
         "pivotX": 256,
-        "pivotY": 195,
-        "trimOffsetX": 177,
-        "trimOffsetY": 171
+        "pivotY": 194.56,
+        "trimOffsetX": 177.02675,
+        "trimOffsetY": 171.02675
       }
     }
   ],
   "meta": {
-    "size": { "w": 724, "h": 724 }
+    "size": {
+      "w": 828,
+      "h": 828
+    }
   }
 }

@@ -184,8 +184,8 @@
             targetFrame.h = dumpData.texRectH;
 
             // 🌟 修正：pivotX 和 pivotY 改為從 m_Offset 讀取的 x 和 y（若無此欄位則預設 0）
-            targetFrame.pivotX = dumpData.offsetX !== undefined ? dumpData.offsetX : 0;
-            targetFrame.pivotY = dumpData.offsetY !== undefined ? dumpData.offsetY : 0;
+            targetFrame.pivotX = dumpData.pivotXRatio * dumpData.rectW;
+            targetFrame.pivotY = dumpData.pivotYRatio * dumpData.rectH;
 
             targetFrame.trimOffsetX = dumpData.texRectX;
             targetFrame.trimOffsetY = dumpData.texRectY;

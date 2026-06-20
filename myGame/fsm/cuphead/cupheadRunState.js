@@ -15,15 +15,6 @@ export default class CupheadRunState extends BaseState {
     animationStore[ao + 1] = 0;
     animationStore[ao + 2] = 0;
     animationStore[ao + 3] = 0;
-
-    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
-    const co = entityId * collisionStride;
-
-    collisionStore[co] = COLLISION.ShapeType.AABB;
-    collisionStore[co + 1] = 0;
-    collisionStore[co + 2] = 45;
-    collisionStore[co + 3] = 80;
-    collisionStore[co + 4] = 110;
   }
 
   update(entityId, world, dt) {
@@ -31,19 +22,29 @@ export default class CupheadRunState extends BaseState {
 
     if (input.isKeyPressed('down')) {
       return CUPHEAD_STATE.IDLE;
+    } else if (input.isKeyPressed('space')) {
+      return CUPHEAD_STATE.JUMP;
     }
 
     const { store: transformStore, stride: transformStride } = world.components.TRANSFORM;
+    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
     const { store: velocityStore, stride: velocityStride } = world.components.VELOCITY;
     const to = entityId * transformStride;
+    const co = entityId * collisionStride;
     const vo = entityId * velocityStride;
+
+    // console.log(velocityStore[vo + 1])
+    if (collisionStore[co + 9] !== 1 && velocityStore[vo + 1] !== 0) {
+      // return CUPHEAD_STATE.FALLING;
+      return;
+    }
 
     let moveX = 0;
     if (input.isKeyPressed('right')) {
-      moveX = 650;
+      moveX = 500;
       transformStore[to + 5] = 1;
     } else if (input.isKeyPressed('left')) {
-      moveX = -650;
+      moveX = -500;
       transformStore[to + 5] = -1;
     }
 

@@ -82,10 +82,8 @@ export default function checkSweptAABB(
   return {
     entityA: aEntityId,
     entityB: bEntityId,
-
     normalX,
     normalY,
-
     time: tFirst,
   };
 }

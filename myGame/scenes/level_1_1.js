@@ -73,6 +73,7 @@ export class Level_1_1 extends BaseScene {
       right: 39,
       down: 40,
       enter: 13,
+      space: 32,
     });
 
     // 創建相機
@@ -88,7 +89,7 @@ export class Level_1_1 extends BaseScene {
 
     // cuphead
     this.cuphead = this.world.createEntity();
-    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 500, 0, 1, 1, 1, 1]);
+    this.world.addComponent(this.cuphead, 'TRANSFORM', [0, 300, 0, 1, 1, 1, 1]);
     this.world.addComponent(this.cuphead, 'SPRITE', [
       0,
       0,
@@ -110,12 +111,14 @@ export class Level_1_1 extends BaseScene {
     this.world.addComponent(this.cuphead, 'COLLISION', [
       COLLISION.ShapeType.AABB,
       0,
-      0,
-      0,
-      0,
+      50,
+      50,
+      105,
       this.collisionLayer.PLAYER,
       this.collisionLayer.WALL,
       COLLISION.BodyType.DYNAMIC,
+      0,
+      0,
     ]);
 
     // tutor
@@ -153,20 +156,54 @@ export class Level_1_1 extends BaseScene {
     //   this.collisionLayer.WALL,
     //   this.collisionLayer.PLAYER,
     //   COLLISION.BodyType.STATIC,
+    //   0,
+    //   0,
     // ]);
 
     // floor
     const floorId = this.world.createEntity();
-    this.world.addComponent(floorId, 'TRANSFORM', [0, -100, 0, 1, 1, 1, 1]);
+    this.world.addComponent(floorId, 'TRANSFORM', [0, -50, 0, 1, 1, 1, 1]);
     this.world.addComponent(floorId, 'COLLISION', [
       COLLISION.ShapeType.AABB,
       0,
       0,
-      5000,
-      200,
+      500,
+      100,
       this.collisionLayer.WALL,
       this.collisionLayer.PLAYER,
       COLLISION.BodyType.STATIC,
+      0,
+      0,
+    ]);
+
+    const floor2Id = this.world.createEntity();
+    this.world.addComponent(floor2Id, 'TRANSFORM', [300, -60, 0, 1, 1, 1, 1]);
+    this.world.addComponent(floor2Id, 'COLLISION', [
+      COLLISION.ShapeType.AABB,
+      0,
+      0,
+      50,
+      400,
+      this.collisionLayer.WALL,
+      this.collisionLayer.PLAYER,
+      COLLISION.BodyType.STATIC,
+      0,
+      0,
+    ]);
+
+    const floor3Id = this.world.createEntity();
+    this.world.addComponent(floor3Id, 'TRANSFORM', [-300, -20, 0, 1, 1, 1, 1]);
+    this.world.addComponent(floor3Id, 'COLLISION', [
+      COLLISION.ShapeType.AABB,
+      0,
+      0,
+      100,
+      350,
+      this.collisionLayer.WALL,
+      this.collisionLayer.PLAYER,
+      COLLISION.BodyType.STATIC,
+      0,
+      0,
     ]);
   }
 

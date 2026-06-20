@@ -15,15 +15,6 @@ export default class CupheadDuckState extends BaseState {
     animationStore[ao + 1] = 0;
     animationStore[ao + 2] = 0;
     animationStore[ao + 3] = 0;
-
-    const { store: collisionStore, stride: collisionStride } = world.components.COLLISION;
-    const co = entityId * collisionStride;
-
-    collisionStore[co] = COLLISION.ShapeType.AABB;
-    collisionStore[co + 1] = 0;
-    collisionStore[co + 2] = 17.5;
-    collisionStore[co + 3] = 80;
-    collisionStore[co + 4] = 55;
   }
 
   update(entityId, world, dt) {
